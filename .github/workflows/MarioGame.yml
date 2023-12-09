@@ -32,7 +32,7 @@ jobs:
         cd src
         find . -name "*.java" > sources.txt
         javac -cp . -Xlint:all @sources.txt
-        $HOME/bin/spotbugs -textui -xml:spotbugs-report.xml PlayGame.class engine/*.class
+        /opt/spotbugs/bin/spotbugs -textui -xml:spotbugs-report.xml PlayGame.class engine/*.class
 
     - name: Clean up unnecessary files
       run: |
