@@ -22,14 +22,15 @@ jobs:
     - name: Build and run SpotBugs
       run: |
         cd src
-        javac -cp . -Xlint:all PlayGame.java engine/*.java
+        find . -name "*.java" > sources.txt
+        javac -cp . -Xlint:all @sources.txt
         java PlayGame
         spotbugs -textui -xml:spotbugs-report.xml PlayGame.class engine/*.class
 
     - name: Clean up unnecessary files
       run: |
         cd src
-        rm -f *.class engine/*.class
+        rm -f *.class engine/*.class sources.txt
 
     - name: Upload SpotBugs results
       uses: actions/upload-artifact@v2
