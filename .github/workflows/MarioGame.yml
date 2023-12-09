@@ -1,0 +1,38 @@
+name: Java Mario Game with SpotBugs
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '21'
+
+    - name: Build and run SpotBugs
+      run: |
+        cd src
+        javac -cp . -Xlint:all PlayGame.java engine/*.java
+        java PlayGame
+        spotbugs -textui -xml:spotbugs-report.xml PlayGame.class engine/*.class
+
+    - name: Clean up unnecessary files
+      run: |
+        cd src
+        rm -f *.class engine/*.class
+
+    - name: Upload SpotBugs results
+      uses: actions/upload-artifact@v2
+      with:
+        name: spotbugs-report
+        path: src/spotbugs-report.xml
