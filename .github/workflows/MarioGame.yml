@@ -19,14 +19,6 @@ jobs:
         distribution: 'adopt'
         java-version: '21'
 
-    - name: Install SpotBugs
-      run: |
-        wget https://repo.maven.apache.org/maven2/com/github/spotbugs/spotbugs/4.5.0/spotbugs-4.8.2.tgz
-        tar -xvf spotbugs-4.8.2.tgz
-        sudo mv spotbugs-4.8.2 /opt/spotbugs
-        sudo ln -s /opt/spotbugs/bin/spotbugs /usr/local/bin/spotbugs
-        sudo chmod +x /usr/local/bin/spotbugs  # 添加这一行改变权限
-
     - name: Build and run SpotBugs
       run: |
         cd src
