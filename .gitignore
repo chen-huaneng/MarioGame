@@ -1,5 +1,5 @@
 *.ps1
 *.iml
-.idea/
-out/
+/.idea/
+/out/
 sources.txt
