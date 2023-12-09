@@ -24,7 +24,7 @@ jobs:
         cd src
         find . -name "*.java" > sources.txt
         javac -cp . -Xlint:all @sources.txt
-        java PlayGame
+        java -Djava.awt.headless=true PlayGame
         spotbugs -textui -xml:spotbugs-report.xml PlayGame.class engine/*.class
 
     - name: Clean up unnecessary files
