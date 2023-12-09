@@ -21,8 +21,10 @@ jobs:
 
     - name: Install SpotBugs
       run: |
-        sudo apt-get update
-        sudo apt-get install -y spotbugs
+        wget https://repo.maven.apache.org/maven2/com/github/spotbugs/spotbugs/4.8.2/spotbugs-4.8.2.tgz
+        tar -xvf spotbugs-4.8.2.tgz
+        sudo mv spotbugs-4.8.2 /opt/spotbugs
+        sudo ln -s /opt/spotbugs/bin/spotbugs /usr/local/bin/spotbugs
 
     - name: Build and run SpotBugs
       run: |
