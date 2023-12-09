@@ -67,11 +67,6 @@ public class MarioGame {
      * @return statistics about the current game
      */
     public MarioResult playGame(String level, int timer, int marioState) {
-        if (!GraphicsEnvironment.isHeadless()) {
-            // 在非 headless 模式下执行 GUI 相关的代码
-            // 例如：创建 JFrame、显示图形界面等
-            return this.runGame(new Agent(), level, timer, marioState, false, 30, 2);
-        }
         return this.runGame(new Agent(), level, timer, marioState, true, 30, 2);
     }
 
