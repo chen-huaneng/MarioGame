@@ -63,31 +63,18 @@ public class MarioLevelModel {
         };
     }
 
-    // 存储地图的长度和宽度，第一维是地图的高，第二维是地图的长
+    // 存储地图的长度和宽度，第一维是地图的长，第二维是地图的宽
     private final char[][] map;
 
     /**
-     * create the Level Model
+     * 创建地图模型
      *
-     * @param levelWidth  the width of the level
-     * @param levelHeight the height of the level
+     * @param levelWidth  地图的长度
+     * @param levelHeight 地图的宽度
      */
     public MarioLevelModel(int levelWidth, int levelHeight) {
         // 控制地图的高度和宽度
         this.map = new char[levelWidth][levelHeight];
-    }
-
-    /**
-     * create a similar clone to the current map
-     */
-    public MarioLevelModel clone() {
-        MarioLevelModel model = new MarioLevelModel(this.getWidth(), this.getHeight());
-        for (int x = 0; x < model.getWidth(); x++) {
-            for (int y = 0; y < model.getHeight(); y++) {
-                model.map[x][y] = this.map[x][y];
-            }
-        }
-        return model;
     }
 
     /**
@@ -111,19 +98,29 @@ public class MarioLevelModel {
     }
 
     /**
+     * 获取指定位置的贴图块
      * get the value of the tile in certain location
      *
-     * @param x x tile position
-     * @param y y tile position
-     * @return the tile value
+     * @param x x tile position 横坐标的位置
+     * @param y y tile position 纵坐标的位置
+     * @return the tile value 贴图的值
      */
     public char getBlock(int x, int y) {
         int currentX = x;
         int currentY = y;
-        if (x < 0) currentX = 0;
-        if (y < 0) currentY = 0;
-        if (x > this.map.length - 1) currentX = this.map.length - 1;
-        if (y > this.map[0].length - 1) currentY = this.map[0].length - 1;
+        // 处理异常的位置(边界位置)
+        if (x < 0) {
+            currentX = 0;
+        }
+        if (y < 0) {
+            currentY = 0;
+        }
+        if (x > this.map.length - 1) {
+            currentX = this.map.length - 1;
+        }
+        if (y > this.map[0].length - 1) {
+            currentY = this.map[0].length - 1;
+        }
         return this.map[currentX][currentY];
     }
 
@@ -154,14 +151,14 @@ public class MarioLevelModel {
     }
 
     /**
-     * get the string value of the map
+     * 获取地图的String数组
      *
-     * @return the map in form of string
+     * @return String数组形式的地图
      */
     public String getMap() {
         // 以String的形式返回地图
         StringBuilder result = new StringBuilder();
-        for (int y = 0; y < map[0].length; y++) {
+        for (int y = 0; y < map[0].length; ++y) {
             for (char[] chars : map) {
                 result.append(chars[y]);
             }
