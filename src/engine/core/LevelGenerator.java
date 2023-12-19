@@ -130,9 +130,11 @@ public class LevelGenerator {
         // 初始化炮台的起始位置
         int xCannon = xo + 1 + random.nextInt(4);
         for (int x = xo; x < xo + length; ++x) {
+            // 下一个炮塔的位置
             if (x > xCannon) {
                 xCannon += 2 + random.nextInt(4);
             }
+            // 如果炮塔位置在边缘
             if (xCannon == xo + length - 1) {
                 xCannon += 10;
             }
@@ -241,6 +243,7 @@ public class LevelGenerator {
     }
 
     /**
+     * 增加敌人
      * @param model 地图
      * @param x0 起始位置
      * @param x1 终止位置
@@ -267,7 +270,7 @@ public class LevelGenerator {
     }
 
     /**
-     *
+     * 生成管道地形
      * @param model 地图模型
      * @param xo 当前地形的横向起始位置
      * @param maxLength 当前地形的最大长度
@@ -317,7 +320,8 @@ public class LevelGenerator {
         return length;
     }
 
-    /** 生成直线地形
+    /**
+     * 生成直线地形
      * @param model 地图
      * @param xo 直线地面的起始坐标
      * @param maxLength 直线地面最大长度
@@ -351,7 +355,8 @@ public class LevelGenerator {
         return length;
     }
 
-    /** 添加一些装饰，包括敌人、金币和砖块
+    /**
+     * 添加一些装饰，包括敌人、金币和砖块
      * @param model 地图
      * @param x0 起始位置
      * @param x1 终止位置
@@ -403,7 +408,8 @@ public class LevelGenerator {
         }
     }
 
-    /** 初始化地图
+    /**
+     * 初始化地图
      * @param model 控制地图的高度和长度
      * @return 返回地图*/
     public String getGeneratedLevel(MarioLevelModel model) {
@@ -447,27 +453,31 @@ public class LevelGenerator {
             length += buildZone(model, length, model.getWidth() - length);
         }
 
-        // 生成地图的底部，使得在一定高度以下都是地面
-        int floor = model.getHeight() - 1 - random.nextInt(4);
+        //// 生成地图的底部，使得在一定高度以下都是地面，保证上面生成的地形的底部不会出现空白
+        //int floor = model.getHeight() - 1 - random.nextInt(4);
+        //
+        //for (int x = length; x < model.getWidth(); ++x) {
+        //    // 在一定高度以上设置为地板砖块
+        //    for (int y = floor; y < model.getHeight(); ++y) {
+        //        model.setBlock(x, y, MarioLevelModel.GROUND);
+        //    }
+        //}
 
-        for (int x = length; x < model.getWidth(); ++x) {
-            // 在一定高度以上设置为地板砖块
-            for (int y = floor; y < model.getHeight(); ++y) {
-                model.setBlock(x, y, MarioLevelModel.GROUND);
-            }
-        }
-
-        // 生成特殊类型的地图
+        // 生成天花板
         if (type > 0) {
+            // 天花板的高度
             int ceiling = 0;
+            // 天花板的持续长度
             int run = 0;
             for (int x = 0; x < model.getWidth(); ++x) {
+                // 重新设置天花板高度和长度
                 if (run-- <= 0 && x > 4) {
                     ceiling = random.nextInt(4);
                     run = random.nextInt(4) + 4;
                 }
                 for (int y = 0; y < model.getHeight(); ++y) {
-                    if ((x > 4 && y <= ceiling) || x < 1) {
+                    // 设置天花板
+                    if (x > 4 && y <= ceiling) {
                         model.setBlock(x, y, MarioLevelModel.NORMAL_BRICK);
                     }
                 }
