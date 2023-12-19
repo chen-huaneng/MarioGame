@@ -2,7 +2,6 @@ package engine.core;
 
 import java.awt.Graphics;
 import java.util.ArrayList;
-
 import engine.graphics.MarioImage;
 import engine.graphics.MarioTilemap;
 import engine.helper.Assets;
@@ -17,13 +16,20 @@ public class MarioLevel {
     public int tileHeight = MarioGame.height / 16;
     public int totalCoins = 0;
     public int marioTileX, marioTileY, exitTileX, exitTileY;
+    // 存储地图贴图的数组
     private int[][] levelTiles;
     private SpriteType[][] spriteTemplates;
     private int[][] lastSpawnTime;
     private MarioTilemap graphics;
     private MarioImage flag;
 
+    /**
+     *
+     * @param level 游戏地图
+     * @param visuals 是否可视化
+     */
     public MarioLevel(String level, boolean visuals) {
+        // 去除首尾的空格并判断是否为空
         if (level.trim().isEmpty()) {
             this.tileWidth = 0;
             this.width = 0;
@@ -31,7 +37,11 @@ public class MarioLevel {
             this.height = 0;
             return;
         }
+
+        // 使用正则表达式分割字符，根据换行符和回车符分割
         String[] lines = level.split("\\r?\\n");
+
+        // 设置贴图的宽度和长度
         this.tileWidth = lines[0].length();
         this.width = this.tileWidth * 16;
         this.tileHeight = lines.length;
@@ -40,56 +50,63 @@ public class MarioLevel {
         this.levelTiles = new int[lines[0].length()][lines.length];
         this.spriteTemplates = new SpriteType[lines[0].length()][lines.length];
         this.lastSpawnTime = new int[lines[0].length()][lines.length];
-        for (int y = 0; y < lines.length; y++) {
-            for (int x = 0; x < lines[y].length(); x++) {
+
+        // 初始化贴图
+        for (int y = 0; y < lines.length; ++y) {
+            for (int x = 0; x < lines[y].length(); ++x) {
                 this.levelTiles[x][y] = 0;
                 this.spriteTemplates[x][y] = SpriteType.NONE;
                 this.lastSpawnTime[x][y] = -40;
             }
         }
 
+        // Mario的初始位置是否确定
         boolean marioLocInit = false;
+        // 出口位置是否确定
         boolean exitLocInit = false;
-        for (int y = 0; y < lines.length; y++) {
-            for (int x = 0; x < lines[y].length(); x++) {
-                Character c = lines[y].charAt(x);
+
+        // 判断各个字符所代表的贴图
+        for (int y = 0; y < lines.length; ++y) {
+            for (int x = 0; x < lines[y].length(); ++x) {
+                char c = lines[y].charAt(x);
                 switch (c) {
+                    // Mario的位置
                     case 'M':
                         this.marioTileX = x;
                         this.marioTileY = y;
                         marioLocInit = true;
                         break;
-                    case 'F':
+                    case 'F': // 终点的位置
                         this.exitTileX = x;
                         this.exitTileY = y;
                         exitLocInit = true;
                         break;
-                    case 'y':
+                    case 'y': // 尖刺
                         this.spriteTemplates[x][y] = SpriteType.SPIKY;
                         break;
-                    case 'Y':
+                    case 'Y': // 带翅膀的尖刺
                         this.spriteTemplates[x][y] = SpriteType.SPIKY_WINGED;
                         break;
-                    case 'E':
+                    case 'E': // 贡巴
                     case 'g':
                         this.spriteTemplates[x][y] = SpriteType.GOOMBA;
                         break;
-                    case 'G':
+                    case 'G': // 带翅膀的贡巴
                         this.spriteTemplates[x][y] = SpriteType.GOOMBA_WINGED;
                         break;
-                    case 'k':
+                    case 'k': // 绿色库帕
                         this.spriteTemplates[x][y] = SpriteType.GREEN_KOOPA;
                         break;
-                    case 'K':
+                    case 'K': // 带翅膀的绿色库帕
                         this.spriteTemplates[x][y] = SpriteType.GREEN_KOOPA_WINGED;
                         break;
-                    case 'r':
+                    case 'r': // 红色库帕
                         this.spriteTemplates[x][y] = SpriteType.RED_KOOPA;
                         break;
-                    case 'R':
+                    case 'R': // 带翅膀的红色库帕
                         this.spriteTemplates[x][y] = SpriteType.RED_KOOPA_WINGED;
                         break;
-                    case 'X':
+                    case 'X': // 地板
                         //floor
                         this.levelTiles[x][y] = 1;
                         break;
@@ -97,8 +114,7 @@ public class MarioLevel {
                         //pyramidBlock
                         this.levelTiles[x][y] = 2;
                         break;
-                    case '%':
-                        //jump through block
+                    case '%': // 雨林砖块
                         int tempIndex = 0;
                         if (x > 0 && lines[y].charAt(x - 1) == '%') {
                             tempIndex += 2;
@@ -108,8 +124,7 @@ public class MarioLevel {
                         }
                         this.levelTiles[x][y] = 43 + tempIndex;
                         break;
-                    case '|':
-                        //background for jump through block
+                    case '|': // 雨林背景
                         this.levelTiles[x][y] = 47;
                         break;
                     case '*':
@@ -150,39 +165,33 @@ public class MarioLevel {
                         //invisible 1 up block
                         this.levelTiles[x][y] = 48;
                         break;
-                    case '2':
-                        //invisible coin block
+                    case '2': // 不可见的金币砖块
                         this.totalCoins += 1;
                         this.levelTiles[x][y] = 49;
                         break;
-                    case 'D':
-                        //used
+                    case 'D': // 使用过后的砖块
                         this.levelTiles[x][y] = 14;
                         break;
-                    case 'S':
-                        //normal block
+                    case 'S': // 普通砖块
                         this.levelTiles[x][y] = 6;
                         break;
-                    case 'C':
-                        //coin block
+                    case 'C': // 含有金币的方块
                         this.totalCoins += 1;
                         this.levelTiles[x][y] = 7;
                         break;
-                    case 'U':
-                        //mushroom block
-                        this.levelTiles[x][y] = 50;
+                    case 'U': // 含有蘑菇的方块
+                        this.levelTiles[x][y] = 8;
                         break;
                     case 'L':
                         //1up block
                         this.levelTiles[x][y] = 51;
                         break;
-                    case 'o':
+                    case 'o': // 金币
                         //coin
                         this.totalCoins += 1;
                         this.levelTiles[x][y] = 15;
                         break;
-                    case 't':
-                        //empty Pipe
+                    case 't': // 不含食人花的管道
                         tempIndex = 0;
                         boolean singlePipe = false;
                         if (x < lines[y].length() - 1 && Character.toLowerCase(lines[y].charAt(x + 1)) != 't' &&
@@ -205,8 +214,7 @@ public class MarioLevel {
                             this.levelTiles[x][y] = 18 + tempIndex;
                         }
                         break;
-                    case 'T':
-                        //flower pipe
+                    case 'T': // 含有食人花的管道
                         tempIndex = 0;
                         singlePipe = x < lines[y].length() - 1 && Character.toLowerCase(lines[y].charAt(x + 1)) != 't' &&
                                 x > 0 && Character.toLowerCase(lines[y].charAt(x - 1)) != 't';
@@ -229,20 +237,16 @@ public class MarioLevel {
                             this.levelTiles[x][y] = 18 + tempIndex;
                         }
                         break;
-                    case '<':
-                        //pipe top left
+                    case '<': // 管道的顶部的左边
                         this.levelTiles[x][y] = 18;
                         break;
-                    case '>':
-                        //pipe top right
+                    case '>': // 管道的顶部的右边
                         this.levelTiles[x][y] = 19;
                         break;
-                    case '[':
-                        //pipe body left
+                    case '[': // 管道的身体部分的左边
                         this.levelTiles[x][y] = 20;
                         break;
-                    case ']':
-                        //pipe body right
+                    case ']': // 管道身体部分的右边
                         this.levelTiles[x][y] = 21;
                         break;
                 }

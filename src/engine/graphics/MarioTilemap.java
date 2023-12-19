@@ -14,6 +14,11 @@ public class MarioTilemap extends MarioGraphics {
     public float[][] moveShift;
     public int animationIndex;
 
+    /**
+     *
+     * @param sheet
+     * @param currentIndeces
+     */
     public MarioTilemap(Image[][] sheet, int[][] currentIndeces) {
         this.sheet = sheet;
         this.currentIndeces = currentIndeces;

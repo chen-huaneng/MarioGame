@@ -10,13 +10,21 @@ public enum SpriteType {
     UNDEF(-42),
     MARIO(-31),
     FIREBALL(16),
+    // 贡巴
     GOOMBA(2, 16),
+    // 带翅膀的贡巴
     GOOMBA_WINGED(3, 16),
+    // 红色库帕
     RED_KOOPA(4, 0),
+    // 带翅膀的红色库帕
     RED_KOOPA_WINGED(5, 0),
+    // 绿色库帕
     GREEN_KOOPA(6, 8),
+    // 带翅膀的绿色库帕
     GREEN_KOOPA_WINGED(7, 8),
+    // 尖刺
     SPIKY(8, 24),
+    // 带翅膀的尖刺
     SPIKY_WINGED(9, 24),
     BULLET_BILL(10, 40),
     ENEMY_FLOWER(11, 48),

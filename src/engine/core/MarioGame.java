@@ -26,14 +26,14 @@ public class MarioGame {
     // 暂停游戏
     public boolean pause = false;
 
-    //visualization
+    // 可视化
     private JFrame window = null;
     private MarioRender render = null;
     private Agent agent = null;
     private MarioWorld world = null;
 
     /**
-     * Create a mario game to be played
+     * 创建Mario游戏
      */
     public MarioGame() {
 
@@ -46,56 +46,78 @@ public class MarioGame {
         return 1000 / fps;
     }
 
+    /**
+     * 设置游戏的主角
+     *
+     * @param agent 游戏的主角
+     */
     private void setAgent(Agent agent) {
         this.agent = agent;
+        // 为主角增加键盘监听器，用于操控人物移动事件
         if (agent != null) {
             this.render.addKeyListener(this.agent);
         }
     }
 
     /**
-     * Play a certain mario level
+     * 以指定的地图开始Mario游戏
      *
-     * @param level      a string that constitutes the mario level, it uses the same representation as the VGLC but with more details. for more details about each symbol check the json file in the levels folder.
-     * @param timer      number of ticks for that level to be played. Setting timer to anything &lt;=0 will make the time infinite
-     * @param marioState the initial state that mario appears in. 0 small mario, 1 large mario, and 2 fire mario.
-     * @return statistics about the current game
+     * @param level 以String形式展示的Mario地图
+     * @param timer 游戏内的时间计时器，如果设置为0则变成无限制
+     * @param marioState Mario的初始状态，0表示最小的Mario，1表示大个的Mario，2表示发射火球的Mario
      */
     public void playGame(String level, int timer, int marioState) {
         this.runGame(new Agent(), level, timer, marioState, true, 30, 2);
     }
 
     /**
-     * Run a certain mario level with a certain agent
+     * 在指定的地图上运行Mario游戏
      *
-     * @param agent      the current AI agent used to play the game
-     * @param level      a string that constitutes the mario level, it uses the same representation as the VGLC but with more details. for more details about each symbol check the json file in the levels folder.
-     * @param timer      number of ticks for that level to be played. Setting timer to anything &lt;=0 will make the time infinite
-     * @param marioState the initial state that mario appears in. 0 small mario, 1 large mario, and 2 fire mario.
-     * @param visuals    show the game visuals if it is true and false otherwise
-     * @param fps        the number of frames per second that the update function is following
-     * @param scale      the screen scale, that scale value is multiplied by the actual width and height
-     * @return statistics about the current game
+     * @param level 以String形式展示的Mario地图
+     * @param timer 游戏内的计时器，如果设置为0则变成无限制
+     * @param marioState Mario的初始状态，0表示最小的Mario，1表示大个的Mario，2表示发射火球的Mario
+     * @param visuals 控制游戏界面是否可视化
+     * @param fps the number of frames per second that the update function is following
+     * @param scale 界面比例大小，会乘以界面相应的长度和宽度
      */
-    public void runGame(Agent agent, String level, int timer, int marioState, boolean visuals, int fps, float scale) {
+    public void runGame(Agent agent, String level, int timer, int marioState, boolean visuals, int fps, double scale) {
         // 控制可视化的界面
         if (visuals) {
+            // 创建游戏窗口
             this.window = new JFrame("Mario Game");
+            // 控制界面大小
             this.render = new MarioRender(scale);
+            // 将内容面板设置为render
             this.window.setContentPane(this.render);
+            // 调整窗口的大小以适应内容面板的大小
             this.window.pack();
+            // 设置为不能改变窗口的大小
             this.window.setResizable(false);
+            // 将窗口设置到屏幕中央
             this.window.setLocationRelativeTo(null);
+            // 设置窗口关闭的操作，当关闭窗口的时候，终值程序
             this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            // 获取图像
             this.render.init();
+            // 设置窗口为可见
             this.window.setVisible(true);
         }
+
         // 设置游戏主角
         this.setAgent(agent);
 
         this.gameLoop(level, timer, marioState, visuals, fps);
     }
 
+    /**
+     *
+     *
+     * @param level 游戏地图
+     * @param timer 游戏内的时间
+     * @param marioState 初始Mario的状态
+     * @param visual 是否可视化
+     * @param fps
+     */
     private void gameLoop(String level, int timer, int marioState, boolean visual, int fps) {
         this.world = new MarioWorld();
 

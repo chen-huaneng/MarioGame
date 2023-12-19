@@ -21,7 +21,9 @@ public class MarioWorld {
     public float cameraX;
     public float cameraY;
     public Mario mario;
+    // 游戏地图
     public MarioLevel level;
+    // 是否可视化
     public boolean visuals;
     public int currentTick;
     //Status
@@ -85,6 +87,12 @@ public class MarioWorld {
         backgrounds[1] = new MarioBackground(graphicsConfig, MarioGame.width, tempBackground);
     }
 
+    /**
+     * 初始化地图
+     *
+     * @param level 游戏地图
+     * @param timer 游戏内时间
+     */
     public void initializeLevel(String level, int timer) {
         this.currentTimer = timer;
         this.level = new MarioLevel(level, this.visuals);

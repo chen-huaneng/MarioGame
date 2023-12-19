@@ -453,16 +453,6 @@ public class LevelGenerator {
             length += buildZone(model, length, model.getWidth() - length);
         }
 
-        //// 生成地图的底部，使得在一定高度以下都是地面，保证上面生成的地形的底部不会出现空白
-        //int floor = model.getHeight() - 1 - random.nextInt(4);
-        //
-        //for (int x = length; x < model.getWidth(); ++x) {
-        //    // 在一定高度以上设置为地板砖块
-        //    for (int y = floor; y < model.getHeight(); ++y) {
-        //        model.setBlock(x, y, MarioLevelModel.GROUND);
-        //    }
-        //}
-
         // 生成天花板
         if (type > 0) {
             // 天花板的高度

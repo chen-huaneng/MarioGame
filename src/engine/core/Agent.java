@@ -2,7 +2,6 @@ package engine.core;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-
 import engine.helper.MarioActions;
 
 public class Agent extends KeyAdapter {

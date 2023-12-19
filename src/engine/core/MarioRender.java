@@ -11,27 +11,41 @@ import java.awt.event.FocusListener;
 
 
 public class MarioRender extends JComponent implements FocusListener {
-    private final float scale;
+    // 界面大小的比例
+    private final double scale;
     private GraphicsConfiguration graphicsConfiguration;
 
     boolean focused;
 
-    public MarioRender(float scale) {
+    /**
+     * 控制游戏界面的大小和交互功能
+     *
+     * @param scale 界面大小的比例
+     */
+    public MarioRender(double scale) {
+        // 设置可以获得焦点
         this.setFocusable(true);
+        // 启用与用户交互的功能
         this.setEnabled(true);
+        // 设置界面的大小比例
         this.scale = scale;
 
+        // 设置界面的尺寸大小
         Dimension size = new Dimension((int) (256 * scale), (int) (240 * scale));
 
-        setPreferredSize(size);
-        setMinimumSize(size);
-        setMaximumSize(size);
-
-        setFocusable(true);
+        // 确保界面的大小一致性
+        this.setPreferredSize(size);
+        this.setMinimumSize(size);
+        this.setMaximumSize(size);
     }
 
+    /**
+     * 初始化和图像相关的资源
+     */
     public void init() {
+        // 获取当前对象的图形配置，例如屏幕分辨率、颜色深度等
         graphicsConfiguration = getGraphicsConfiguration();
+        // 初始化
         Assets.init(graphicsConfiguration);
     }
 
