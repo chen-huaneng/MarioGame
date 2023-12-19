@@ -67,7 +67,7 @@ public class MarioGame {
      * @param marioState Mario的初始状态，0表示最小的Mario，1表示大个的Mario，2表示发射火球的Mario
      */
     public void playGame(String level, int timer, int marioState) {
-        this.runGame(new Agent(), level, timer, marioState, true, 30, 2);
+        this.runGame(new Agent(), level, timer, marioState, true, 30, 2.5);
     }
 
     /**
