@@ -1,14 +1,17 @@
 package engine.core;
 
-import engine.sprites.Mario;
-
 import java.util.Random;
 
 public class LevelGenerator {
+    // 生成直线地形的概率
     private static final int ODDS_STRAIGHT = 0;
+    // 生成坡度地形的概率
     private static final int ODDS_HILL_STRAIGHT = 1;
+    // 生成管道的概率
     private static final int ODDS_TUBES = 2;
+    // 生成悬崖的概率
     private static final int ODDS_JUMP = 3;
+    // 生成炮塔的概率
     private static final int ODDS_CANNONS = 4;
     // 控制各种地图静态数据的概率
     private final int[] odds = new int[5];
@@ -23,7 +26,9 @@ public class LevelGenerator {
     /** 初始化随机数生成器 */
     public LevelGenerator() {
         random = new Random();
+        // 控制类型
         this.type = random.nextInt(3);
+        // 控制难度
         this.difficulty = random.nextInt(5);
     }
 
@@ -51,7 +56,7 @@ public class LevelGenerator {
             // 生成管道
             case ODDS_TUBES -> buildTubes(model, x, maxLength);
             // 生成悬崖地形
-            case ODDS_JUMP -> buildJump(model, x);
+            case ODDS_JUMP -> buildJump(model, x, maxLength);
             // 生成炮台
             case ODDS_CANNONS -> buildCannons(model, x, maxLength);
             default -> 0;
@@ -62,15 +67,20 @@ public class LevelGenerator {
      * 生成悬崖地形
      * @param model 地图模型
      * @param xo 当前地形的起始位置
+     * @param maxLength 最大长度
      * @return 当前地形的长度
      */
-    private int buildJump(MarioLevelModel model, int xo) {
+    private int buildJump(MarioLevelModel model, int xo, int maxLength) {
         // 跳跃两边的长度
         int js = random.nextInt(4) + 2;
         // 跳跃的长度
         int jl = random.nextInt(2) + 2;
         // 悬崖的总长度
         int length = js * 2 + jl;
+
+        if (length >= maxLength) {
+            return 0;
+        }
 
         // 有1/3的概率生成阶梯
         boolean hasStairs = random.nextInt(3) == 0;
@@ -79,19 +89,17 @@ public class LevelGenerator {
         int floor = model.getHeight() - 1 - random.nextInt(4);
 
         // 在悬崖两边设置方块
-        // 设置悬崖左边的方块
-        for (int x = xo; x < xo + js; ++x) {
-            for (int y = 0; y < model.getHeight(); ++y) {
+        for (int y = 0; y < model.getHeight(); ++y) {
+            // 设置悬崖左边的方块
+            for (int x = xo; x < xo + js; ++x) {
                 // 大于底部的高度或者有阶梯并且满足一定的阶梯条件
                 if (y >= floor || (hasStairs && (y >= floor - (x - xo) + 1))) {
                     model.setBlock(x, y, MarioLevelModel.GROUND);
                 }
             }
-        }
 
-        // 设置悬崖右边的方块
-        for (int x = xo + length - js; x < xo + length; ++x) {
-            for (int y = 0; y < model.getHeight(); y++) {
+            // 设置悬崖右边的方块
+            for (int x = xo + length - js; x < xo + length; ++x) {
                 // 大于底部的高度或者有阶梯并且满足一定的阶梯条件
                 if (y >= floor || (hasStairs && (y >= floor - ((xo + length) - x) + 2))) {
                     model.setBlock(x, y, MarioLevelModel.GROUND);
@@ -132,6 +140,7 @@ public class LevelGenerator {
             int cannonHeight = floor - random.nextInt(4) - 1;
 
             for (int y = 0; y < model.getHeight(); ++y) {
+                // 设置底部的砖块
                 if (y >= floor) {
                     model.setBlock(x, y, MarioLevelModel.GROUND);
                 } else if (x == xCannon && y >= cannonHeight){
@@ -145,7 +154,7 @@ public class LevelGenerator {
     }
 
     /**
-     *
+     * 生成直线雨林
      * @param model 地图模型
      * @param xo 当前地形的起始位置
      * @param maxLength 当前地形的最大长度
@@ -171,45 +180,55 @@ public class LevelGenerator {
         // 添加敌人
         addEnemyLine(model, xo + 1, xo + length - 1, floor - 1);
 
+        // 初始高度
         int h = floor;
 
-        // 判断是否继续生成
-        boolean keepGoing = true;
-
+        // 判断是否已经生成
         boolean[] occupied = new boolean[length];
+
         // 在坡度上生成地形
-        while (keepGoing) {
-            // 随机减少坡度的高度
+        while (true) {
+            // 随机增加坡度的高度
             h = h - 2 - random.nextInt(3);
 
             // 坡度高度小于0则停止生成
             if (h <= 0) {
-                keepGoing = false;
+                break;
             } else {
                 // 随机生成坡度的长度和起始位置
                 int l = random.nextInt(5) + 3;
+
+                // 如果长度不够则不继续生成
+                if (length - l - 2 <= 0) {
+                    break;
+                }
+
                 int xxo = random.nextInt(length - l - 2) + xo + 1;
 
                 // 检查新生成的坡度是否与现有的坡度重合
                 if (occupied[xxo - xo] || occupied[xxo - xo + l] || occupied[xxo - xo - 1]
                         || occupied[xxo - xo + l + 1]) {
-                    keepGoing = false;
+                    break;
                 } else {
                     // 标记已生成的坡度位置
                     occupied[xxo - xo] = true;
                     occupied[xxo - xo + l] = true;
+
                     // 添加敌人
                     addEnemyLine(model, xxo, xxo + l, h - 1);
+
                     // 有1/4的概率生成砖块和金币等
                     if (random.nextInt(4) == 0) {
                         decorate(model, xxo - 1, xxo + l + 1, h);
-                        keepGoing = false;
+                        break;
                     }
+
                     // 在新的坡度内设置地形块
                     for (int x = xxo; x < xxo + l; ++x) {
                         for (int y = h; y < floor; ++y) {
                             int yy = y == h ? 8 : 9;
                             if (model.getBlock(x, y) == MarioLevelModel.EMPTY) {
+                                // 在顶部设置平台，如果不是顶部则设置为背景
                                 model.setBlock(x, y, yy == 8 ? MarioLevelModel.PLATFORM : MarioLevelModel.PLATFORM_BACKGROUND);
                             }
                         }
@@ -235,9 +254,12 @@ public class LevelGenerator {
         // 在指定范围内生成敌人
         for (int x = x0; x < x1; ++x) {
             // 判断是否生成敌人
-            if (random.nextInt(35) < difficulty + 1) {
+            if (random.nextInt(35) <= difficulty) {
                 // 选择敌人的类型,根据难度设置不同的敌人
-                int type = difficulty < 1 ? 0 : random.nextInt(3) + 1;
+                int type = 0;
+                if (difficulty != 0) {
+                    type = random.nextInt(3) + 1;
+                }
                 // 在地图上设置敌人,根据难度判断是否给敌人加上翅膀
                 model.setBlock(x, y, MarioLevelModel.getWingedEnemyVersion(enemies[type], random.nextInt(35) < difficulty));
             }
@@ -253,7 +275,7 @@ public class LevelGenerator {
      */
     private int buildTubes(MarioLevelModel model, int xo, int maxLength) {
         // 随机生成地形的长度
-        int length = random.nextInt(10) + 5;
+        int length = random.nextInt(5) + 5;
         // 如果长度大于最大长度则设为最大长度
         if (length > maxLength) {
             length = maxLength;
@@ -266,12 +288,13 @@ public class LevelGenerator {
         // 管道的高度
         int tubeHeight = floor - random.nextInt(2) - 2;
         for (int x = xo; x < xo + length; ++x) {
+            // 控制管道的贴图能够正常，不会出现管道只有一半的情况
             if (x > xTube + 1) {
                 xTube += 3 + random.nextInt(4);
                 tubeHeight = floor - random.nextInt(2) - 2;
             }
             if (xTube >= xo + length - 2) {
-                xTube += 10;
+                xTube += 4;
             }
 
             char tubeType = MarioLevelModel.PIPE;
@@ -281,9 +304,11 @@ public class LevelGenerator {
             }
 
             for (int y = 0; y < model.getHeight(); ++y) {
+                // 在底部设置砖块
                 if (y >= floor) {
                     model.setBlock(x, y, MarioLevelModel.GROUND);
                 } else if ((x == xTube || x == xTube + 1) && y >= tubeHeight) {
+                    // 设置管道贴图
                     model.setBlock(x, y, tubeType);
                 }
             }
@@ -364,10 +389,10 @@ public class LevelGenerator {
                 // 生成砖块或者金币的概率
                 int rate = random.nextInt(10);
 
-                // 如果不在左边界和右边界上，则生成砖块，并且有5/10的概率
-                if (x != x0 + 1 && x != x1 - 2 && rate < 5) {
+                // 如果不在左边界和右边界上，则生成砖块，并且有6/10的概率
+                if (x != x0 + 1 && x != x1 - 2 && rate < 6) {
                     type = MarioLevelModel.NORMAL_BRICK;
-                } else if (rate < 7) { // 有2/10的概率生成含有金币的方块
+                } else if (rate == 6) { // 有1/10的概率生成含有金币的方块
                     type = MarioLevelModel.COIN_BRICK;
                 } else if (rate == 7) { // 有1/10的概率生成含有蘑菇的方块
                     type = MarioLevelModel.MUSHROOM_BRICK;
@@ -378,7 +403,7 @@ public class LevelGenerator {
         }
     }
 
-    /**
+    /** 初始化地图
      * @param model 控制地图的高度和长度
      * @return 返回地图*/
     public String getGeneratedLevel(MarioLevelModel model) {
@@ -386,10 +411,12 @@ public class LevelGenerator {
         model.clearMap();
 
         // 初始化地图静态物体的数据
+        // 直线地形的概率
         odds[ODDS_STRAIGHT] = 20;
+        // 坡度地形的概率
         odds[ODDS_HILL_STRAIGHT] = 10;
         // 控制管道的数量
-        odds[ODDS_TUBES] = 2 + 1 * difficulty;
+        odds[ODDS_TUBES] = 2 + difficulty;
         // 控制悬崖的数量
         odds[ODDS_JUMP] = 2 * difficulty;
         // 控制大炮的数量
@@ -400,7 +427,7 @@ public class LevelGenerator {
             odds[ODDS_HILL_STRAIGHT] = 0;
         }
 
-        for (int i = 0; i < odds.length; i++) {
+        for (int i = 0; i < odds.length; ++i) {
             // 概率修正，防止概率小于0
             if (odds[i] < 0) {
                 odds[i] = 0;
@@ -447,6 +474,7 @@ public class LevelGenerator {
             }
         }
 
+        // 返回String形式的地图
         return model.getMap();
     }
 }

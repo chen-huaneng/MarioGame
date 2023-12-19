@@ -1,11 +1,9 @@
 package engine.core;
 
 public class MarioLevelModel {
-    //start and end of the level
     // 空白
     public static final char EMPTY = '-';
 
-    //game tiles symbols
     // 地面方块
     public static final char GROUND = 'X';
     // 普通砖块
@@ -27,7 +25,6 @@ public class MarioLevelModel {
     // 跳过平台
     public static final char PLATFORM = '%';
 
-    //enemies that can be in the level
     // 蘑菇怪
     public static final char GOOMBA = 'g';
     // 有翅膀的蘑菇怪
@@ -55,10 +52,10 @@ public class MarioLevelModel {
     public static char getWingedEnemyVersion(char enemy, boolean winged) {
         // 判断是否带翅膀
         return switch (enemy) {
-            case GOOMBA_WINGED -> winged ? GOOMBA : enemy;
-            case GREEN_KOOPA_WINGED -> winged ? GREEN_KOOPA : enemy;
-            case RED_KOOPA_WINGED -> winged ? RED_KOOPA : enemy;
-            case SPIKY_WINGED -> winged ? SPIKY : enemy;
+            case GOOMBA -> winged ? GOOMBA_WINGED : enemy;
+            case GREEN_KOOPA -> winged ? GREEN_KOOPA_WINGED : enemy;
+            case RED_KOOPA -> winged ? RED_KOOPA_WINGED : enemy;
+            case SPIKY -> winged ? SPIKY_WINGED : enemy;
             default -> enemy;
         };
     }
@@ -78,9 +75,9 @@ public class MarioLevelModel {
     }
 
     /**
-     * get map width
+     * 获取地图的宽度
      *
-     * @return map width
+     * @return 地图的宽度
      */
     public int getWidth() {
         // 获取地图的宽度
@@ -88,9 +85,9 @@ public class MarioLevelModel {
     }
 
     /**
-     * get map height
+     * 获取地图的高度
      *
-     * @return map height
+     * @return 地图的高度
      */
     public int getHeight() {
         // 获取地图的高度
@@ -99,7 +96,6 @@ public class MarioLevelModel {
 
     /**
      * 获取指定位置的贴图块
-     * get the value of the tile in certain location
      *
      * @param x x tile position 横坐标的位置
      * @param y y tile position 纵坐标的位置
@@ -108,6 +104,7 @@ public class MarioLevelModel {
     public char getBlock(int x, int y) {
         int currentX = x;
         int currentY = y;
+
         // 处理异常的位置(边界位置)
         if (x < 0) {
             currentX = 0;
@@ -121,15 +118,16 @@ public class MarioLevelModel {
         if (y > this.map[0].length - 1) {
             currentY = this.map[0].length - 1;
         }
+
         return this.map[currentX][currentY];
     }
 
     /**
-     * set a tile on the map with certain value
+     * 设置指定位置的贴图
      *
-     * @param x     the x tile position
-     * @param y     the y tile position
-     * @param value the tile value to be set
+     * @param x     横坐标的位置
+     * @param y     纵坐标的位置
+     * @param value 被设置的贴图值
      */
     public void setBlock(int x, int y, char value) {
         // 判断是否越界
@@ -139,7 +137,7 @@ public class MarioLevelModel {
     }
 
     /**
-     * clear the whole map
+     * 清空整个地图
      */
     public void clearMap() {
         // 清空地图

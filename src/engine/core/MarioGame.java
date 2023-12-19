@@ -26,11 +26,6 @@ public class MarioGame {
     // 暂停游戏
     public boolean pause = false;
 
-    /**
-     * events that kills the player when it happens only care about type and param
-     */
-    private MarioEvent[] killEvents;
-
     //visualization
     private JFrame window = null;
     private MarioRender render = null;
@@ -66,8 +61,8 @@ public class MarioGame {
      * @param marioState the initial state that mario appears in. 0 small mario, 1 large mario, and 2 fire mario.
      * @return statistics about the current game
      */
-    public MarioResult playGame(String level, int timer, int marioState) {
-        return this.runGame(new Agent(), level, timer, marioState, true, 30, 2);
+    public void playGame(String level, int timer, int marioState) {
+        this.runGame(new Agent(), level, timer, marioState, true, 30, 2);
     }
 
     /**
@@ -82,7 +77,7 @@ public class MarioGame {
      * @param scale      the screen scale, that scale value is multiplied by the actual width and height
      * @return statistics about the current game
      */
-    public MarioResult runGame(Agent agent, String level, int timer, int marioState, boolean visuals, int fps, float scale) {
+    public void runGame(Agent agent, String level, int timer, int marioState, boolean visuals, int fps, float scale) {
         // 控制可视化的界面
         if (visuals) {
             this.window = new JFrame("Mario Game");
@@ -90,6 +85,7 @@ public class MarioGame {
             this.window.setContentPane(this.render);
             this.window.pack();
             this.window.setResizable(false);
+            this.window.setLocationRelativeTo(null);
             this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             this.render.init();
             this.window.setVisible(true);
@@ -97,10 +93,10 @@ public class MarioGame {
         // 设置游戏主角
         this.setAgent(agent);
 
-        return this.gameLoop(level, timer, marioState, visuals, fps);
+        this.gameLoop(level, timer, marioState, visuals, fps);
     }
 
-    private MarioResult gameLoop(String level, int timer, int marioState, boolean visual, int fps) {
+    private void gameLoop(String level, int timer, int marioState, boolean visual, int fps) {
         this.world = new MarioWorld();
 
         // 控制可视化界面
@@ -163,8 +159,5 @@ public class MarioGame {
                 }
             }
         }
-
-        // 返回游戏的结果
-        return new MarioResult(this.world, gameEvents);
     }
 }
