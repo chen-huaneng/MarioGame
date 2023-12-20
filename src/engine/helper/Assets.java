@@ -12,8 +12,11 @@ import javax.imageio.ImageIO;
 
 
 public class Assets {
+    // 普通Mario贴图数组
     public static Image[][] mario;
+    // 小个的Mario贴图数组
     public static Image[][] smallMario;
+    // 火球Mario贴图数组
     public static Image[][] fireMario;
     public static Image[][] enemies;
     public static Image[][] items;
@@ -61,17 +64,6 @@ public class Assets {
         // 从文件系统中读取图像资源
         // source用于存储图像的原始数据
         BufferedImage source = ImageIO.read(file);
-
-        //// 如果无法读取图像
-        //if (source == null) {
-        //    // 创建文件表示路径
-        //    File newFile = new File(imageName);
-        //    ImageInputStream iis = ImageIO.createImageInputStream(newFile);
-        //    String suffix = imageName.substring(imageName.length() - 3);
-        //    ImageReader reader = ImageIO.getImageReadersBySuffix(suffix).next();
-        //    reader.setInput(iis, true);
-        //    source = reader.read(0);
-        //}
 
         // 创建兼容的图像
         Image image = gc.createCompatibleImage(source.getWidth(), source.getHeight(), Transparency.BITMASK);

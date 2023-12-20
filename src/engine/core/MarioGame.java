@@ -106,6 +106,7 @@ public class MarioGame {
         // 设置游戏主角
         this.setAgent(agent);
 
+        // 进入游戏主循环
         this.gameLoop(level, timer, marioState, visuals, fps);
     }
 
@@ -119,12 +120,16 @@ public class MarioGame {
      * @param fps
      */
     private void gameLoop(String level, int timer, int marioState, boolean visual, int fps) {
+        // 初始化
         this.world = new MarioWorld();
 
         // 控制可视化界面
         this.world.visuals = visual;
+        // 初始化游戏主要的设置
         this.world.initializeLevel(level, 1000 * timer);
+        // 控制可视化
         if (visual) {
+            // 设置游戏的背景贴图
             this.world.initializeVisuals(this.render.getGraphicsConfiguration());
         }
 

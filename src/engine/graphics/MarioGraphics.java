@@ -10,6 +10,9 @@ public abstract class MarioGraphics {
     public boolean flipX, flipY;
     public int width, height;
 
+    /**
+     *
+     */
     public MarioGraphics() {
         this.visible = true;
         this.alpha = 1;

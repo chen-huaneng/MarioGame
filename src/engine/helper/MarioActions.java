@@ -23,7 +23,11 @@ public enum MarioActions {
         return name;
     }
 
-    /** 获取动作的长度 */
+    /**
+     * 获取游戏动作
+     *
+     * @return 返回数组的长度
+     */
     public static int numberOfActions() {
         return MarioActions.values().length;
     }

@@ -24,6 +24,7 @@ public class MarioLevel {
     private MarioImage flag;
 
     /**
+     * 设置游戏的贴图
      *
      * @param level 游戏地图
      * @param visuals 是否可视化
@@ -211,14 +212,21 @@ public class MarioLevel {
         this.exitTileX = lines[0].length() - 1;
         this.exitTileY = findFirstFloor(lines, this.exitTileX);
 
-        for (int y = this.exitTileY; y > Math.max(1, this.exitTileY - 11); y--) {
+        // 设置终点的旗杆底部
+        for (int y = this.exitTileY; y > Math.max(1, this.exitTileY - 11); --y) {
             this.levelTiles[this.exitTileX][y] = 40;
         }
+
+        // 设置旗杆的顶部
         this.levelTiles[this.exitTileX][Math.max(1, this.exitTileY - 11)] = 39;
 
+        // 判断是否可视化
         if (visuals) {
+            // 设置贴图
             this.graphics = new MarioTilemap(Assets.level, this.levelTiles);
+            // 设置旗杆的旗帜
             this.flag = new MarioImage(Assets.level, 41);
+            // 设置旗帜的长度和宽度
             this.flag.width = 16;
             this.flag.height = 16;
         }
@@ -286,16 +294,29 @@ public class MarioLevel {
         return xTile + "_" + yTile + "_" + this.getSpriteType(xTile, yTile).getValue();
     }
 
+    /**
+     * 判断是否为固定的静态物体
+     *
+     * @param c 地图中的字符
+     * @return 是否为静态物体
+     */
     private boolean isSolid(char c) {
-        return c == 'X' || c == '#' || c == '@' || c == '!' || c == 'B' || c == 'C' ||
-                c == 'Q' || c == '<' || c == '>' || c == '[' || c == ']' || c == '?' ||
-                c == 'S' || c == 'U' || c == 'D' || c == '%' || c == 't' || c == 'T';
+        return c == 'X' || c == '*' || c == 'C' || c == 'S' ||
+                c == 'U' || c == 'D' || c == '%' || c == 't' || c == 'T';
     }
 
+    /**
+     * 找到指定横坐标的地板高度
+     *
+     * @param lines 以String形式存储的地图
+     * @param x 横坐标的位置
+     * @return 纵坐标的位置
+     */
     private int findFirstFloor(String[] lines, int x) {
         boolean skipLines = true;
-        for (int i = lines.length - 1; i >= 0; i--) {
-            Character c = lines[i].charAt(x);
+        for (int i = lines.length - 1; i >= 0; --i) {
+            char c = lines[i].charAt(x);
+            // 如果是静态物体则跳过
             if (isSolid(c)) {
                 skipLines = false;
                 continue;

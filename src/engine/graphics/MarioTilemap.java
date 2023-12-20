@@ -15,15 +15,16 @@ public class MarioTilemap extends MarioGraphics {
     public int animationIndex;
 
     /**
+     * 初始化游戏地图的贴图
      *
-     * @param sheet
-     * @param currentIndeces
+     * @param sheet 贴图的图片
+     * @param currentIndices 贴图的索引值
      */
-    public MarioTilemap(Image[][] sheet, int[][] currentIndeces) {
+    public MarioTilemap(Image[][] sheet, int[][] currentIndices) {
         this.sheet = sheet;
-        this.currentIndeces = currentIndeces;
-        this.indexShift = new int[currentIndeces.length][currentIndeces[0].length];
-        this.moveShift = new float[currentIndeces.length][currentIndeces[0].length];
+        this.currentIndeces = currentIndices;
+        this.indexShift = new int[currentIndices.length][currentIndices[0].length];
+        this.moveShift = new float[currentIndices.length][currentIndices[0].length];
         this.animationIndex = 0;
     }
 

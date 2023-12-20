@@ -7,7 +7,7 @@ import engine.sprites.FlowerEnemy;
 public enum SpriteType {
     //Generic values
     NONE(0),
-    UNDEF(-42),
+    // Mario
     MARIO(-31),
     FIREBALL(16),
     // 贡巴

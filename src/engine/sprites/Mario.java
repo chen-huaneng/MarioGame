@@ -29,10 +29,18 @@ public class Mario extends MarioSprite {
     private final float AIR_INERTIA = 0.89f;
     private final int POWERUP_TIME = 3;
 
+    /**
+     *
+     * @param visuals 是否可视化
+     * @param x Mario的初始横坐标
+     * @param y Mario的初始纵坐标
+     */
     public Mario(boolean visuals, float x, float y) {
         super(x + 8, y + 15, SpriteType.MARIO);
+        // 设置初始的状态
         this.isLarge = this.oldLarge = false;
         this.isFire = this.oldFire = false;
+        // 设置高度和宽度
         this.width = 4;
         this.height = 24;
         // 显示图像
@@ -172,7 +180,11 @@ public class Mario extends MarioSprite {
         return blocking;
     }
 
+    /**
+     *
+     */
     public void updateGraphics() {
+        // 如果Mario死亡则不更新
         if (!this.alive) {
             return;
         }

@@ -43,7 +43,9 @@ public class MarioWorld {
      * 初始化世界 */
     public MarioWorld() {
         this.pauseTimer = 0;
+        // 设置游戏状态
         this.gameStatus = GameStatus.RUNNING;
+        // 初始化存储动态相关的链表
         this.sprites = new ArrayList<>();
         this.shellsToCheck = new ArrayList<>();
         this.fireballsToCheck = new ArrayList<>();
@@ -53,7 +55,10 @@ public class MarioWorld {
         this.lastFrameEvents = new ArrayList<>();
     }
 
-    /** 初始化游戏可视化 */
+    /**
+     * 设置游戏的背景
+     * @param graphicsConfig 图片相关的配置
+     */
     public void initializeVisuals(GraphicsConfiguration graphicsConfig) {
         int[][] tempBackground = new int[][]{
                 new int[]{42},
@@ -73,7 +78,9 @@ public class MarioWorld {
                 new int[]{42},
                 new int[]{42}
         };
+        // 设置游戏的背景
         backgrounds[0] = new MarioBackground(graphicsConfig, MarioGame.width, tempBackground);
+
         tempBackground = new int[][]{
                 new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -85,11 +92,12 @@ public class MarioWorld {
                 new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
         };
+        // 设置游戏的背景
         backgrounds[1] = new MarioBackground(graphicsConfig, MarioGame.width, tempBackground);
     }
 
     /**
-     * 初始化地图
+     * 初始化地图中主要的设置
      *
      * @param level 游戏地图
      * @param timer 游戏内时间
@@ -100,7 +108,9 @@ public class MarioWorld {
 
         // 添加Mario
         this.mario = new Mario(this.visuals, this.level.marioTileX * 16, this.level.marioTileY * 16);
+        // Mario的存活状态
         this.mario.alive = true;
+        // 在精灵列表中添加Mario
         this.sprites.add(this.mario);
 
         this.mario.world = this;
@@ -164,7 +174,10 @@ public class MarioWorld {
         return sprite instanceof Enemy || sprite instanceof FlowerEnemy || sprite instanceof BulletBill;
     }
 
-    /** 更新游戏的数据 */
+    /**
+     * 更新游戏状态
+     * @param actions 动作数组
+     */
     public void update(boolean[] actions) {
         // 判断游戏是否正在运行
         if (this.gameStatus != GameStatus.RUNNING) {
