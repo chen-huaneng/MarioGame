@@ -39,7 +39,8 @@ public class MarioWorld {
 
     private final MarioBackground[] backgrounds = new MarioBackground[2];
 
-    /** 初始化世界 */
+    /**
+     * 初始化世界 */
     public MarioWorld() {
         this.pauseTimer = 0;
         this.gameStatus = GameStatus.RUNNING;

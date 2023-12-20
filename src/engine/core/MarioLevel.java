@@ -35,6 +35,7 @@ public class MarioLevel {
             this.width = 0;
             this.tileHeight = 0;
             this.height = 0;
+            // 为空则初始化重要参数并返回
             return;
         }
 
@@ -47,6 +48,7 @@ public class MarioLevel {
         this.tileHeight = lines.length;
         this.height = this.tileHeight * 16;
 
+        // 用于存储贴图相关的数组
         this.levelTiles = new int[lines[0].length()][lines.length];
         this.spriteTemplates = new SpriteType[lines[0].length()][lines.length];
         this.lastSpawnTime = new int[lines[0].length()][lines.length];
@@ -70,8 +72,7 @@ public class MarioLevel {
             for (int x = 0; x < lines[y].length(); ++x) {
                 char c = lines[y].charAt(x);
                 switch (c) {
-                    // Mario的位置
-                    case 'M':
+                    case 'M': // Mario的位置
                         this.marioTileX = x;
                         this.marioTileY = y;
                         marioLocInit = true;
@@ -107,68 +108,69 @@ public class MarioLevel {
                         this.spriteTemplates[x][y] = SpriteType.RED_KOOPA_WINGED;
                         break;
                     case 'X': // 地板
-                        //floor
                         this.levelTiles[x][y] = 1;
                         break;
-                    case '#':
-                        //pyramidBlock
-                        this.levelTiles[x][y] = 2;
-                        break;
+                    //case '#': // 金字塔方块
+                    //    this.levelTiles[x][y] = 2;
+                    //    break;
                     case '%': // 雨林砖块
                         int tempIndex = 0;
+
+                        // 判断是否为边界，如果为边界则改用其他砖块
                         if (x > 0 && lines[y].charAt(x - 1) == '%') {
                             tempIndex += 2;
                         }
                         if (x < this.levelTiles.length - 1 && lines[y].charAt(x + 1) == '%') {
                             tempIndex += 1;
                         }
+
                         this.levelTiles[x][y] = 43 + tempIndex;
                         break;
                     case '|': // 雨林背景
                         this.levelTiles[x][y] = 47;
                         break;
-                    case '*':
-                        //bullet bill
+                    case '*': // 炮塔的贴图
                         tempIndex = 0;
+                        // 判断炮塔的高度，根据高度调整贴图
                         if (y > 0 && lines[y - 1].charAt(x) == '*') {
                             tempIndex += 1;
                         }
                         if (y > 1 && lines[y - 2].charAt(x) == '*') {
                             tempIndex += 1;
                         }
+
                         this.levelTiles[x][y] = 3 + tempIndex;
                         break;
-                    case 'B':
-                        //bullet bill head
-                        this.levelTiles[x][y] = 3;
-                        break;
-                    case 'b':
-                        //bullet bill neck and body
-                        tempIndex = 0;
-                        if (y > 1 && lines[y - 2].charAt(x) == 'B') {
-                            tempIndex += 1;
-                        }
-                        this.levelTiles[x][y] = 4 + tempIndex;
-                        break;
-                    case '?':
-                    case '@':
-                        //mushroom question block
-                        this.levelTiles[x][y] = 8;
-                        break;
-                    case 'Q':
-                    case '!':
-                        //coin question block
-                        this.totalCoins += 1;
-                        this.levelTiles[x][y] = 11;
-                        break;
-                    case '1':
-                        //invisible 1 up block
-                        this.levelTiles[x][y] = 48;
-                        break;
-                    case '2': // 不可见的金币砖块
-                        this.totalCoins += 1;
-                        this.levelTiles[x][y] = 49;
-                        break;
+                    //case 'B': // 炮塔的顶部贴图
+                    //    this.levelTiles[x][y] = 3;
+                    //    break;
+                    //case 'b': //炮塔的顶部和身体
+                    //    //bullet bill neck and body
+                    //    tempIndex = 0;
+                    //    if (y > 1 && lines[y - 2].charAt(x) == 'B') {
+                    //        tempIndex += 1;
+                    //    }
+                    //    this.levelTiles[x][y] = 4 + tempIndex;
+                    //    break;
+                    //case '?':
+                    //case '@':
+                    //    //mushroom question block
+                    //    this.levelTiles[x][y] = 8;
+                    //    break;
+                    //case 'Q':
+                    //case '!':
+                    //    //coin question block
+                    //    this.totalCoins += 1;
+                    //    this.levelTiles[x][y] = 11;
+                    //    break;
+                    //case '1':
+                    //    //invisible 1 up block
+                    //    this.levelTiles[x][y] = 48;
+                    //    break;
+                    //case '2': // 不可见的金币砖块
+                    //    this.totalCoins += 1;
+                    //    this.levelTiles[x][y] = 49;
+                    //    break;
                     case 'D': // 使用过后的砖块
                         this.levelTiles[x][y] = 14;
                         break;
@@ -177,15 +179,15 @@ public class MarioLevel {
                         break;
                     case 'C': // 含有金币的方块
                         this.totalCoins += 1;
-                        this.levelTiles[x][y] = 7;
+                        this.levelTiles[x][y] = 11;
                         break;
                     case 'U': // 含有蘑菇的方块
                         this.levelTiles[x][y] = 8;
                         break;
-                    case 'L':
-                        //1up block
-                        this.levelTiles[x][y] = 51;
-                        break;
+                    //case 'L':
+                    //    //1up block
+                    //    this.levelTiles[x][y] = 51;
+                    //    break;
                     case 'o': // 金币
                         //coin
                         this.totalCoins += 1;

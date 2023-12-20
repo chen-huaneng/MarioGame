@@ -385,25 +385,26 @@ public class LevelGenerator {
         int newBegin = x0 + 1 + random.nextInt(4);
         int newEnd = x1 - 1 - random.nextInt(4);
 
+        // 控制含有蘑菇砖块的数量
+        boolean hasMushroom = false;
+
         // 如果地板的高度更高，在当前地板的更上方生成砖块或者金币,并且地板的长度要在一定的范围
         if (floor > 4 && newEnd - newBegin > 2) {
             for (int x = newBegin; x < newEnd; ++x) {
-                // type用于存储类型，默认为金币
-                char type = MarioLevelModel.COIN;
+                // 如果不在左边界或者右边界上则生成砖块
+                if (x != x0 + 1 && x != x1 - 2) {
+                    // 生成各种砖块的概率
+                    int rate = random.nextInt(10);
 
-                // 生成砖块或者金币的概率
-                int rate = random.nextInt(10);
-
-                // 如果不在左边界和右边界上，则生成砖块，并且有6/10的概率
-                if (x != x0 + 1 && x != x1 - 2 && rate < 6) {
-                    type = MarioLevelModel.NORMAL_BRICK;
-                } else if (rate == 6) { // 有1/10的概率生成含有金币的方块
-                    type = MarioLevelModel.COIN_BRICK;
-                } else if (rate == 7) { // 有1/10的概率生成含有蘑菇的方块
-                    type = MarioLevelModel.MUSHROOM_BRICK;
+                    if (rate < 8) { // 有8/10的概率生成普通砖块
+                        model.setBlock(x, floor - 4, MarioLevelModel.NORMAL_BRICK);
+                    } else if (!hasMushroom && rate == 8) { // 有1/10的概率生成含有蘑菇的方块
+                        model.setBlock(x, floor - 4, MarioLevelModel.MUSHROOM_BRICK);
+                        hasMushroom = true;
+                    } else { // 有1/10的概率生成含有金币的方块
+                        model.setBlock(x, floor - 4, MarioLevelModel.COIN_BRICK);
+                    }
                 }
-                // 剩下2/10的概率生成金币
-                model.setBlock(x, floor - 4, type);
             }
         }
     }
