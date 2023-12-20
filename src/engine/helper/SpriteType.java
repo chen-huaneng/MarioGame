@@ -75,6 +75,7 @@ public enum SpriteType {
      * @return 返回精灵
      */
     public MarioSprite spawnSprite(boolean visuals, int xTile, int yTile, int dir) {
+        // 生成食人花
         if (this == SpriteType.ENEMY_FLOWER) {
             return new FlowerEnemy(visuals, xTile * 16 + 17, yTile * 16 + 18);
         }

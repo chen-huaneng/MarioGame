@@ -200,15 +200,18 @@ public class Enemy extends MarioSprite {
     }
 
     /**
+     * 移动敌人对象的方法，考虑了碰撞的检测和处，并对移动的有效性进行判定
      *
      * @param xa
      * @param ya
      * @return
      */
     private boolean move(float xa, float ya) {
+        // 当移动距离大于8的时候，进行迭代，每次移动8个单位，直到距离小于等于8
         while (xa > 8) {
-            if (!move(8, 0))
+            if (!move(8, 0)) {
                 return false;
+            }
             xa -= 8;
         }
         while (xa < -8) {
@@ -227,6 +230,7 @@ public class Enemy extends MarioSprite {
             ya += 8;
         }
 
+        // 用于标记是否发生碰撞
         boolean collide = false;
         if (ya > 0) {
             if (isBlocking(x + xa - width, y + ya, xa, 0))
@@ -296,15 +300,26 @@ public class Enemy extends MarioSprite {
         }
     }
 
+    /**
+     * 判断给定坐标位置是否存在障碍物，以及是否会阻挡敌人的移动
+     *
+     * @param _x
+     * @param _y
+     * @param xa
+     * @param ya
+     * @return
+     */
     private boolean isBlocking(float _x, float _y, float xa, float ya) {
+        // 将像素转换为坐标
         int x = (int) (_x / 16);
         int y = (int) (_y / 16);
-        if (x == (int) (this.x / 16) && y == (int) (this.y / 16))
+
+        // 检查给定坐标是否与敌人坐标相同，如果相同表示当前位置是敌人所在的位置，避免误判
+        if (x == (int) (this.x / 16) && y == (int) (this.y / 16)) {
             return false;
+        }
 
-        boolean blocking = world.level.isBlocking(x, y, xa, ya);
-
-        return blocking;
+        return world.level.isBlocking(x, y, xa, ya);
     }
 
     public boolean shellCollideCheck(Shell shell) {

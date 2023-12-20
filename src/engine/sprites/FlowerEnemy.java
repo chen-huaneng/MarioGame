@@ -61,6 +61,7 @@ public class FlowerEnemy extends Enemy {
      */
     @Override
     public void update() {
+        // 如果没有存活则返回
         if (!this.alive) {
             return;
         }

@@ -3,7 +3,11 @@ import engine.core.MarioLevelModel;
 import engine.core.LevelGenerator;
 
 public class PlayGame {
-    /** 主程序入口 */
+    /**
+     * 主程序入口
+     *
+     * @param args 系统参数
+     */
     public static void main(String[] args) {
         // 游戏主流程
         LevelGenerator generator = new LevelGenerator();

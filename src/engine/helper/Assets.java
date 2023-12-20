@@ -8,7 +8,10 @@ import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.File;
+import java.util.Objects;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 
 
 public class Assets {
@@ -58,22 +61,51 @@ public class Assets {
      * @throws IOException 抛出读取文件异常
      */
     private static Image getImage(GraphicsConfiguration gc, String imageName) throws IOException {
-        // 将图像文件名和一个路径前缀拼接
-        imageName = img + imageName;
-        // 创建一个拼接后的图像文件路径
-        File file = new File(imageName);
         // 从文件系统中读取图像资源
         // source用于存储图像的原始数据
-        BufferedImage source = ImageIO.read(file);
+        BufferedImage source = null;
+        try {
+            source = ImageIO.read(Objects.requireNonNull(Assets.class.getResourceAsStream(imageName)));
+        } catch (Exception e) {
+        }
+
+        // 如果读取失败，尝试用路径获取
+        if (source == null) {
+            // 将图像文件名和一个路径前缀拼接
+            imageName = img + imageName;
+
+            // 创建一个拼接后的图像文件路径
+            File file = new File(imageName);
+            source = ImageIO.read(file);
+        }
+
+        // 如果仍然读取失败，尝试用流读取
+        if (source == null) {
+            File file = new File(imageName);
+            // 创建输入流，从文件中读取图片数据
+            ImageInputStream iis = ImageIO.createImageInputStream(file);
+            // 获取图片的后缀名
+            String suffix = imageName.substring(imageName.length() - 3);
+            // 获取指定后缀的对象
+            ImageReader reader = ImageIO.getImageReadersBySuffix(suffix).next();
+            // 设置输入流为输入源，方便从流中读取数据
+            reader.setInput(iis, true);
+            // 读取输入源的第一帧
+            source = reader.read(0);
+        }
 
         // 创建兼容的图像
         Image image = gc.createCompatibleImage(source.getWidth(), source.getHeight(), Transparency.BITMASK);
+
         // 获取图像的 Graphics2D 对象，用于进行图形绘制操作
         Graphics2D g = (Graphics2D) image.getGraphics();
+
         // 设置合成模式
         g.setComposite(AlphaComposite.Src);
+
         // 将原始图像绘制到兼容图像上
         g.drawImage(source, 0, 0, null);
+
         // 释放图像的系统资源
         g.dispose();
 
