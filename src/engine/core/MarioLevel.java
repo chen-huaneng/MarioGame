@@ -110,9 +110,6 @@ public class MarioLevel {
                     case 'X': // 地板
                         this.levelTiles[x][y] = 1;
                         break;
-                    //case '#': // 金字塔方块
-                    //    this.levelTiles[x][y] = 2;
-                    //    break;
                     case '%': // 雨林砖块
                         int tempIndex = 0;
 
@@ -141,36 +138,6 @@ public class MarioLevel {
 
                         this.levelTiles[x][y] = 3 + tempIndex;
                         break;
-                    //case 'B': // 炮塔的顶部贴图
-                    //    this.levelTiles[x][y] = 3;
-                    //    break;
-                    //case 'b': //炮塔的顶部和身体
-                    //    //bullet bill neck and body
-                    //    tempIndex = 0;
-                    //    if (y > 1 && lines[y - 2].charAt(x) == 'B') {
-                    //        tempIndex += 1;
-                    //    }
-                    //    this.levelTiles[x][y] = 4 + tempIndex;
-                    //    break;
-                    //case '?':
-                    //case '@':
-                    //    //mushroom question block
-                    //    this.levelTiles[x][y] = 8;
-                    //    break;
-                    //case 'Q':
-                    //case '!':
-                    //    //coin question block
-                    //    this.totalCoins += 1;
-                    //    this.levelTiles[x][y] = 11;
-                    //    break;
-                    //case '1':
-                    //    //invisible 1 up block
-                    //    this.levelTiles[x][y] = 48;
-                    //    break;
-                    //case '2': // 不可见的金币砖块
-                    //    this.totalCoins += 1;
-                    //    this.levelTiles[x][y] = 49;
-                    //    break;
                     case 'D': // 使用过后的砖块
                         this.levelTiles[x][y] = 14;
                         break;
@@ -184,10 +151,6 @@ public class MarioLevel {
                     case 'U': // 含有蘑菇的方块
                         this.levelTiles[x][y] = 8;
                         break;
-                    //case 'L':
-                    //    //1up block
-                    //    this.levelTiles[x][y] = 51;
-                    //    break;
                     case 'o': // 金币
                         //coin
                         this.totalCoins += 1;
@@ -195,14 +158,14 @@ public class MarioLevel {
                         break;
                     case 't': // 不含食人花的管道
                         tempIndex = 0;
-                        boolean singlePipe = false;
-                        if (x < lines[y].length() - 1 && Character.toLowerCase(lines[y].charAt(x + 1)) != 't' &&
-                                x > 0 && Character.toLowerCase(lines[y].charAt(x - 1)) != 't') {
-                            singlePipe = true;
-                        }
+                        // 判断是否是单个管道
+                        boolean singlePipe = x < lines[y].length() - 1 && Character.toLowerCase(lines[y].charAt(x + 1)) != 't' &&
+                                x > 0 && Character.toLowerCase(lines[y].charAt(x - 1)) != 't';
+                        // 判断贴图的左右方向
                         if (x > 0 && (this.levelTiles[x - 1][y] == 18 || this.levelTiles[x - 1][y] == 20)) {
                             tempIndex += 1;
                         }
+                        // 判断贴图的高度
                         if (y > 0 && Character.toLowerCase(lines[y - 1].charAt(x)) == 't') {
                             if (singlePipe) {
                                 tempIndex += 1;
@@ -210,6 +173,7 @@ public class MarioLevel {
                                 tempIndex += 2;
                             }
                         }
+                        // 判断是否单个管道
                         if (singlePipe) {
                             this.levelTiles[x][y] = 52 + tempIndex;
                         } else {
@@ -218,11 +182,14 @@ public class MarioLevel {
                         break;
                     case 'T': // 含有食人花的管道
                         tempIndex = 0;
+                        // 判断是否单个管道
                         singlePipe = x < lines[y].length() - 1 && Character.toLowerCase(lines[y].charAt(x + 1)) != 't' &&
                                 x > 0 && Character.toLowerCase(lines[y].charAt(x - 1)) != 't';
+                        // 判断贴图的左右方向
                         if (x > 0 && (this.levelTiles[x - 1][y] == 18 || this.levelTiles[x - 1][y] == 20)) {
                             tempIndex += 1;
                         }
+                        // 判断贴图的高度
                         if (y > 0 && Character.toLowerCase(lines[y - 1].charAt(x)) == 't') {
                             if (singlePipe) {
                                 tempIndex += 1;
@@ -230,6 +197,7 @@ public class MarioLevel {
                                 tempIndex += 2;
                             }
                         }
+                        // 判断是否单个管道
                         if (singlePipe) {
                             this.levelTiles[x][y] = 52 + tempIndex;
                         } else {
@@ -238,18 +206,6 @@ public class MarioLevel {
                             }
                             this.levelTiles[x][y] = 18 + tempIndex;
                         }
-                        break;
-                    case '<': // 管道的顶部的左边
-                        this.levelTiles[x][y] = 18;
-                        break;
-                    case '>': // 管道的顶部的右边
-                        this.levelTiles[x][y] = 19;
-                        break;
-                    case '[': // 管道的身体部分的左边
-                        this.levelTiles[x][y] = 20;
-                        break;
-                    case ']': // 管道身体部分的右边
-                        this.levelTiles[x][y] = 21;
                         break;
                 }
             }
