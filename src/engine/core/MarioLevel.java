@@ -62,26 +62,11 @@ public class MarioLevel {
             }
         }
 
-        // Mario的初始位置是否确定
-        boolean marioLocInit = false;
-        // 出口位置是否确定
-        boolean exitLocInit = false;
-
         // 判断各个字符所代表的贴图
         for (int y = 0; y < lines.length; ++y) {
             for (int x = 0; x < lines[y].length(); ++x) {
                 char c = lines[y].charAt(x);
                 switch (c) {
-                    case 'M': // Mario的位置
-                        this.marioTileX = x;
-                        this.marioTileY = y;
-                        marioLocInit = true;
-                        break;
-                    case 'F': // 终点的位置
-                        this.exitTileX = x;
-                        this.exitTileY = y;
-                        exitLocInit = true;
-                        break;
                     case 'y': // 尖刺
                         this.spriteTemplates[x][y] = SpriteType.SPIKY;
                         break;
@@ -152,19 +137,21 @@ public class MarioLevel {
                         this.levelTiles[x][y] = 8;
                         break;
                     case 'o': // 金币
-                        //coin
                         this.totalCoins += 1;
                         this.levelTiles[x][y] = 15;
                         break;
                     case 't': // 不含食人花的管道
                         tempIndex = 0;
+
                         // 判断是否是单个管道
                         boolean singlePipe = x < lines[y].length() - 1 && Character.toLowerCase(lines[y].charAt(x + 1)) != 't' &&
                                 x > 0 && Character.toLowerCase(lines[y].charAt(x - 1)) != 't';
+
                         // 判断贴图的左右方向
                         if (x > 0 && (this.levelTiles[x - 1][y] == 18 || this.levelTiles[x - 1][y] == 20)) {
                             tempIndex += 1;
                         }
+
                         // 判断贴图的高度
                         if (y > 0 && Character.toLowerCase(lines[y - 1].charAt(x)) == 't') {
                             if (singlePipe) {
@@ -173,6 +160,7 @@ public class MarioLevel {
                                 tempIndex += 2;
                             }
                         }
+
                         // 判断是否单个管道
                         if (singlePipe) {
                             this.levelTiles[x][y] = 52 + tempIndex;
@@ -182,13 +170,16 @@ public class MarioLevel {
                         break;
                     case 'T': // 含有食人花的管道
                         tempIndex = 0;
+
                         // 判断是否单个管道
                         singlePipe = x < lines[y].length() - 1 && Character.toLowerCase(lines[y].charAt(x + 1)) != 't' &&
                                 x > 0 && Character.toLowerCase(lines[y].charAt(x - 1)) != 't';
+
                         // 判断贴图的左右方向
                         if (x > 0 && (this.levelTiles[x - 1][y] == 18 || this.levelTiles[x - 1][y] == 20)) {
                             tempIndex += 1;
                         }
+
                         // 判断贴图的高度
                         if (y > 0 && Character.toLowerCase(lines[y - 1].charAt(x)) == 't') {
                             if (singlePipe) {
@@ -197,6 +188,7 @@ public class MarioLevel {
                                 tempIndex += 2;
                             }
                         }
+
                         // 判断是否单个管道
                         if (singlePipe) {
                             this.levelTiles[x][y] = 52 + tempIndex;
@@ -210,14 +202,15 @@ public class MarioLevel {
                 }
             }
         }
-        if (!marioLocInit) {
-            this.marioTileX = 0;
-            this.marioTileY = findFirstFloor(lines, this.marioTileX);
-        }
-        if (!exitLocInit) {
-            this.exitTileX = lines[0].length() - 1;
-            this.exitTileY = findFirstFloor(lines, this.exitTileX);
-        }
+
+        // 设置起点
+        this.marioTileX = 0;
+        this.marioTileY = findFirstFloor(lines, this.marioTileX);
+
+        // 设置默认的终点
+        this.exitTileX = lines[0].length() - 1;
+        this.exitTileY = findFirstFloor(lines, this.exitTileX);
+
         for (int y = this.exitTileY; y > Math.max(1, this.exitTileY - 11); y--) {
             this.levelTiles[this.exitTileX][y] = 40;
         }
