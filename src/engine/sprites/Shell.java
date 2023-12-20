@@ -13,9 +13,7 @@ public class Shell extends MarioSprite {
     private static final float AIR_INERTIA = 0.89f;
 
     private int shellType = 0;
-    private boolean onGround = false;
 
-    private MarioImage graphics;
 
     public Shell(boolean visuals, float x, float y, int shellType, String spriteCode) {
         super(x, y, SpriteType.SHELL);
@@ -33,18 +31,6 @@ public class Shell extends MarioSprite {
             this.graphics.originY = 31;
             this.graphics.width = 16;
         }
-    }
-
-    @Override
-    public MarioSprite clone() {
-        Shell sprite = new Shell(false, this.x, this.y, this.shellType, this.initialCode);
-        sprite.xa = this.xa;
-        sprite.ya = this.ya;
-        sprite.width = this.width;
-        sprite.height = this.height;
-        sprite.facing = this.facing;
-        sprite.onGround = this.onGround;
-        return sprite;
     }
 
     @Override
@@ -91,11 +77,6 @@ public class Shell extends MarioSprite {
     }
 
     @Override
-    public void render(Graphics og) {
-        super.render(og);
-        this.graphics.render(og, (int) (this.x - this.world.cameraX), (int) (this.y - this.world.cameraY));
-    }
-
     public boolean fireballCollideCheck(Fireball fireball) {
         if (!this.alive) return false;
 
@@ -119,6 +100,7 @@ public class Shell extends MarioSprite {
         return false;
     }
 
+    @Override
     public void collideCheck() {
         if (!this.alive) return;
 
@@ -148,96 +130,13 @@ public class Shell extends MarioSprite {
         }
     }
 
-    private boolean move(float xa, float ya) {
-        while (xa > 8) {
-            if (!move(8, 0))
-                return false;
-            xa -= 8;
-        }
-        while (xa < -8) {
-            if (!move(-8, 0))
-                return false;
-            xa += 8;
-        }
-        while (ya > 8) {
-            if (!move(0, 8))
-                return false;
-            ya -= 8;
-        }
-        while (ya < -8) {
-            if (!move(0, -8))
-                return false;
-            ya += 8;
-        }
-
-        boolean collide = false;
-        if (ya > 0) {
-            if (isBlocking(x + xa - width, y + ya, xa, 0))
-                collide = true;
-            else if (isBlocking(x + xa + width, y + ya, xa, 0))
-                collide = true;
-            else if (isBlocking(x + xa - width, y + ya + 1, xa, ya))
-                collide = true;
-            else if (isBlocking(x + xa + width, y + ya + 1, xa, ya))
-                collide = true;
-        }
-        if (ya < 0) {
-            if (isBlocking(x + xa, y + ya - height, xa, ya))
-                collide = true;
-            else if (collide || isBlocking(x + xa - width, y + ya - height, xa, ya))
-                collide = true;
-            else if (collide || isBlocking(x + xa + width, y + ya - height, xa, ya))
-                collide = true;
-        }
-        if (xa > 0) {
-            if (isBlocking(x + xa + width, y + ya - height, xa, ya))
-                collide = true;
-            if (isBlocking(x + xa + width, y + ya - height / 2, xa, ya))
-                collide = true;
-            if (isBlocking(x + xa + width, y + ya, xa, ya))
-                collide = true;
-
-        }
-        if (xa < 0) {
-            if (isBlocking(x + xa - width, y + ya - height, xa, ya))
-                collide = true;
-            if (isBlocking(x + xa - width, y + ya - height / 2, xa, ya))
-                collide = true;
-            if (isBlocking(x + xa - width, y + ya, xa, ya))
-                collide = true;
-
-        }
-
-        if (collide) {
-            if (xa < 0) {
-                x = (int) ((x - width) / 16) * 16 + width;
-                this.xa = 0;
-            }
-            if (xa > 0) {
-                x = (int) ((x + width) / 16 + 1) * 16 - width - 1;
-                this.xa = 0;
-            }
-            if (ya < 0) {
-                y = (int) ((y - height) / 16) * 16 + height;
-                this.ya = 0;
-            }
-            if (ya > 0) {
-                y = (int) (y / 16 + 1) * 16 - 1;
-                onGround = true;
-            }
-            return false;
-        } else {
-            x += xa;
-            y += ya;
-            return true;
-        }
-    }
-
-    private boolean isBlocking(float _x, float _y, float xa, float ya) {
+    @Override
+    public boolean isBlocking(float _x, float _y, float xa, float ya) {
         int x = (int) (_x / 16);
         int y = (int) (_y / 16);
-        if (x == (int) (this.x / 16) && y == (int) (this.y / 16))
+        if (x == (int) (this.x / 16) && y == (int) (this.y / 16)) {
             return false;
+        }
 
         boolean blocking = world.level.isBlocking(x, y, xa, ya);
 
@@ -248,15 +147,7 @@ public class Shell extends MarioSprite {
         return blocking;
     }
 
-    public void bumpCheck(int xTile, int yTile) {
-        if (!this.alive) return;
-
-        if (x + width > xTile * 16 && x - width < xTile * 16 + 16 && yTile == (int) ((y - 1) / 16)) {
-            facing = -world.mario.facing;
-            ya = -10;
-        }
-    }
-
+    @Override
     public boolean shellCollideCheck(Shell shell) {
         if (!this.alive) return false;
 

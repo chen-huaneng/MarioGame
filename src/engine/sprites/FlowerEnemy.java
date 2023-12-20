@@ -35,28 +35,6 @@ public class FlowerEnemy extends Enemy {
     }
 
     /**
-     * 覆盖默认的克隆方法
-     *
-     * @return 克隆之后的食人花
-     */
-    @Override
-    public MarioSprite clone() {
-        FlowerEnemy sprite = new FlowerEnemy(false, this.x, this.y);
-        sprite.xa = this.xa;
-        sprite.ya = this.ya;
-        sprite.initialCode = this.initialCode;
-        sprite.width = this.width;
-        sprite.height = this.height;
-        sprite.onGround = this.onGround;
-        sprite.winged = this.winged;
-        sprite.avoidCliffs = this.avoidCliffs;
-        sprite.noFireballDeath = this.noFireballDeath;
-        sprite.yStart = yStart;
-        sprite.waitTime = waitTime;
-        return sprite;
-    }
-
-    /**
      *
      */
     @Override

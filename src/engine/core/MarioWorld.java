@@ -153,7 +153,6 @@ public class MarioWorld {
         this.addedSprites.add(sprite);
         sprite.alive = true;
         sprite.world = this;
-        sprite.added();
         sprite.update();
     }
 
@@ -166,7 +165,6 @@ public class MarioWorld {
         this.removedSprites.add(sprite);
         // 将存活状态设为死亡
         sprite.alive = false;
-        sprite.removed();
         sprite.world = null;
     }
 

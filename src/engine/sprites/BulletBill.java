@@ -9,7 +9,6 @@ import engine.helper.EventType;
 import engine.helper.SpriteType;
 
 public class BulletBill extends MarioSprite {
-    private MarioImage graphics;
 
     public BulletBill(boolean visuals, float x, float y, int dir) {
         super(x, y, SpriteType.BULLET_BILL);
@@ -27,16 +26,6 @@ public class BulletBill extends MarioSprite {
     }
 
     @Override
-    public MarioSprite clone() {
-        BulletBill sprite = new BulletBill(false, x, y, this.facing);
-        sprite.xa = this.xa;
-        sprite.ya = this.ya;
-        sprite.width = this.width;
-        sprite.height = this.height;
-        return sprite;
-    }
-
-    @Override
     public void update() {
         if (!this.alive) {
             return;
@@ -45,18 +34,13 @@ public class BulletBill extends MarioSprite {
         super.update();
         float sideWaysSpeed = 4f;
         xa = facing * sideWaysSpeed;
-        move(xa, 0);
+        move(xa);
         if (this.graphics != null) {
             this.graphics.flipX = facing == -1;
         }
     }
 
     @Override
-    public void render(Graphics og) {
-        super.render(og);
-        this.graphics.render(og, (int) (this.x - this.world.cameraX), (int) (this.y - this.world.cameraY));
-    }
-
     public void collideCheck() {
         if (!this.alive) {
             return;
@@ -80,11 +64,16 @@ public class BulletBill extends MarioSprite {
         }
     }
 
-    private boolean move(float xa, float ya) {
+    /**
+     * 移动蘑菇的位置
+     *
+     * @param xa 水平移动速度
+     */
+    private void move(float xa) {
         x += xa;
-        return true;
     }
 
+    @Override
     public boolean fireballCollideCheck(Fireball fireball) {
         if (!this.alive) {
             return false;
@@ -99,6 +88,7 @@ public class BulletBill extends MarioSprite {
         return false;
     }
 
+    @Override
     public boolean shellCollideCheck(Shell shell) {
         if (!this.alive) {
             return false;

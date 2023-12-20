@@ -11,7 +11,7 @@ import engine.helper.TileFeature;
 
 public class Mario extends MarioSprite {
     public boolean isLarge, isFire;
-    public boolean onGround, wasOnGround, isDucking, canShoot, mayJump;
+    public boolean wasOnGround, isDucking, canShoot, mayJump;
     public boolean[] actions = null;
     public int jumpTime = 0;
 
@@ -21,7 +21,6 @@ public class Mario extends MarioSprite {
 
     private float marioFrameSpeed = 0;
     private boolean oldLarge, oldFire = false;
-    private MarioImage graphics = null;
 
     // stats
     private float xJumpStart = -100;
@@ -50,53 +49,37 @@ public class Mario extends MarioSprite {
         }
     }
 
+    /**
+     * 移动敌人对象的方法，考虑了碰撞的检测和处，并对移动的有效性进行判定
+     *
+     * @param xa 水平移动速度
+     * @param ya 垂直移动速度
+     * @return 判断是否更新位置
+     */
     @Override
-    public MarioSprite clone() {
-        Mario sprite = new Mario(false, x - 8, y - 15);
-        sprite.xa = this.xa;
-        sprite.ya = this.ya;
-        sprite.initialCode = this.initialCode;
-        sprite.width = this.width;
-        sprite.height = this.height;
-        sprite.facing = this.facing;
-        sprite.isLarge = isLarge;
-        sprite.isFire = isFire;
-        sprite.wasOnGround = wasOnGround;
-        sprite.onGround = onGround;
-        sprite.isDucking = isDucking;
-        sprite.canShoot = canShoot;
-        sprite.mayJump = mayJump;
-        sprite.actions = new boolean[this.actions.length];
-        for (int i = 0; i < this.actions.length; i++) {
-            sprite.actions[i] = this.actions[i];
-        }
-        sprite.xJumpSpeed = xJumpSpeed;
-        sprite.yJumpSpeed = yJumpSpeed;
-        sprite.invulnerableTime = invulnerableTime;
-        sprite.jumpTime = jumpTime;
-        sprite.xJumpStart = xJumpStart;
-        return sprite;
-    }
-
-    private boolean move(float xa, float ya) {
+    public boolean move(float xa, float ya) {
         while (xa > 8) {
-            if (!move(8, 0))
+            if (!move(8, 0)) {
                 return false;
+            }
             xa -= 8;
         }
         while (xa < -8) {
-            if (!move(-8, 0))
+            if (!move(-8, 0)) {
                 return false;
+            }
             xa += 8;
         }
         while (ya > 8) {
-            if (!move(0, 8))
+            if (!move(0, 8)) {
                 return false;
+            }
             ya -= 8;
         }
         while (ya < -8) {
-            if (!move(0, -8))
+            if (!move(0, -8)) {
                 return false;
+            }
             ya += 8;
         }
 
@@ -161,7 +144,8 @@ public class Mario extends MarioSprite {
         }
     }
 
-    private boolean isBlocking(float _x, float _y, float xa, float ya) {
+    @Override
+    public boolean isBlocking(float _x, float _y, float xa, float ya) {
         int xTile = (int) (_x / 16);
         int yTile = (int) (_y / 16);
         if (xTile == (int) (this.x / 16) && yTile == (int) (this.y / 16))
@@ -526,10 +510,4 @@ public class Mario extends MarioSprite {
         }
     }
 
-    @Override
-    public void render(Graphics og) {
-        super.render(og);
-
-        this.graphics.render(og, (int) (this.x - this.world.cameraX), (int) (this.y - this.world.cameraY));
-    }
 }

@@ -8,7 +8,6 @@ import engine.helper.EventType;
 import engine.helper.SpriteType;
 
 public class FireFlower extends MarioSprite {
-    private MarioImage graphics;
     private int life;
 
     public FireFlower(boolean visuals, float x, float y) {
@@ -24,19 +23,6 @@ public class FireFlower extends MarioSprite {
             this.graphics.width = 16;
             this.graphics.height = 16;
         }
-    }
-
-    @Override
-    public MarioSprite clone() {
-        FireFlower f = new FireFlower(false, x, y);
-        f.xa = this.xa;
-        f.ya = this.ya;
-        f.initialCode = this.initialCode;
-        f.width = this.width;
-        f.height = this.height;
-        f.facing = this.facing;
-        f.life = this.life;
-        return f;
     }
 
     @Override
@@ -73,9 +59,4 @@ public class FireFlower extends MarioSprite {
         }
     }
 
-    @Override
-    public void render(Graphics og) {
-        super.render(og);
-        this.graphics.render(og, (int) (this.x - this.world.cameraX), (int) (this.y - this.world.cameraY));
-    }
 }

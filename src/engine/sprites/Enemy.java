@@ -12,8 +12,6 @@ import engine.helper.SpriteType;
 public class Enemy extends MarioSprite {
     private static final float GROUND_INERTIA = 0.89f;
     private static final float AIR_INERTIA = 0.89f;
-
-    protected boolean onGround = false;
     protected boolean avoidCliffs = true;
     protected boolean winged = true;
     protected boolean noFireballDeath;
@@ -21,7 +19,6 @@ public class Enemy extends MarioSprite {
     protected float runTime;
     protected int wingTime = 0;
     protected MarioImage wingGraphics;
-    protected MarioImage graphics;
 
     /**
      * 生成指定坐标和方向的敌人类型
@@ -73,25 +70,7 @@ public class Enemy extends MarioSprite {
         }
     }
 
-    /**
-     * 覆盖原本的克隆方法
-     * @return 克隆之后的精灵
-     */
     @Override
-    public MarioSprite clone() {
-        Enemy e = new Enemy(false, this.x, this.y, this.facing, this.type);
-        e.xa = this.xa;
-        e.ya = this.ya;
-        e.initialCode = this.initialCode;
-        e.width = this.width;
-        e.height = this.height;
-        e.onGround = this.onGround;
-        e.winged = this.winged;
-        e.avoidCliffs = this.avoidCliffs;
-        e.noFireballDeath = this.noFireballDeath;
-        return e;
-    }
-
     public void collideCheck() {
         if (!this.alive) {
             return;
@@ -206,7 +185,8 @@ public class Enemy extends MarioSprite {
      * @param ya 垂直移动速度
      * @return 判断是否更新位置
      */
-    private boolean move(float xa, float ya) {
+    @Override
+    public boolean move(float xa, float ya) {
         // 当移动距离大于8的时候，进行迭代，每次移动8个单位，直到距离小于等于8
         while (xa > 8) {
             if (!move(8, 0)) {
@@ -316,28 +296,7 @@ public class Enemy extends MarioSprite {
         }
     }
 
-    /**
-     * 判断给定坐标位置是否存在障碍物，以及是否会阻挡敌人的移动
-     *
-     * @param _x 横坐标
-     * @param _y 纵坐标
-     * @param xa 水平速度
-     * @param ya 垂直速度
-     * @return 返回是否会被阻挡
-     */
-    private boolean isBlocking(float _x, float _y, float xa, float ya) {
-        // 将像素转换为坐标
-        int x = (int) (_x / 16);
-        int y = (int) (_y / 16);
-
-        // 检查给定坐标是否与敌人坐标相同，如果相同表示当前位置是敌人所在的位置，避免误判
-        if (x == (int) (this.x / 16) && y == (int) (this.y / 16)) {
-            return false;
-        }
-
-        return world.level.isBlocking(x, y, xa, ya);
-    }
-
+    @Override
     public boolean shellCollideCheck(Shell shell) {
         if (!this.alive) {
             return false;
@@ -369,6 +328,7 @@ public class Enemy extends MarioSprite {
         return false;
     }
 
+    @Override
     public boolean fireballCollideCheck(Fireball fireball) {
         if (!this.alive) {
             return false;
@@ -401,6 +361,7 @@ public class Enemy extends MarioSprite {
         return false;
     }
 
+    @Override
     public void bumpCheck(int xTile, int yTile) {
         if (!this.alive) {
             return;
