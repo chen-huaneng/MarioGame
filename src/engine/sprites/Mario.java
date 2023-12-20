@@ -16,6 +16,7 @@ public class Mario extends MarioSprite {
     public int jumpTime = 0;
 
     private float xJumpSpeed, yJumpSpeed = 0;
+    // 无敌时间
     private int invulnerableTime = 0;
 
     private float marioFrameSpeed = 0;
@@ -181,7 +182,7 @@ public class Mario extends MarioSprite {
     }
 
     /**
-     *
+     * 根据Mario的状态、动作、速度等信息来更新Mario的图形显示状态
      */
     public void updateGraphics() {
         // 如果Mario死亡则不更新
@@ -197,64 +198,92 @@ public class Mario extends MarioSprite {
             currentLarge = this.isLarge;
             currentFire = this.isFire;
         }
+
+        // 根据Mario的大小选择适合的贴图
         if (currentLarge) {
+            // 大Mario
             this.graphics.sheet = Assets.mario;
+
+            // 火球Mario
             if (currentFire) {
                 this.graphics.sheet = Assets.fireMario;
             }
 
+            // 根据Mario的大小设置原点和像素大小
             graphics.originX = 16;
             graphics.originY = 31;
             graphics.width = graphics.height = 32;
         } else {
+            // 小Mario
             this.graphics.sheet = Assets.smallMario;
+
+            // 根据Mario的大小设置原点和像素大小
             graphics.originX = 8;
             graphics.originY = 15;
             graphics.width = graphics.height = 16;
         }
 
+        // 根据水平速度xa的绝对值来控制动画的速度
         this.marioFrameSpeed += Math.abs(xa) + 5;
+        // 避免在静态下切换动画过快
         if (Math.abs(xa) < 0.5f) {
             this.marioFrameSpeed = 0;
         }
 
+        // 根据无敌时间来设置对象是否可见
+        // 根据奇偶的变化来实现闪烁的效果
         graphics.visible = ((invulnerableTime / 2) & 1) == 0;
+
+        // 根据Mario的面向来确定是否翻转
         graphics.flipX = facing == -1;
 
         int frameIndex = 0;
         if (currentLarge) {
+            // 计算动画帧索引
             frameIndex = ((int) (marioFrameSpeed / 20)) % 4;
-            if (frameIndex == 3)
+
+            // 如果索引帧过高则设为1
+            if (frameIndex == 3) {
                 frameIndex = 1;
-            if (Math.abs(xa) > 10)
+            }
+
+            // 用于处理移动速度过快的情况
+            if (Math.abs(xa) > 10) {
                 frameIndex += 3;
+            }
+
+            // 如果不在地面上根据水平速度选择索引帧
             if (!onGround) {
-                if (Math.abs(xa) > 10)
-                    frameIndex = 6;
-                else
-                    frameIndex = 5;
+                frameIndex = Math.abs(xa) > 10 ? 6 : 5;
             }
         } else {
+            // 计算动画帧索引
             frameIndex = ((int) (marioFrameSpeed / 20)) % 2;
-            if (Math.abs(xa) > 10)
+
+            // 用于处理移动速度过快的情况
+            if (Math.abs(xa) > 10) {
                 frameIndex += 2;
+            }
+
+            // 如果不在地面上根据水平速度选择索引帧
             if (!onGround) {
-                if (Math.abs(xa) > 10)
-                    frameIndex = 5;
-                else
-                    frameIndex = 4;
+                frameIndex = Math.abs(xa) > 10 ? 5 : 4;
             }
         }
 
+        // 处理在地面上向相反方向移动的操作
         if (onGround && ((facing == -1 && xa > 0) || (facing == 1 && xa < 0))) {
-            if (xa > 1 || xa < -1)
+            if (xa > 1 || xa < -1) {
                 frameIndex = currentLarge ? 8 : 7;
+            }
         }
 
+        // 处理大Mario蹲下的动画
         if (currentLarge && isDucking) {
             frameIndex = 13;
         }
 
+        // 将最终计算得到的索引帧赋值
         graphics.index = frameIndex;
     }
 

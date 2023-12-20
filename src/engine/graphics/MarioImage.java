@@ -7,6 +7,12 @@ public class MarioImage extends MarioGraphics {
     public Image[][] sheet;
     public int index;
 
+    /**
+     * 设置图像的数组以及索引
+     *
+     * @param sheet 图片数组
+     * @param index 索引
+     */
     public MarioImage(Image[][] sheet, int index) {
         super();
         this.sheet = sheet;

@@ -11,6 +11,7 @@ public abstract class MarioGraphics {
     public int width, height;
 
     /**
+     * 图像的默认设置
      *
      */
     public MarioGraphics() {

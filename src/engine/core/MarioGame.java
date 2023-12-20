@@ -11,13 +11,9 @@ import engine.helper.GameStatus;
 import engine.helper.MarioActions;
 
 public class MarioGame {
-    /**
-     * Screen width
-     */
+    // 屏幕的宽度
     public static final int width = 256;
-    /**
-     * Screen height
-     */
+    // 屏幕的高度
     public static final int height = 256;
 
     /**

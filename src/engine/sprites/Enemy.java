@@ -23,28 +23,49 @@ public class Enemy extends MarioSprite {
     protected MarioImage wingGraphics;
     protected MarioImage graphics;
 
+    /**
+     * 生成指定坐标和方向的敌人类型
+     *
+     * @param visuals 是否可视化
+     * @param x 横坐标
+     * @param y 纵坐标
+     * @param dir 方向
+     * @param type 类型
+     */
     public Enemy(boolean visuals, float x, float y, int dir, SpriteType type) {
         super(x, y, type);
+
+        // 设置敌人的高度和宽度
         this.width = 4;
         this.height = 24;
+
+        // 如果不是乌龟类型则设置高度为12
         if (this.type != SpriteType.RED_KOOPA && this.type != SpriteType.GREEN_KOOPA
                 && this.type != SpriteType.RED_KOOPA_WINGED && this.type != SpriteType.GREEN_KOOPA_WINGED) {
             this.height = 12;
         }
-        this.winged = this.type.getValue() % 2 == 1;
-        this.avoidCliffs = this.type == SpriteType.RED_KOOPA || this.type == SpriteType.RED_KOOPA_WINGED;
-        this.noFireballDeath = this.type == SpriteType.SPIKY || this.type == SpriteType.SPIKY_WINGED;
-        this.facing = dir;
-        if (this.facing == 0) {
-            this.facing = 1;
-        }
 
+        // 判断是否带翅膀
+        this.winged = this.type.getValue() % 2 == 1;
+
+        // 根据敌人类型是否避开悬崖
+        this.avoidCliffs = this.type == SpriteType.RED_KOOPA || this.type == SpriteType.RED_KOOPA_WINGED;
+
+        // 判断敌人是否会因为火球而死亡
+        this.noFireballDeath = this.type == SpriteType.SPIKY || this.type == SpriteType.SPIKY_WINGED;
+
+        // 设置敌人的面朝方向
+        this.facing = dir == 0 ? 1 : dir;
+
+        // 判断是否可视化
         if (visuals) {
+            // 设置初始的位置和宽度
             this.graphics = new MarioImage(Assets.enemies, this.type.getStartIndex());
             this.graphics.originX = 8;
             this.graphics.originY = 31;
             this.graphics.width = 16;
 
+            // 设置初始的位置和宽度
             this.wingGraphics = new MarioImage(Assets.enemies, 32);
             this.wingGraphics.originX = 16;
             this.wingGraphics.originY = 31;
@@ -52,6 +73,10 @@ public class Enemy extends MarioSprite {
         }
     }
 
+    /**
+     * 覆盖原本的克隆方法
+     * @return 克隆之后的精灵
+     */
     @Override
     public MarioSprite clone() {
         Enemy e = new Enemy(false, this.x, this.y, this.facing, this.type);
@@ -121,14 +146,20 @@ public class Enemy extends MarioSprite {
         this.graphics.index = this.type.getStartIndex() + runFrame;
     }
 
+    /**
+     * 更新敌人的位置和状态
+     */
     @Override
     public void update() {
+        // 如果敌人死亡则不需要更新
         if (!this.alive) {
             return;
         }
 
+        // 定义水平速度的初始值
         float sideWaysSpeed = 1.75f;
 
+        //根据水平速度值来设定朝向
         if (xa > 2) {
             facing = 1;
         }
@@ -136,10 +167,13 @@ public class Enemy extends MarioSprite {
             facing = -1;
         }
 
+        // 更新矢量的速度，包含了朝向和水平速度
         xa = facing * sideWaysSpeed;
 
-        if (!move(xa, 0))
+        if (!move(xa, 0)) {
             facing = -facing;
+        }
+
         onGround = false;
         move(0, ya);
 
@@ -165,6 +199,12 @@ public class Enemy extends MarioSprite {
         }
     }
 
+    /**
+     *
+     * @param xa
+     * @param ya
+     * @return
+     */
     private boolean move(float xa, float ya) {
         while (xa > 8) {
             if (!move(8, 0))

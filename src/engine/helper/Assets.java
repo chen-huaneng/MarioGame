@@ -18,6 +18,7 @@ public class Assets {
     public static Image[][] smallMario;
     // 火球Mario贴图数组
     public static Image[][] fireMario;
+    // 敌人贴图数组
     public static Image[][] enemies;
     public static Image[][] items;
     public static Image[][] level;

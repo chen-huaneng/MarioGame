@@ -6,10 +6,20 @@ public class FlowerEnemy extends Enemy {
     private float yStart;
     private int tick, waitTime;
 
+    /**
+     * 根据坐标和是否可视化生成食人花
+     *
+     * @param visuals 是否可视化
+     * @param x 横坐标
+     * @param y 纵坐标
+     */
     public FlowerEnemy(boolean visuals, float x, float y) {
         super(visuals, x, y, 0, SpriteType.ENEMY_FLOWER);
+        // 设置为不带翅膀和可以被火球击杀
         this.winged = false;
         this.noFireballDeath = false;
+
+        // 设置宽度和高度
         this.width = 2;
         this.yStart = this.y;
         this.ya = -1;
@@ -24,6 +34,11 @@ public class FlowerEnemy extends Enemy {
         }
     }
 
+    /**
+     * 覆盖默认的克隆方法
+     *
+     * @return 克隆之后的食人花
+     */
     @Override
     public MarioSprite clone() {
         FlowerEnemy sprite = new FlowerEnemy(false, this.x, this.y);
@@ -41,6 +56,9 @@ public class FlowerEnemy extends Enemy {
         return sprite;
     }
 
+    /**
+     *
+     */
     @Override
     public void update() {
         if (!this.alive) {

@@ -6,9 +6,12 @@ import engine.core.MarioWorld;
 import engine.helper.SpriteType;
 
 public abstract class MarioSprite {
+    // 表示精灵的类型
     public SpriteType type;
 
     public String initialCode;
+
+    // MarioSprite的当前位置
     public float x, y, xa, ya;
     public int width, height, facing;
     public boolean alive;
@@ -28,6 +31,7 @@ public abstract class MarioSprite {
         this.y = y;
         this.xa = 0;
         this.ya = 0;
+        // 朝向
         this.facing = 1;
         // 存活状态
         this.alive = true;

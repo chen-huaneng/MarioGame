@@ -269,14 +269,30 @@ public class MarioLevel {
         this.graphics.moveShift[xTile][yTile] = shift;
     }
 
+    /**
+     * 获取指定位置的精灵贴图
+     *
+     * @param xTile 贴图的横坐标
+     * @param yTile 贴图的纵坐标
+     * @return 返回指定位置的精灵贴图
+     */
     public SpriteType getSpriteType(int xTile, int yTile) {
+        // 判断精灵的位置是否超出了贴图的范围
         if (xTile < 0 || yTile < 0 || xTile >= this.tileWidth || yTile >= this.tileHeight) {
             return SpriteType.NONE;
         }
         return this.spriteTemplates[xTile][yTile];
     }
 
+    /**
+     * 根据传入的位置返回上一次生成的时刻
+     *
+     * @param xTile 贴图的横坐标
+     * @param yTile 贴图的纵坐标
+     * @return 上一次生成的时刻
+     */
     public int getLastSpawnTick(int xTile, int yTile) {
+        // 判断给定位置是否超出边界
         if (xTile < 0 || yTile < 0 || xTile > this.tileWidth - 1 || yTile > this.tileHeight - 1) {
             return 0;
         }
@@ -290,6 +306,13 @@ public class MarioLevel {
         this.lastSpawnTime[xTile][yTile] = tick;
     }
 
+    /**
+     * 返回指定位置的精灵贴图的字符串表示
+     *
+     * @param xTile 贴图的横坐标
+     * @param yTile 贴图的纵坐标
+     * @return 贴图的字符串表示
+     */
     public String getSpriteCode(int xTile, int yTile) {
         return xTile + "_" + yTile + "_" + this.getSpriteType(xTile, yTile).getValue();
     }

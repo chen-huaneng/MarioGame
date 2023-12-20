@@ -26,13 +26,17 @@ public class MarioWorld {
     // 是否可视化
     public boolean visuals;
     public int currentTick;
-    //Status
+
+    // 是否存活以及金币数量
     public int coins, lives;
+
+    // 上一帧的事件列表
     public ArrayList<MarioEvent> lastFrameEvents;
     private final ArrayList<MarioSprite> sprites;
     private final ArrayList<Shell> shellsToCheck;
     private final ArrayList<Fireball> fireballsToCheck;
     private final ArrayList<MarioSprite> addedSprites;
+    // 要移除的精灵列表
     private final ArrayList<MarioSprite> removedSprites;
 
     private final ArrayList<MarioEffect> effects;
@@ -116,14 +120,28 @@ public class MarioWorld {
         this.mario.world = this;
     }
 
+    /**
+     * 增加Mario的事件
+     *
+     * @param eventType 事件类型
+     * @param eventParam 事件的参数
+     */
     public void addEvent(EventType eventType, int eventParam) {
+        // 小Mario
         int marioState = 0;
+
+        // 判断Mario的状态，根据状态设置值
         if (this.mario.isLarge) {
+            // 大Mario
             marioState = 1;
         }
+
         if (this.mario.isFire) {
+            //火球Mario
             marioState = 2;
         }
+
+        // 添加事件
         this.lastFrameEvents.add(new MarioEvent(eventType, eventParam, mario.x, mario.y, marioState, this.currentTick));
     }
 
@@ -139,8 +157,14 @@ public class MarioWorld {
         sprite.update();
     }
 
+    /**
+     * 在地图中移除精灵
+     * @param sprite 精灵
+     */
     public void removeSprite(MarioSprite sprite) {
+        // 将要移除的精灵添加到列表中
         this.removedSprites.add(sprite);
+        // 将存活状态设为死亡
         sprite.alive = false;
         sprite.removed();
         sprite.world = null;
@@ -159,19 +183,33 @@ public class MarioWorld {
         this.gameStatus = GameStatus.WIN;
     }
 
+    /**
+     * 判定Mario失败的情况
+     */
     public void lose() {
         this.addEvent(EventType.LOSE, 0);
         this.gameStatus = GameStatus.LOSE;
         this.mario.alive = false;
     }
 
+    /**
+     * 超时事件
+     */
     public void timeout() {
+        // 将游戏状态设置为死亡
         this.gameStatus = GameStatus.TIME_OUT;
+        // 将Mario的状态设置为死亡
         this.mario.alive = false;
     }
 
+    /**
+     * 判断某个精灵是否为敌人
+     *
+     * @param sprite 精灵
+     * @return 是否为敌人
+     */
     private boolean isEnemy(MarioSprite sprite) {
-        return sprite instanceof Enemy || sprite instanceof FlowerEnemy || sprite instanceof BulletBill;
+        return sprite instanceof Enemy || sprite instanceof BulletBill;
     }
 
     /**
@@ -186,7 +224,7 @@ public class MarioWorld {
 
         if (this.pauseTimer > 0) {
             --this.pauseTimer;
-            // 更新图像
+            // 更新Mario图像
             if (this.visuals) {
                 this.mario.updateGraphics();
             }
@@ -196,13 +234,16 @@ public class MarioWorld {
         // 处理计时器的值
         if (this.currentTimer > 0) {
             this.currentTimer -= 30;
+
             // 如果时间小于0则触发超时事件
             if (this.currentTimer <= 0) {
                 this.currentTimer = 0;
+                // 触发超时事件
                 this.timeout();
                 return;
             }
         }
+
         ++this.currentTick;
 
         // 更新相机的位置，使得Mario始终处于屏幕中央
@@ -244,22 +285,33 @@ public class MarioWorld {
         removedSprites.clear();
     }
 
+    /**
+     * 更新精灵的状态
+     */
     private void updateGameStatus() {
         // 统计页面上的火球数量
         this.fireballsOnScreen = 0;
 
         // 更新关卡的状态，传递相机的位置
         for (MarioSprite sprite : sprites) {
+            // 判断精灵的位置是否超出当前屏幕的位置
             if (sprite.x < cameraX - 64 || sprite.x > cameraX + MarioGame.width + 64 || sprite.y > this.level.height + 32) {
+
+                // 如果Mario不在当前屏幕可见位置表示游戏结束
                 if (sprite.type == SpriteType.MARIO) {
                     this.lose();
                 }
+
+                // 在游戏中移除该精灵
                 this.removeSprite(sprite);
+
+                // 判断是否为敌人并添加掉出世界的事件
                 if (this.isEnemy(sprite) && sprite.y > MarioGame.height + 32) {
                     this.addEvent(EventType.FALL_KILL, sprite.type.getValue());
                 }
                 continue;
             }
+
             // 更新火球的数量
             if (sprite.type == SpriteType.FIREBALL) {
                 this.fireballsOnScreen += 1;
@@ -267,23 +319,31 @@ public class MarioWorld {
         }
     }
 
-    /** 处理精灵图块的生成和删除 */
+    /**
+     *
+     */
     private void generateSprites() {
         // 处理图块的生成和删除，以当前相机为基准，每个图块的像素大小为16 * 16
         for (int x = (int) cameraX / 16 - 1; x <= (int) (cameraX + MarioGame.width) / 16 + 1; ++x) {
             for (int y = (int) cameraY / 16 - 1; y <= (int) (cameraY + MarioGame.height) / 16 + 1; ++y) {
+
                 // 确定生成图块的位置和Mario的相对位置，用于处理一些需要根据方向生成的精灵
                 int dir = 0;
-                if (x * 16 + 8 > mario.x + 16)
+                if (x * 16 + 8 > mario.x + 16) {
                     dir = -1;
-                if (x * 16 + 8 < mario.x - 16)
+                }
+                if (x * 16 + 8 < mario.x - 16) {
                     dir = 1;
+                }
 
                 // 获取当前精灵的图块
                 SpriteType type = level.getSpriteType(x, y);
+
                 // 判断是否有需要新生成的精灵
                 if (type != SpriteType.NONE) {
+                    // 返回指定精灵的字符串形式贴图
                     String spriteCode = level.getSpriteCode(x, y);
+
                     boolean found = false;
                     // 查找是否已经存在相同的精灵
                     for (MarioSprite sprite : sprites) {
@@ -292,13 +352,12 @@ public class MarioWorld {
                             break;
                         }
                     }
-                    // 生成新的精灵
-                    if (!found) {
-                        if (this.level.getLastSpawnTick(x, y) != this.currentTick - 1) {
-                            MarioSprite sprite = type.spawnSprite(this.visuals, x, y, dir);
-                            sprite.initialCode = spriteCode;
-                            this.addSprite(sprite);
-                        }
+
+                    // 如果没有找到则生成新的精灵并且不是上一时刻生成的
+                    if (!found && this.level.getLastSpawnTick(x, y) != this.currentTick - 1) {
+                        MarioSprite sprite = type.spawnSprite(this.visuals, x, y, dir);
+                        sprite.initialCode = spriteCode;
+                        this.addSprite(sprite);
                     }
                     this.level.setLastSpawnTick(x, y, this.currentTick);
                 }
@@ -350,22 +409,32 @@ public class MarioWorld {
         fireballsToCheck.clear();
     }
 
-    /** 更新相机的位置 */
+    /**
+     * 更新相机的位置，使得Mario位于屏幕中央
+     */
     private void updateCameraPosition() {
-        // 控制相机的位置，使得相机的中心对准Mario
+        // 控制相机的水平位置，使得相机的中心对准Mario
         this.cameraX = this.mario.x - MarioGame.width / 2;
+
+        // 处理相机水平位置超出地图长度的情况
         if (this.cameraX + MarioGame.width > this.level.width) {
             this.cameraX = this.level.width - MarioGame.width;
         }
-        // 限制相机的位置不会超过屏幕边界
+
+        // 限制相机的水平位置不会超过屏幕边界
         if (this.cameraX < 0) {
             this.cameraX = 0;
         }
 
+        // 控制相机的高度位置
         this.cameraY = this.mario.y - MarioGame.height / 2;
+
+        // 处理高度超过地图高度的情况
         if (this.cameraY + MarioGame.height > this.level.height) {
             this.cameraY = this.level.height - MarioGame.height;
         }
+
+        // 限制相机的高度位置不会超过屏幕的边界
         if (this.cameraY < 0) {
             this.cameraY = 0;
         }

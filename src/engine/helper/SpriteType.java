@@ -6,9 +6,11 @@ import engine.sprites.FlowerEnemy;
 
 public enum SpriteType {
     //Generic values
+    // 空白
     NONE(0),
     // Mario
     MARIO(-31),
+    // 火球
     FIREBALL(16),
     // 贡巴
     GOOMBA(2, 16),
@@ -27,13 +29,14 @@ public enum SpriteType {
     // 带翅膀的尖刺
     SPIKY_WINGED(9, 24),
     BULLET_BILL(10, 40),
+    // 食人花
     ENEMY_FLOWER(11, 48),
     MUSHROOM(12),
     FIRE_FLOWER(13),
     SHELL(14),
     LIFE_MUSHROOM(15);
 
-    private int value;
+    private final int value;
     private int startIndex;
 
     SpriteType(int newValue) {
@@ -45,14 +48,32 @@ public enum SpriteType {
         startIndex = newIndex;
     }
 
+    /**
+     * 获取精灵的值
+     * @return 返回精灵的值
+     */
     public int getValue() {
         return value;
     }
 
+    /**
+     * 获取开始的索引
+     *
+     * @return 获取开始的索引
+     */
     public int getStartIndex() {
         return startIndex;
     }
 
+    /**
+     * 根据坐标位置返回相应的精灵类型
+     *
+     * @param visuals 是否可视化
+     * @param xTile 横坐标
+     * @param yTile 纵坐标
+     * @param dir 方向
+     * @return 返回精灵
+     */
     public MarioSprite spawnSprite(boolean visuals, int xTile, int yTile, int dir) {
         if (this == SpriteType.ENEMY_FLOWER) {
             return new FlowerEnemy(visuals, xTile * 16 + 17, yTile * 16 + 18);
