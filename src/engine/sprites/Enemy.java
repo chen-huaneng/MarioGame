@@ -202,9 +202,9 @@ public class Enemy extends MarioSprite {
     /**
      * 移动敌人对象的方法，考虑了碰撞的检测和处，并对移动的有效性进行判定
      *
-     * @param xa
-     * @param ya
-     * @return
+     * @param xa 水平移动速度
+     * @param ya 垂直移动速度
+     * @return 判断是否更新位置
      */
     private boolean move(float xa, float ya) {
         // 当移动距离大于8的时候，进行迭代，每次移动8个单位，直到距离小于等于8
@@ -215,85 +215,101 @@ public class Enemy extends MarioSprite {
             xa -= 8;
         }
         while (xa < -8) {
-            if (!move(-8, 0))
+            if (!move(-8, 0)) {
                 return false;
+            }
             xa += 8;
         }
         while (ya > 8) {
-            if (!move(0, 8))
+            if (!move(0, 8)) {
                 return false;
+            }
             ya -= 8;
         }
         while (ya < -8) {
-            if (!move(0, -8))
+            if (!move(0, -8)) {
                 return false;
+            }
             ya += 8;
         }
 
         // 用于标记是否发生碰撞
         boolean collide = false;
-        if (ya > 0) {
-            if (isBlocking(x + xa - width, y + ya, xa, 0))
-                collide = true;
-            else if (isBlocking(x + xa + width, y + ya, xa, 0))
-                collide = true;
-            else if (isBlocking(x + xa - width, y + ya + 1, xa, ya))
-                collide = true;
-            else if (isBlocking(x + xa + width, y + ya + 1, xa, ya))
+
+        // 判断向上移动是否会发生碰撞
+        if (ya > 0 &&
+            (isBlocking(x + xa - width, y + ya, xa, 0) ||
+                isBlocking(x + xa + width, y + ya, xa, 0) ||
+                isBlocking(x + xa - width, y + ya + 1, xa, ya) ||
+                isBlocking(x + xa + width, y + ya + 1, xa, ya))) {
+            collide = true;
+        }
+
+        // 判断向下移动是否会发生碰撞
+        if (ya < 0 &&
+            (isBlocking(x + xa, y + ya - height, xa, ya) ||
+                isBlocking(x + xa - width, y + ya - height, xa, ya) ||
+                isBlocking(x + xa + width, y + ya - height, xa, ya))) {
                 collide = true;
         }
-        if (ya < 0) {
-            if (isBlocking(x + xa, y + ya - height, xa, ya))
-                collide = true;
-            else if (collide || isBlocking(x + xa - width, y + ya - height, xa, ya))
-                collide = true;
-            else if (collide || isBlocking(x + xa + width, y + ya - height, xa, ya))
-                collide = true;
-        }
+
+        // 判断向右移动是否会发生碰撞
         if (xa > 0) {
-            if (isBlocking(x + xa + width, y + ya - height, xa, ya))
+            // 判断左右移动是否有障碍物
+            if (isBlocking(x + xa + width, y + ya - height, xa, ya) ||
+                    isBlocking(x + xa + width, y + ya - height / 2, xa, ya) ||
+                    isBlocking(x + xa + width, y + ya, xa, ya)) {
                 collide = true;
-            if (isBlocking(x + xa + width, y + ya - height / 2, xa, ya))
-                collide = true;
-            if (isBlocking(x + xa + width, y + ya, xa, ya))
-                collide = true;
+            }
 
+            // 判断是否需要避免掉落悬崖
             if (avoidCliffs && onGround
-                    && !world.level.isBlocking((int) ((x + xa + width) / 16), (int) ((y) / 16 + 1), xa, 1))
+                    && !world.level.isBlocking((int) ((x + xa + width) / 16), (int) ((y) / 16 + 1), xa, 1)) {
                 collide = true;
+            }
         }
+
+        // 判断向左移动是否会发生碰撞
         if (xa < 0) {
-            if (isBlocking(x + xa - width, y + ya - height, xa, ya))
+            // 判断左右移动是否有障碍物
+            if (isBlocking(x + xa - width, y + ya - height, xa, ya) ||
+                    isBlocking(x + xa - width, y + ya - height / 2, xa, ya) ||
+                    isBlocking(x + xa - width, y + ya, xa, ya)) {
                 collide = true;
-            if (isBlocking(x + xa - width, y + ya - height / 2, xa, ya))
-                collide = true;
-            if (isBlocking(x + xa - width, y + ya, xa, ya))
-                collide = true;
+            }
 
+            // 判断是否需要避免掉落悬崖
             if (avoidCliffs && onGround
-                    && !world.level.isBlocking((int) ((x + xa - width) / 16), (int) ((y) / 16 + 1), xa, 1))
+                    && !world.level.isBlocking((int) ((x + xa - width) / 16), (int) ((y) / 16 + 1), xa, 1)) {
                 collide = true;
+            }
         }
 
+        // 如果发生碰撞
         if (collide) {
+            // 向左移动发生碰撞后调整位置到碰撞点的右侧，并把速度调为0
             if (xa < 0) {
                 x = (int) ((x - width) / 16) * 16 + width;
                 this.xa = 0;
             }
+            // 向右移动发生碰撞后调整位置到碰撞点的左侧，并把速度调为0
             if (xa > 0) {
                 x = (int) ((x + width) / 16 + 1) * 16 - width - 1;
                 this.xa = 0;
             }
+            // 向下移动发生碰撞后调整位置到碰撞点的上侧，并把速度调为0
             if (ya < 0) {
                 y = (int) ((y - height) / 16) * 16 + height;
                 this.ya = 0;
             }
+            // 向上移动发生碰撞后调整位置到地面
             if (ya > 0) {
                 y = (int) (y / 16 + 1) * 16 - 1;
                 onGround = true;
             }
             return false;
         } else {
+            // 如果没有发生碰撞则更新敌人的位置
             x += xa;
             y += ya;
             return true;
@@ -303,11 +319,11 @@ public class Enemy extends MarioSprite {
     /**
      * 判断给定坐标位置是否存在障碍物，以及是否会阻挡敌人的移动
      *
-     * @param _x
-     * @param _y
-     * @param xa
-     * @param ya
-     * @return
+     * @param _x 横坐标
+     * @param _y 纵坐标
+     * @param xa 水平速度
+     * @param ya 垂直速度
+     * @return 返回是否会被阻挡
      */
     private boolean isBlocking(float _x, float _y, float xa, float ya) {
         // 将像素转换为坐标
