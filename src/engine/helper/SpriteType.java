@@ -80,6 +80,7 @@ public enum SpriteType {
         if (this == SpriteType.ENEMY_FLOWER) {
             return new FlowerEnemy(visuals, xTile * 16 + 17, yTile * 16 + 18);
         }
+        // 生成其他敌人
         return new Enemy(visuals, xTile * 16 + 8, yTile * 16 + 15, dir, this);
     }
 }

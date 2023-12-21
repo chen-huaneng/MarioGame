@@ -20,8 +20,11 @@ public class PassWindow extends JFrame {
      *
      * @throws IOException 当读取图像文件失败时抛出。*/
     public PassWindow() throws IOException {
+        // 设置窗口标题
         super("欢迎进入马里奥游戏！");
+        // 设置窗口大小
         this.setSize(450, 450);
+        // 设置窗口位置
         this.setLocationRelativeTo(null);
 
         //窗口居中设置窗口长宽
@@ -30,6 +33,7 @@ public class PassWindow extends JFrame {
         // 置空布局
         panel.setLayout(null);
 
+        // 创建组件
         textAccount = new JTextArea("账号：");
         textAccount.setEditable(false); // 可否编辑
         textAccount.setBounds(100, 150, 40, 25); // 位置以及大小
@@ -69,7 +73,9 @@ public class PassWindow extends JFrame {
 
                 if (checkCredentials(account, password)) {
                     JOptionPane.showMessageDialog(PassWindow.this, "登录成功！ Welcome, " + getLastName(account), "Success", JOptionPane.INFORMATION_MESSAGE);
+
                     dispose();
+
                     try {
                         StartMenu rwin = new StartMenu(2.5, 0);
                     } catch (IOException e1) {
@@ -92,6 +98,9 @@ public class PassWindow extends JFrame {
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
+
+                assert registerWindow != null;
+
                 registerWindow.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosed(java.awt.event.WindowEvent windowEvent) {
@@ -110,6 +119,7 @@ public class PassWindow extends JFrame {
             }
         });
 
+        // 添加组件
         panel.add(textAccount);
         panel.add(inputAccount);
         panel.add(textPassword);
@@ -119,6 +129,7 @@ public class PassWindow extends JFrame {
         panel.add(buttonReset);
 
         add("Center", panel);
+        // 设置窗口可见
         setVisible(true);
     }
 

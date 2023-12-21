@@ -23,8 +23,12 @@ public class BulletBill extends MarioSprite {
         }
     }
 
+    /**
+     * 更新蘑菇的位置
+     */
     @Override
     public void update() {
+        // 如果蘑菇死亡，则不再更新
         if (!this.alive) {
             return;
         }

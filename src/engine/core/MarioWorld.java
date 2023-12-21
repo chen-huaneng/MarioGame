@@ -45,6 +45,7 @@ public class MarioWorld {
     private final ArrayList<MarioSprite> sprites;
     private final ArrayList<Shell> shellsToCheck;
     private final ArrayList<Fireball> fireballsToCheck;
+    // 待添加的精灵列表
     private final ArrayList<MarioSprite> addedSprites;
     // 要移除的精灵列表
     private final ArrayList<MarioSprite> removedSprites;
@@ -161,8 +162,14 @@ public class MarioWorld {
         this.effects.add(effect);
     }
 
+    /**
+     * 在地图中添加精灵
+     *
+     * @param sprite 精灵
+     */
     public void addSprite(MarioSprite sprite) {
         this.addedSprites.add(sprite);
+        // 设定敌人的初始状态
         sprite.alive = true;
         sprite.world = this;
         sprite.update();
@@ -332,7 +339,7 @@ public class MarioWorld {
     }
 
     /**
-     *
+     * 处理图块的生成和删除
      */
     private void generateSprites() {
         // 处理图块的生成和删除，以当前相机为基准，每个图块的像素大小为16 * 16
@@ -367,6 +374,7 @@ public class MarioWorld {
 
                     // 如果没有找到则生成新的精灵并且不是上一时刻生成的
                     if (!found && this.level.getLastSpawnTick(x, y) != this.currentTick - 1) {
+                        // 生成敌人
                         MarioSprite sprite = type.spawnSprite(this.visuals, x, y, dir);
                         sprite.initialCode = spriteCode;
                         this.addSprite(sprite);

@@ -129,8 +129,6 @@ public class MarioGame {
         // 初始化
         this.world = new MarioWorld();
         
-
-
         // 控制可视化界面
         this.world.visuals = visual;
         // 初始化游戏主要的设置
