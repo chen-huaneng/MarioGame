@@ -1,16 +1,14 @@
 package engine.core;
 
-import java.awt.image.VolatileImage;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.awt.*;
-import java.awt.event.KeyAdapter;
-
-import javax.swing.JFrame;
-
 import engine.helper.GameStatus;
 import engine.helper.MarioActions;
 import gui.StartMenu;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.VolatileImage;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class MarioGame {
     // 屏幕的宽度
@@ -60,8 +58,8 @@ public class MarioGame {
     /**
      * 以指定的地图开始Mario游戏
      *
-     * @param level 以String形式展示的Mario地图
-     * @param timer 游戏内的时间计时器，如果设置为0则变成无限制
+     * @param level      以String形式展示的Mario地图
+     * @param timer      游戏内的时间计时器，如果设置为0则变成无限制
      * @param marioState Mario的初始状态，0表示最小的Mario，1表示大个的Mario，2表示发射火球的Mario
      */
     public void playGame(String level, int timer, int marioState) {
@@ -71,12 +69,12 @@ public class MarioGame {
     /**
      * 在指定的地图上运行Mario游戏
      *
-     * @param level 以String形式展示的Mario地图
-     * @param timer 游戏内的计时器，如果设置为0则变成无限制
+     * @param level      以String形式展示的Mario地图
+     * @param timer      游戏内的计时器，如果设置为0则变成无限制
      * @param marioState Mario的初始状态，0表示最小的Mario，1表示大个的Mario，2表示发射火球的Mario
-     * @param visuals 控制游戏界面是否可视化
-     * @param fps the number of frames per second that the update function is following
-     * @param scale 界面比例大小，会乘以界面相应的长度和宽度
+     * @param visuals    控制游戏界面是否可视化
+     * @param fps        the number of frames per second that the update function is following
+     * @param scale      界面比例大小，会乘以界面相应的长度和宽度
      */
     public void runGame(Agent agent, String level, int timer, int marioState, boolean visuals, int fps, double scale) {
         // 控制可视化的界面
@@ -109,12 +107,10 @@ public class MarioGame {
     }
 
     /**
-     *
-     *
-     * @param level 游戏地图
-     * @param timer 游戏内的时间
+     * @param level      游戏地图
+     * @param timer      游戏内的时间
      * @param marioState 初始Mario的状态
-     * @param visual 是否可视化
+     * @param visual     是否可视化
      * @param fps
      */
     private void gameLoop(String level, int timer, int marioState, boolean visual, int fps) {
@@ -174,7 +170,7 @@ public class MarioGame {
                 this.render.renderWorld(this.world, renderTarget, backBuffer, currentBuffer);
             }
 
-            
+
             if (this.getDelay(fps) > 0) {
                 try {
                     currentTime += this.getDelay(fps);
@@ -184,35 +180,35 @@ public class MarioGame {
                 }
             }
         }
-        
-        if(this.world.gameStatus == GameStatus.TIME_OUT) {
-        	try {
-            	this.window.dispose();
-    			StartMenu startmenu=new StartMenu(2.5,1);
-    		} catch (IOException e) {
-    			// TODO Auto-generated catch block
-    			e.printStackTrace();
+
+        if (this.world.gameStatus == GameStatus.TIME_OUT) {
+            try {
+                this.window.dispose();
+                StartMenu startmenu = new StartMenu(2.5, 1);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
-		}
-        if(this.world.gameStatus == GameStatus.LOSE) {
-        	try {
-            	this.window.dispose();
-    			StartMenu startmenu=new StartMenu(2.5,2);
-    		} catch (IOException e) {
-    			// TODO Auto-generated catch block
-    			e.printStackTrace();
+        if (this.world.gameStatus == GameStatus.LOSE) {
+            try {
+                this.window.dispose();
+                StartMenu startmenu = new StartMenu(2.5, 2);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
-		}
-        if(this.world.gameStatus == GameStatus.WIN) {
-        	try {
-            	this.window.dispose();
-    			StartMenu startmenu=new StartMenu(2.5,3);
-    		} catch (IOException e) {
-    			// TODO Auto-generated catch block
-    			e.printStackTrace();
+        if (this.world.gameStatus == GameStatus.WIN) {
+            try {
+                this.window.dispose();
+                StartMenu startmenu = new StartMenu(2.5, 3);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
-		}
     }
 
-	
+
 }

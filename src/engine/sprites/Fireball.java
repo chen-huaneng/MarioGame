@@ -1,7 +1,5 @@
 package engine.sprites;
 
-import java.awt.Graphics;
-
 import engine.graphics.MarioImage;
 import engine.helper.Assets;
 import engine.helper.SpriteType;
@@ -35,8 +33,9 @@ public class Fireball extends MarioSprite {
             return;
         }
 
-        if (facing != 0)
+        if (facing != 0) {
             anim++;
+        }
 
         float sideWaysSpeed = 8f;
         if (xa > 2) {
@@ -56,8 +55,9 @@ public class Fireball extends MarioSprite {
 
         onGround = false;
         move(0, ya);
-        if (onGround)
+        if (onGround) {
             ya = -10;
+        }
 
         ya *= 0.95f;
         if (onGround) {

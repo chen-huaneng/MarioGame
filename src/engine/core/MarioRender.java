@@ -1,10 +1,8 @@
 package engine.core;
 
-import javax.swing.*;
-
 import engine.helper.Assets;
-import engine.helper.MarioActions;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;

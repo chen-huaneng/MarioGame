@@ -1,7 +1,5 @@
 package engine.sprites;
 
-import java.awt.Graphics;
-
 import engine.graphics.MarioImage;
 import engine.helper.Assets;
 import engine.helper.EventType;
@@ -67,8 +65,9 @@ public class Mushroom extends MarioSprite {
 
         xa = facing * sideWaysSpeed;
 
-        if (!move(xa, 0))
+        if (!move(xa, 0)) {
             facing = -facing;
+        }
         onGround = false;
         move(0, ya);
 

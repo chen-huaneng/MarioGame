@@ -1,17 +1,13 @@
 package engine.helper;
 
-import java.awt.AlphaComposite;
-import java.awt.Graphics2D;
-import java.awt.GraphicsConfiguration;
-import java.awt.Image;
-import java.awt.Transparency;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.File;
-import java.util.Objects;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.Objects;
 
 
 public class Assets {
@@ -55,7 +51,7 @@ public class Assets {
     /**
      * 读取并绘制图像到兼容图像上
      *
-     * @param gc 对象的图形配置
+     * @param gc        对象的图形配置
      * @param imageName 图像的名称
      * @return 返回读取的文件
      * @throws IOException 抛出读取文件异常
@@ -115,10 +111,10 @@ public class Assets {
     /**
      * 将图像切割成相应的小图片
      *
-     * @param gc 对象的图形配置
+     * @param gc        对象的图形配置
      * @param imageName 图像的名称
-     * @param xSize 图像的切割宽度
-     * @param ySize 图像的切割长度
+     * @param xSize     图像的切割宽度
+     * @param ySize     图像的切割长度
      * @return 切割完之后的图像
      * @throws IOException 抛出读取文件异常
      */

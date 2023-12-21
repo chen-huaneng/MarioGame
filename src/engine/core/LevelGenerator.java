@@ -23,7 +23,9 @@ public class LevelGenerator {
     private final int type;
     private final Random random;
 
-    /** 初始化随机数生成器 */
+    /**
+     * 初始化随机数生成器
+     */
     public LevelGenerator() {
         random = new Random();
         // 控制类型
@@ -32,11 +34,14 @@ public class LevelGenerator {
         this.difficulty = random.nextInt(5);
     }
 
-    /** 根据随机数生成地图类型
-     * @param model 地图模型
-     * @param x 地形的横向起始位置
+    /**
+     * 根据随机数生成地图类型
+     *
+     * @param model     地图模型
+     * @param x         地形的横向起始位置
      * @param maxLength 表示当前地形的最大长度
-     * @return 生成地形的长度 */
+     * @return 生成地形的长度
+     */
     private int buildZone(MarioLevelModel model, int x, int maxLength) {
         int t = random.nextInt(totalOdds);
         int type = 0;
@@ -65,8 +70,9 @@ public class LevelGenerator {
 
     /**
      * 生成悬崖地形
-     * @param model 地图模型
-     * @param xo 当前地形的起始位置
+     *
+     * @param model     地图模型
+     * @param xo        当前地形的起始位置
      * @param maxLength 最大长度
      * @return 当前地形的长度
      */
@@ -112,8 +118,9 @@ public class LevelGenerator {
 
     /**
      * 生成炮台地形
-     * @param model 地图模型
-     * @param xo 地形的起始位置
+     *
+     * @param model     地图模型
+     * @param xo        地形的起始位置
      * @param maxLength 地形的最大长度
      * @return 生成地形的长度
      */
@@ -145,7 +152,7 @@ public class LevelGenerator {
                 // 设置底部的砖块
                 if (y >= floor) {
                     model.setBlock(x, y, MarioLevelModel.GROUND);
-                } else if (x == xCannon && y >= cannonHeight){
+                } else if (x == xCannon && y >= cannonHeight) {
                     // 在炮塔的位置生成发射子弹的炮塔块
                     model.setBlock(x, y, MarioLevelModel.BULLET_BILL);
                 }
@@ -157,8 +164,9 @@ public class LevelGenerator {
 
     /**
      * 生成直线雨林
-     * @param model 地图模型
-     * @param xo 当前地形的起始位置
+     *
+     * @param model     地图模型
+     * @param xo        当前地形的起始位置
      * @param maxLength 当前地形的最大长度
      * @return 返回生成的地形的长度
      */
@@ -244,10 +252,12 @@ public class LevelGenerator {
 
     /**
      * 增加敌人
+     *
      * @param model 地图
-     * @param x0 起始位置
-     * @param x1 终止位置
-     * @param y 生成高度*/
+     * @param x0    起始位置
+     * @param x1    终止位置
+     * @param y     生成高度
+     */
     private void addEnemyLine(MarioLevelModel model, int x0, int x1, int y) {
         // 定义敌人的种类
         char[] enemies = new char[]{MarioLevelModel.GOOMBA,
@@ -271,8 +281,9 @@ public class LevelGenerator {
 
     /**
      * 生成管道地形
-     * @param model 地图模型
-     * @param xo 当前地形的横向起始位置
+     *
+     * @param model     地图模型
+     * @param xo        当前地形的横向起始位置
      * @param maxLength 当前地形的最大长度
      * @return 当前地形的长度
      */
@@ -322,11 +333,13 @@ public class LevelGenerator {
 
     /**
      * 生成直线地形
-     * @param model 地图
-     * @param xo 直线地面的起始坐标
+     *
+     * @param model     地图
+     * @param xo        直线地面的起始坐标
      * @param maxLength 直线地面最大长度
-     * @param safe 是否生成安全地面，如果是，则直线地面长度会更长
-     * @return 返回直线地面的长度*/
+     * @param safe      是否生成安全地面，如果是，则直线地面长度会更长
+     * @return 返回直线地面的长度
+     */
     private int buildStraight(MarioLevelModel model, int xo, int maxLength, boolean safe) {
         // 随机生成直线的长度
         // 如果是安全地面则长度更长
@@ -357,10 +370,12 @@ public class LevelGenerator {
 
     /**
      * 添加一些装饰，包括敌人、金币和砖块
+     *
      * @param model 地图
-     * @param x0 起始位置
-     * @param x1 终止位置
-     * @param floor 地板的高度*/
+     * @param x0    起始位置
+     * @param x1    终止位置
+     * @param floor 地板的高度
+     */
     private void decorate(MarioLevelModel model, int x0, int x1, int floor) {
         // 如果地板高度不足则返回
         if (floor < 1) {
@@ -411,8 +426,10 @@ public class LevelGenerator {
 
     /**
      * 初始化地图
+     *
      * @param model 控制地图的高度和长度
-     * @return 返回地图*/
+     * @return 返回地图
+     */
     public String getGeneratedLevel(MarioLevelModel model) {
         // 清空地图（初始化地图）
         model.clearMap();

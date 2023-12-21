@@ -1,13 +1,8 @@
 package engine.graphics;
 
-import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GraphicsConfiguration;
-import java.awt.Image;
-import java.awt.Transparency;
 import engine.helper.Assets;
+
+import java.awt.*;
 
 public class MarioBackground extends MarioGraphics {
     private final Image image;
@@ -18,8 +13,8 @@ public class MarioBackground extends MarioGraphics {
      * 创建Mario游戏背景
      *
      * @param graphicsConfiguration 图片相关配置
-     * @param screenWidth 屏幕的宽度
-     * @param indices 索引
+     * @param screenWidth           屏幕的宽度
+     * @param indices               索引
      */
     public MarioBackground(GraphicsConfiguration graphicsConfiguration, int screenWidth, int[][] indices) {
         super();

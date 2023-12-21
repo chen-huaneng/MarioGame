@@ -1,7 +1,5 @@
 package engine.sprites;
 
-import java.awt.Graphics;
-
 import engine.effects.DeathEffect;
 import engine.graphics.MarioImage;
 import engine.helper.Assets;
@@ -35,7 +33,9 @@ public class Shell extends MarioSprite {
 
     @Override
     public void update() {
-        if (!this.alive) return;
+        if (!this.alive) {
+            return;
+        }
 
         super.update();
 
@@ -78,15 +78,18 @@ public class Shell extends MarioSprite {
 
     @Override
     public boolean fireballCollideCheck(Fireball fireball) {
-        if (!this.alive) return false;
+        if (!this.alive) {
+            return false;
+        }
 
         float xD = fireball.x - x;
         float yD = fireball.y - y;
 
         if (xD > -16 && xD < 16) {
             if (yD > -height && yD < fireball.height) {
-                if (facing != 0)
+                if (facing != 0) {
                     return true;
+                }
 
                 xa = fireball.facing * 2;
                 ya = -5;
@@ -102,7 +105,9 @@ public class Shell extends MarioSprite {
 
     @Override
     public void collideCheck() {
-        if (!this.alive) return;
+        if (!this.alive) {
+            return;
+        }
 
         float xMarioD = world.mario.x - x;
         float yMarioD = world.mario.y - y;
@@ -149,7 +154,9 @@ public class Shell extends MarioSprite {
 
     @Override
     public boolean shellCollideCheck(Shell shell) {
-        if (!this.alive) return false;
+        if (!this.alive) {
+            return false;
+        }
 
         float xD = shell.x - x;
         float yD = shell.y - y;

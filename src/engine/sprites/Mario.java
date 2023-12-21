@@ -1,7 +1,5 @@
 package engine.sprites;
 
-import java.awt.Graphics;
-
 import engine.graphics.MarioImage;
 import engine.helper.Assets;
 import engine.helper.EventType;
@@ -30,10 +28,9 @@ public class Mario extends MarioSprite {
     private final int POWERUP_TIME = 3;
 
     /**
-     *
      * @param visuals 是否可视化
-     * @param x Mario的初始横坐标
-     * @param y Mario的初始纵坐标
+     * @param x       Mario的初始横坐标
+     * @param y       Mario的初始纵坐标
      */
     public Mario(boolean visuals, float x, float y) {
         super(x + 8, y + 15, SpriteType.MARIO);
@@ -85,38 +82,46 @@ public class Mario extends MarioSprite {
 
         boolean collide = false;
         if (ya > 0) {
-            if (isBlocking(x + xa - width, y + ya, xa, 0))
+            if (isBlocking(x + xa - width, y + ya, xa, 0)) {
                 collide = true;
-            else if (isBlocking(x + xa + width, y + ya, xa, 0))
+            } else if (isBlocking(x + xa + width, y + ya, xa, 0)) {
                 collide = true;
-            else if (isBlocking(x + xa - width, y + ya + 1, xa, ya))
+            } else if (isBlocking(x + xa - width, y + ya + 1, xa, ya)) {
                 collide = true;
-            else if (isBlocking(x + xa + width, y + ya + 1, xa, ya))
+            } else if (isBlocking(x + xa + width, y + ya + 1, xa, ya)) {
                 collide = true;
+            }
         }
         if (ya < 0) {
-            if (isBlocking(x + xa, y + ya - height, xa, ya))
+            if (isBlocking(x + xa, y + ya - height, xa, ya)) {
                 collide = true;
-            else if (collide || isBlocking(x + xa - width, y + ya - height, xa, ya))
+            } else if (collide || isBlocking(x + xa - width, y + ya - height, xa, ya)) {
                 collide = true;
-            else if (collide || isBlocking(x + xa + width, y + ya - height, xa, ya))
+            } else if (collide || isBlocking(x + xa + width, y + ya - height, xa, ya)) {
                 collide = true;
+            }
         }
         if (xa > 0) {
-            if (isBlocking(x + xa + width, y + ya - height, xa, ya))
+            if (isBlocking(x + xa + width, y + ya - height, xa, ya)) {
                 collide = true;
-            if (isBlocking(x + xa + width, y + ya - height / 2, xa, ya))
+            }
+            if (isBlocking(x + xa + width, y + ya - height / 2, xa, ya)) {
                 collide = true;
-            if (isBlocking(x + xa + width, y + ya, xa, ya))
+            }
+            if (isBlocking(x + xa + width, y + ya, xa, ya)) {
                 collide = true;
+            }
         }
         if (xa < 0) {
-            if (isBlocking(x + xa - width, y + ya - height, xa, ya))
+            if (isBlocking(x + xa - width, y + ya - height, xa, ya)) {
                 collide = true;
-            if (isBlocking(x + xa - width, y + ya - height / 2, xa, ya))
+            }
+            if (isBlocking(x + xa - width, y + ya - height / 2, xa, ya)) {
                 collide = true;
-            if (isBlocking(x + xa - width, y + ya, xa, ya))
+            }
+            if (isBlocking(x + xa - width, y + ya, xa, ya)) {
                 collide = true;
+            }
         }
         if (collide) {
             if (xa < 0) {
@@ -148,8 +153,9 @@ public class Mario extends MarioSprite {
     public boolean isBlocking(float _x, float _y, float xa, float ya) {
         int xTile = (int) (_x / 16);
         int yTile = (int) (_y / 16);
-        if (xTile == (int) (this.x / 16) && yTile == (int) (this.y / 16))
+        if (xTile == (int) (this.x / 16) && yTile == (int) (this.y / 16)) {
             return false;
+        }
 
         boolean blocking = world.level.isBlocking(xTile, yTile, xa, ya);
         int block = world.level.getBlock(xTile, yTile);
@@ -328,14 +334,16 @@ public class Mario extends MarioSprite {
 
         if (actions[MarioActions.LEFT.getValue()] && !isDucking) {
             xa -= sideWaysSpeed;
-            if (jumpTime >= 0)
+            if (jumpTime >= 0) {
                 facing = -1;
+            }
         }
 
         if (actions[MarioActions.RIGHT.getValue()] && !isDucking) {
             xa += sideWaysSpeed;
-            if (jumpTime >= 0)
+            if (jumpTime >= 0) {
                 facing = 1;
+            }
         }
 
         if (actions[MarioActions.SPEED.getValue()] && canShoot && isFire && world.fireballsOnScreen < 2) {
@@ -416,8 +424,9 @@ public class Mario extends MarioSprite {
     }
 
     public void getHurt() {
-        if (invulnerableTime > 0 || !this.alive)
+        if (invulnerableTime > 0 || !this.alive) {
             return;
+        }
 
         if (isLarge) {
             world.pauseTimer = 3 * POWERUP_TIME;

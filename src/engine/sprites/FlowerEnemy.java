@@ -3,15 +3,15 @@ package engine.sprites;
 import engine.helper.SpriteType;
 
 public class FlowerEnemy extends Enemy {
-    private float yStart;
+    private final float yStart;
     private int tick, waitTime;
 
     /**
      * 根据坐标和是否可视化生成食人花
      *
      * @param visuals 是否可视化
-     * @param x 横坐标
-     * @param y 纵坐标
+     * @param x       横坐标
+     * @param y       纵坐标
      */
     public FlowerEnemy(boolean visuals, float x, float y) {
         super(visuals, x, y, 0, SpriteType.ENEMY_FLOWER);

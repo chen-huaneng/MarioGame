@@ -1,6 +1,6 @@
 package engine.graphics;
 
-import java.awt.Graphics;
+import java.awt.*;
 
 public abstract class MarioGraphics {
     // 可视化
@@ -12,7 +12,6 @@ public abstract class MarioGraphics {
 
     /**
      * 图像的默认设置
-     *
      */
     public MarioGraphics() {
         this.visible = true;

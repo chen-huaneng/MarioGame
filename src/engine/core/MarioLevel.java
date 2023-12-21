@@ -1,12 +1,13 @@
 package engine.core;
 
-import java.awt.Graphics;
-import java.util.ArrayList;
 import engine.graphics.MarioImage;
 import engine.graphics.MarioTilemap;
 import engine.helper.Assets;
 import engine.helper.SpriteType;
 import engine.helper.TileFeature;
+
+import java.awt.*;
+import java.util.ArrayList;
 
 public class MarioLevel {
 
@@ -26,7 +27,7 @@ public class MarioLevel {
     /**
      * 设置游戏的贴图
      *
-     * @param level 游戏地图
+     * @param level   游戏地图
      * @param visuals 是否可视化
      */
     public MarioLevel(String level, boolean visuals) {
@@ -332,7 +333,7 @@ public class MarioLevel {
      * 找到指定横坐标的地板高度
      *
      * @param lines 以String形式存储的地图
-     * @param x 横坐标的位置
+     * @param x     横坐标的位置
      * @return 纵坐标的位置
      */
     private int findFirstFloor(String[] lines, int x) {

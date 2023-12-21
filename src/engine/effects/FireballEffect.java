@@ -1,6 +1,6 @@
 package engine.effects;
 
-import java.awt.Graphics;
+import java.awt.*;
 
 public class FireballEffect extends MarioEffect {
     public FireballEffect(float x, float y) {

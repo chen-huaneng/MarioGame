@@ -1,8 +1,8 @@
 package engine.helper;
 
-import engine.sprites.MarioSprite;
 import engine.sprites.Enemy;
 import engine.sprites.FlowerEnemy;
+import engine.sprites.MarioSprite;
 
 public enum SpriteType {
     //Generic values
@@ -50,6 +50,7 @@ public enum SpriteType {
 
     /**
      * 获取精灵的值
+     *
      * @return 返回精灵的值
      */
     public int getValue() {
@@ -69,9 +70,9 @@ public enum SpriteType {
      * 根据坐标位置返回相应的精灵类型
      *
      * @param visuals 是否可视化
-     * @param xTile 横坐标
-     * @param yTile 纵坐标
-     * @param dir 方向
+     * @param xTile   横坐标
+     * @param yTile   纵坐标
+     * @param dir     方向
      * @return 返回精灵
      */
     public MarioSprite spawnSprite(boolean visuals, int xTile, int yTile, int dir) {

@@ -1,6 +1,6 @@
 package engine.effects;
 
-import java.awt.Graphics;
+import java.awt.*;
 
 public class CoinEffect extends MarioEffect {
     public CoinEffect(float x, float y) {

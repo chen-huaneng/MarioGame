@@ -1,7 +1,5 @@
 package engine.sprites;
 
-import java.awt.Graphics;
-
 import engine.graphics.MarioImage;
 import engine.helper.Assets;
 import engine.helper.EventType;

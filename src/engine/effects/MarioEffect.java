@@ -1,9 +1,9 @@
 package engine.effects;
 
-import java.awt.Graphics;
-
 import engine.graphics.MarioImage;
 import engine.helper.Assets;
+
+import java.awt.*;
 
 public abstract class MarioEffect {
     public float x, y, xv, yv, xa, ya;

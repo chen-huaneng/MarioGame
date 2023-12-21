@@ -1,7 +1,5 @@
 package engine.sprites;
 
-import java.awt.Graphics;
-
 import engine.effects.DeathEffect;
 import engine.graphics.MarioImage;
 import engine.helper.Assets;

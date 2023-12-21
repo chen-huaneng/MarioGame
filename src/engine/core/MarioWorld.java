@@ -1,16 +1,26 @@
 package engine.core;
 
-import java.awt.Graphics;
-import java.awt.GraphicsConfiguration;
-import java.util.ArrayList;
-
-import engine.effects.*;
+import engine.effects.BrickEffect;
+import engine.effects.CoinEffect;
+import engine.effects.FireballEffect;
+import engine.effects.MarioEffect;
 import engine.graphics.MarioBackground;
 import engine.helper.EventType;
 import engine.helper.GameStatus;
 import engine.helper.SpriteType;
 import engine.helper.TileFeature;
-import engine.sprites.*;
+import engine.sprites.BulletBill;
+import engine.sprites.Enemy;
+import engine.sprites.FireFlower;
+import engine.sprites.Fireball;
+import engine.sprites.LifeMushroom;
+import engine.sprites.Mario;
+import engine.sprites.MarioSprite;
+import engine.sprites.Mushroom;
+import engine.sprites.Shell;
+
+import java.awt.*;
+import java.util.ArrayList;
 
 public class MarioWorld {
     // 游戏状态
@@ -44,7 +54,8 @@ public class MarioWorld {
     private final MarioBackground[] backgrounds = new MarioBackground[2];
 
     /**
-     * 初始化世界 */
+     * 初始化世界
+     */
     public MarioWorld() {
         this.pauseTimer = 0;
         // 设置游戏状态
@@ -61,6 +72,7 @@ public class MarioWorld {
 
     /**
      * 设置游戏的背景
+     *
      * @param graphicsConfig 图片相关的配置
      */
     public void initializeVisuals(GraphicsConfiguration graphicsConfig) {
@@ -123,7 +135,7 @@ public class MarioWorld {
     /**
      * 增加Mario的事件
      *
-     * @param eventType 事件类型
+     * @param eventType  事件类型
      * @param eventParam 事件的参数
      */
     public void addEvent(EventType eventType, int eventParam) {
@@ -158,6 +170,7 @@ public class MarioWorld {
 
     /**
      * 在地图中移除精灵
+     *
      * @param sprite 精灵
      */
     public void removeSprite(MarioSprite sprite) {
@@ -212,6 +225,7 @@ public class MarioWorld {
 
     /**
      * 更新游戏状态
+     *
      * @param actions 动作数组
      */
     public void update(boolean[] actions) {
@@ -372,7 +386,9 @@ public class MarioWorld {
         }
     }
 
-    /** 检测乌龟壳的碰撞和处理被碰撞的精灵 */
+    /**
+     * 检测乌龟壳的碰撞和处理被碰撞的精灵
+     */
     private void checkShellCollide() {
         // 碰撞检测和处理
         for (Shell shell : shellsToCheck) {
@@ -388,7 +404,9 @@ public class MarioWorld {
         shellsToCheck.clear();
     }
 
-    /** 检测火球的碰撞和处理被碰撞的精灵 */
+    /**
+     * 检测火球的碰撞和处理被碰撞的精灵
+     */
     private void checkFireballCollide() {
         // 火球检测和处理
         for (Fireball fireball : fireballsToCheck) {

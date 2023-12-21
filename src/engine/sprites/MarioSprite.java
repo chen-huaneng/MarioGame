@@ -1,10 +1,10 @@
 package engine.sprites;
 
-import java.awt.*;
-
 import engine.core.MarioWorld;
 import engine.graphics.MarioImage;
 import engine.helper.SpriteType;
+
+import java.awt.*;
 
 public abstract class MarioSprite {
     // 表示精灵的类型
@@ -24,8 +24,8 @@ public abstract class MarioSprite {
     /**
      * 初始化精灵类型
      *
-     * @param x 横坐标
-     * @param y 纵坐标
+     * @param x    横坐标
+     * @param y    纵坐标
      * @param type 精灵类型
      */
     public MarioSprite(float x, float y, SpriteType type) {
@@ -111,16 +111,13 @@ public abstract class MarioSprite {
         }
 
         // 用于标记是否发生碰撞
-        boolean collide = false;
-
-        // 判断向上移动是否会发生碰撞
-        if (ya > 0 &&
+        boolean collide = ya > 0 &&
                 (isBlocking(x + xa - width, y + ya, xa, 0) ||
                         isBlocking(x + xa + width, y + ya, xa, 0) ||
                         isBlocking(x + xa - width, y + ya + 1, xa, ya) ||
-                        isBlocking(x + xa + width, y + ya + 1, xa, ya))) {
-            collide = true;
-        }
+                        isBlocking(x + xa + width, y + ya + 1, xa, ya));
+
+        // 判断向上移动是否会发生碰撞
 
         // 判断向下移动是否会发生碰撞
         if (ya < 0 &&

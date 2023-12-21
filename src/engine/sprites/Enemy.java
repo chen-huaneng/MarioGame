@@ -1,13 +1,13 @@
 package engine.sprites;
 
-import java.awt.Graphics;
-
 import engine.effects.DeathEffect;
 import engine.effects.SquishEffect;
 import engine.graphics.MarioImage;
 import engine.helper.Assets;
 import engine.helper.EventType;
 import engine.helper.SpriteType;
+
+import java.awt.*;
 
 public class Enemy extends MarioSprite {
     private static final float GROUND_INERTIA = 0.89f;
@@ -24,10 +24,10 @@ public class Enemy extends MarioSprite {
      * 生成指定坐标和方向的敌人类型
      *
      * @param visuals 是否可视化
-     * @param x 横坐标
-     * @param y 纵坐标
-     * @param dir 方向
-     * @param type 类型
+     * @param x       横坐标
+     * @param y       纵坐标
+     * @param dir     方向
+     * @param type    类型
      */
     public Enemy(boolean visuals, float x, float y, int dir, SpriteType type) {
         super(x, y, type);
@@ -119,8 +119,9 @@ public class Enemy extends MarioSprite {
         if (!onGround) {
             runFrame = 1;
         }
-        if (winged)
+        if (winged) {
             runFrame = wingTime / 4 % 2;
+        }
 
         this.graphics.index = this.type.getStartIndex() + runFrame;
     }
@@ -214,23 +215,20 @@ public class Enemy extends MarioSprite {
         }
 
         // 用于标记是否发生碰撞
-        boolean collide = false;
+        boolean collide = ya > 0 &&
+                (isBlocking(x + xa - width, y + ya, xa, 0) ||
+                        isBlocking(x + xa + width, y + ya, xa, 0) ||
+                        isBlocking(x + xa - width, y + ya + 1, xa, ya) ||
+                        isBlocking(x + xa + width, y + ya + 1, xa, ya));
 
         // 判断向上移动是否会发生碰撞
-        if (ya > 0 &&
-            (isBlocking(x + xa - width, y + ya, xa, 0) ||
-                isBlocking(x + xa + width, y + ya, xa, 0) ||
-                isBlocking(x + xa - width, y + ya + 1, xa, ya) ||
-                isBlocking(x + xa + width, y + ya + 1, xa, ya))) {
-            collide = true;
-        }
 
         // 判断向下移动是否会发生碰撞
         if (ya < 0 &&
-            (isBlocking(x + xa, y + ya - height, xa, ya) ||
-                isBlocking(x + xa - width, y + ya - height, xa, ya) ||
-                isBlocking(x + xa + width, y + ya - height, xa, ya))) {
-                collide = true;
+                (isBlocking(x + xa, y + ya - height, xa, ya) ||
+                        isBlocking(x + xa - width, y + ya - height, xa, ya) ||
+                        isBlocking(x + xa + width, y + ya - height, xa, ya))) {
+            collide = true;
         }
 
         // 判断向右移动是否会发生碰撞
@@ -339,8 +337,9 @@ public class Enemy extends MarioSprite {
 
         if (xD > -16 && xD < 16) {
             if (yD > -height && yD < fireball.height) {
-                if (noFireballDeath)
+                if (noFireballDeath) {
                     return true;
+                }
 
                 xa = fireball.facing * 2;
                 ya = -5;

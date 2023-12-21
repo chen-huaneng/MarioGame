@@ -1,7 +1,6 @@
 package engine.graphics;
 
-import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.*;
 
 public class MarioImage extends MarioGraphics {
     public Image[][] sheet;
@@ -21,7 +20,9 @@ public class MarioImage extends MarioGraphics {
 
     @Override
     public void render(Graphics og, int x, int y) {
-        if (!visible) return;
+        if (!visible) {
+            return;
+        }
 
         int xPixel = x - originX;
         int yPixel = y - originY;

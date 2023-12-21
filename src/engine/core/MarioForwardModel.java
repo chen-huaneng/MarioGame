@@ -7,9 +7,10 @@ public class MarioForwardModel {
     public static final int OBS_BRICK = OBS_SCENE_SHIFT + 6;
     public static final int OBS_QUESTION_BLOCK = OBS_SCENE_SHIFT + 8;
 
-    private MarioWorld world;
+    private final MarioWorld world;
 
     // stats
+
     /**
      * Create a forward model object
      *

@@ -1,8 +1,9 @@
 package engine.core;
 
+import engine.helper.MarioActions;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import engine.helper.MarioActions;
 
 public class Agent extends KeyAdapter {
     private boolean[] actions = null;
@@ -15,17 +16,23 @@ public class Agent extends KeyAdapter {
         return actions;
     }
 
-    /** 按下按键的事件 */
+    /**
+     * 按下按键的事件
+     */
     public void keyPressed(KeyEvent e) {
         toggleKey(e.getKeyCode(), true);
     }
 
-    /** 释放按键的事件 */
+    /**
+     * 释放按键的事件
+     */
     public void keyReleased(KeyEvent e) {
         toggleKey(e.getKeyCode(), false);
     }
 
-    /** 根据事件触发 */
+    /**
+     * 根据事件触发
+     */
     private void toggleKey(int keyCode, boolean isPressed) {
         // 如果事件为空则返回
         if (this.actions == null) {
