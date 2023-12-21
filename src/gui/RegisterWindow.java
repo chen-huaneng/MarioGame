@@ -11,7 +11,9 @@ import java.io.IOException;
 
 public class RegisterWindow extends JDialog {
 
-    JPasswordField inputAccount, inputName, inputGender, inputStudentID;
+    JPasswordField inputAccount;
+    JPasswordField inputName;
+    JPasswordField inputStudentID;
     JPasswordField inputPassword, inputConfirmPassword;
     JButton buttonRegister;
 

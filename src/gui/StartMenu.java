@@ -12,6 +12,7 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * StartMenu 类用于创建游戏的起始菜单界面。
@@ -109,8 +110,8 @@ public class StartMenu extends JFrame implements KeyListener {
         // 创建 ImageIcon 对象
         try {
             //class用于获取类的元数据，尝试从类路径中获取图像资源。如果获取失败，不抛出异常，而是捕获并忽略异常
-            source = ImageIO.read(Assets.class.getResourceAsStream(imageName));
-        } catch (Exception e) {
+            source = ImageIO.read(Objects.requireNonNull(Assets.class.getResourceAsStream(imageName)));
+        } catch (Exception ignored) {
         }
         //检查第一个尝试获取的source是否为null，如果为null，则第二次尝试从文件系统中读取图像资源
         if (source == null) {
@@ -131,7 +132,7 @@ public class StartMenu extends JFrame implements KeyListener {
      * 内部类，用于启动游戏。
      * 继承 SwingWorker，以异步方式运行游戏。
      */
-    private class GameStarter extends SwingWorker<Void, Void> {
+    private static class GameStarter extends SwingWorker<Void, Void> {
         @Override
         protected Void doInBackground() throws Exception {
             LevelGenerator generator = new LevelGenerator();
