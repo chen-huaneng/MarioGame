@@ -1,6 +1,7 @@
 package engine.core;
 
 import java.awt.image.VolatileImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -9,6 +10,7 @@ import javax.swing.JFrame;
 
 import engine.helper.GameStatus;
 import engine.helper.MarioActions;
+import gui.StartMenu;
 
 public class MarioGame {
     // 屏幕的宽度
@@ -172,7 +174,7 @@ public class MarioGame {
                 this.render.renderWorld(this.world, renderTarget, backBuffer, currentBuffer);
             }
 
-            //check if delay needed
+            
             if (this.getDelay(fps) > 0) {
                 try {
                     currentTime += this.getDelay(fps);
@@ -182,5 +184,35 @@ public class MarioGame {
                 }
             }
         }
+        
+        if(this.world.gameStatus == GameStatus.TIME_OUT) {
+        	try {
+            	this.window.dispose();
+    			StartMenu startmenu=new StartMenu(2.5,1);
+    		} catch (IOException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+        }
+		}
+        if(this.world.gameStatus == GameStatus.LOSE) {
+        	try {
+            	this.window.dispose();
+    			StartMenu startmenu=new StartMenu(2.5,2);
+    		} catch (IOException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+        }
+		}
+        if(this.world.gameStatus == GameStatus.WIN) {
+        	try {
+            	this.window.dispose();
+    			StartMenu startmenu=new StartMenu(2.5,3);
+    		} catch (IOException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+        }
+		}
     }
+
+	
 }
