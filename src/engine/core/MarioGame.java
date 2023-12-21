@@ -200,7 +200,6 @@ public class MarioGame {
                 this.window.dispose();
                 StartMenu startmenu = new StartMenu(2.5, 1);
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
@@ -209,7 +208,6 @@ public class MarioGame {
                 this.window.dispose();
                 StartMenu startmenu = new StartMenu(2.5, 2);
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
@@ -218,7 +216,6 @@ public class MarioGame {
                 this.window.dispose();
                 StartMenu startmenu = new StartMenu(2.5, 3);
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }

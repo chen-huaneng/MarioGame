@@ -37,9 +37,11 @@ public class MarioBackground extends MarioGraphics {
         g.clearRect(0, 0, this.width, this.height);
         for (int x = 0; x < indices[0].length; ++x) {
             for (int y = 0; y < indices.length; ++y) {
+
                 // 计算砖块在数组中的索引位置
                 int xTile = indices[y][x] % 8;
                 int yTile = indices[y][x] / 8;
+
                 // 绘制游戏砖块的图像，像素大小为16*16
                 g.drawImage(Assets.level[xTile][yTile], x * 16, y * 16, 16, 16, null);
             }
