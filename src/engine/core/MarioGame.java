@@ -35,6 +35,15 @@ public class MarioGame {
 
     }
 
+    /**
+     * 获取游戏中Mario获取的金币数量
+     *
+     * @return 金币的数量
+     */
+    public int getCoins() {
+        return world.coins;
+    }
+
     private int getDelay(int fps) {
         if (fps <= 0) {
             return 0;

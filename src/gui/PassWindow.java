@@ -15,6 +15,11 @@ public class PassWindow extends JFrame {
     JPasswordField inputPassword;
     JButton buttonLogin, buttonRegister, buttonReset;
 
+    /**
+     *
+     *
+     * @throws IOException
+     */
     public PassWindow() throws IOException {
         super("欢迎进入马里奥游戏！");
         this.setSize(450, 450);
@@ -66,7 +71,6 @@ public class PassWindow extends JFrame {
                     try {
                         StartMenu rwin = new StartMenu(2.5, 0);
                     } catch (IOException e1) {
-                        // TODO Auto-generated catch block
                         e1.printStackTrace();
                     }
                 } else {
@@ -83,7 +87,6 @@ public class PassWindow extends JFrame {
                 try {
                     registerWindow = new RegisterWindow(PassWindow.this);
                 } catch (IOException e1) {
-                    // TODO Auto-generated catch block
                     e1.printStackTrace();
                 }
                 registerWindow.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -115,12 +118,25 @@ public class PassWindow extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * 获取全名
+     *
+     * @param fullName 全名
+     * @return 名字
+     */
     private String getLastName(String fullName) {
 
         String[] names = fullName.split(" ");
         return names.length > 0 ? names[0] : fullName;
     }
 
+    /**
+     * 检查登录信息
+     *
+     * @param account  账号
+     * @param password 密码
+     * @return 是否正确
+     */
     private boolean checkCredentials(String account, String password) {
         try {
             File file = new File("credentials.txt");
@@ -144,6 +160,9 @@ public class PassWindow extends JFrame {
         return false;
     }
 
+    /**
+     * 刷新登录信息
+     */
     private void refreshCredentials() {
         // 更新登录信息
         inputAccount.setText("");
