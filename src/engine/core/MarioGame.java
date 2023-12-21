@@ -195,24 +195,24 @@ public class MarioGame {
 
         if (this.world.gameStatus == GameStatus.TIME_OUT) {
             try {
-                this.window.dispose();
                 StartMenu startmenu = new StartMenu(2.5, 1);
+                this.window.dispose();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         if (this.world.gameStatus == GameStatus.LOSE) {
             try {
-                this.window.dispose();
                 StartMenu startmenu = new StartMenu(2.5, 2);
+                this.window.dispose();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         if (this.world.gameStatus == GameStatus.WIN) {
             try {
-                this.window.dispose();
                 StartMenu startmenu = new StartMenu(2.5, 3);
+                this.window.dispose();
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -75,7 +75,7 @@ public class StartMenu extends JFrame implements KeyListener {
         setFocusTraversalKeysEnabled(false);
 
         // 设置窗口属性
-        setTitle("游戏准备界面");
+        setTitle("MarioXMU");
 
         // 设置窗口的大小为原始尺寸乘以倍数
         // 使用 Math.round 确保得到整数
