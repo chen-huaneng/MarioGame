@@ -6,9 +6,11 @@ import gui.StartMenu;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.im.InputContext;
 import java.awt.image.VolatileImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class MarioGame {
     // 屏幕的宽度
@@ -111,6 +113,7 @@ public class MarioGame {
         // 设置游戏主角
         this.setAgent(agent);
 
+
         // 进入游戏主循环
         this.gameLoop(level, timer, marioState, visuals, fps);
     }
@@ -125,6 +128,8 @@ public class MarioGame {
     private void gameLoop(String level, int timer, int marioState, boolean visual, int fps) {
         // 初始化
         this.world = new MarioWorld();
+        
+
 
         // 控制可视化界面
         this.world.visuals = visual;
