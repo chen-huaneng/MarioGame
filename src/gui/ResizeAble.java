@@ -36,6 +36,8 @@ public interface ResizeAble {
         label.setFont(new Font("微软雅黑", Font.BOLD, size));
         // 设置标签为透明
         label.setOpaque(false);
+        // 设置字体颜色为红色
+        label.setForeground(Color.PINK);
         return label;
     }
 

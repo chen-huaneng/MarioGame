@@ -19,7 +19,7 @@ public class PassWindow extends JFrame implements ResizeAble {
      */
     public PassWindow() throws IOException {
         // 设置窗口标题
-        super("欢迎进入马里奥游戏！");
+        super("MarioXMU");
 
         this.setSize(scaledWidth, scaledHeight);
 

@@ -23,7 +23,7 @@ public class BackgroundPanel extends JPanel {
      *
      * @throws IOException 当读取图像文件失败时抛出。*/
     public BackgroundPanel() throws IOException {
-        String imageName = "background.jpg";
+        String imageName = "background.png";
         // 从类路径中获取图像资源
         BufferedImage source = null;
 

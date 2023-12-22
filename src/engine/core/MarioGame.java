@@ -91,7 +91,7 @@ public class MarioGame {
         // 控制可视化的界面
         if (visuals) {
             // 创建游戏窗口
-            this.window = new JFrame("Mario Game");
+            this.window = new JFrame("MarioXMU");
             // 控制界面大小
             this.render = new MarioRender(scale);
             // 将内容面板设置为render

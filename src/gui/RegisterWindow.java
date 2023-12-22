@@ -19,7 +19,7 @@ public class RegisterWindow extends JDialog implements ResizeAble {
      * @throws IOException 当读取图像文件失败时抛出。
      */
     public RegisterWindow(PassWindow pwin) throws IOException {
-        super(pwin, "请先注册马里奥账号吧！", true);
+        super(pwin, "MarioXMU", true);
 
         // 设置窗口大小
         this.setSize(scaledWidth, scaledHeight);
