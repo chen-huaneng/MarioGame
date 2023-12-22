@@ -178,6 +178,9 @@ public abstract class MarioSprite {
         }
     }
 
+    /**
+     * 更新敌人的位置
+     */
     public void update() {
 
     }

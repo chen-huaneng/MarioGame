@@ -33,10 +33,13 @@ public class BulletBill extends MarioSprite {
             return;
         }
 
-        super.update();
+        //super.update();
+        // 设置速度
         float sideWaysSpeed = 4f;
         xa = facing * sideWaysSpeed;
+        // 设置移动，包含了方向和速度
         move(xa);
+        // 根据方向设置图片的朝向
         if (this.graphics != null) {
             this.graphics.flipX = facing == -1;
         }

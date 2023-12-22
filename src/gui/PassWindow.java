@@ -22,9 +22,14 @@ public class PassWindow extends JFrame {
     public PassWindow() throws IOException {
         // 设置窗口标题
         super("欢迎进入马里奥游戏！");
+
         // 设置窗口大小
-        this.setSize(450, 450);
-        // 设置窗口位置
+        double scale = 2.5;
+        int scaledWidth = (int) Math.round(256 * scale);
+        int scaledHeight = (int) Math.round(256 * scale);
+        this.setSize(scaledWidth, scaledHeight);
+
+        // 设置窗口位置为居中
         this.setLocationRelativeTo(null);
 
         //窗口居中设置窗口长宽
@@ -33,35 +38,39 @@ public class PassWindow extends JFrame {
         // 置空布局
         panel.setLayout(null);
 
+        int size = 32, x = scaledWidth / 4, y = scaledHeight / 4, width = 80, height = 50;
         // 创建组件
         textAccount = new JTextArea("账号：");
         textAccount.setEditable(false); // 可否编辑
-        textAccount.setBounds(100, 150, 40, 25); // 位置以及大小
-        textAccount.setFont(new Font("微软雅黑", Font.BOLD, 16)); // 设置字号字体
+        textAccount.setBounds(x, y, width, height); // 位置以及大小
+        textAccount.setFont(new Font("微软雅黑", Font.BOLD, size)); // 设置字号字体
         textAccount.setOpaque(false); // 设置窗体为透明
 
         textPassword = new JTextArea("密码：");
         textPassword.setEditable(false);
-        textPassword.setBounds(100, 200, 40, 25);
-        textPassword.setFont(new Font("微软雅黑", Font.BOLD, 16));
+        textPassword.setBounds(x, y + height * 2, width, height);
+        textPassword.setFont(new Font("微软雅黑", Font.BOLD, size));
         textPassword.setOpaque(false);
 
-        inputAccount = new JPasswordField(14);
-        inputAccount.setBounds(150, 150, 150, 25);
+        inputAccount = new JPasswordField(size);
+        inputAccount.setBounds(x + width, y, width * 3, height);
+        inputAccount.setFont(new Font("微软雅黑", Font.BOLD, size));
         inputAccount.setBackground(null);
         inputAccount.setEchoChar((char) 0);
 
-        inputPassword = new JPasswordField(14);
+        inputPassword = new JPasswordField(size);
+        inputPassword.setFont(new Font("微软雅黑", Font.BOLD, size));
         inputPassword.setEchoChar('*');
-        inputPassword.setBounds(150, 200, 150, 25);
+        inputPassword.setBounds(x + width, y + height * 2, width * 3, height);
         inputPassword.setBackground(null);
 
+        int tmp = 40;
         buttonLogin = new JButton("登录");
-        buttonLogin.setBounds(100, 300, 60, 25);
+        buttonLogin.setBounds(x, y + height * 4, width, height);
         buttonRegister = new JButton("注册");
-        buttonRegister.setBounds(175, 300, 60, 25);
+        buttonRegister.setBounds(x + 3 * tmp, y + height * 4, width, height);
         buttonReset = new JButton("退出");
-        buttonReset.setBounds(250, 300, 60, 25);
+        buttonReset.setBounds(x + 6 * tmp, y + height * 4, width, height);
 
         // 登录按钮的监听器
         buttonLogin.addActionListener(new ActionListener() {

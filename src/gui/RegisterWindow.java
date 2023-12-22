@@ -10,121 +10,94 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class RegisterWindow extends JDialog {
-
-    JPasswordField inputAccount, inputName, inputGender, inputStudentID;
-    JPasswordField inputPassword, inputConfirmPassword;
-    JButton buttonRegister;
+    private final JPasswordField inputAccount;
+    private final JPasswordField inputName;
+    private final JPasswordField inputStudentID;
+    private final JPasswordField inputPassword;
+    private final JPasswordField inputConfirmPassword;
+    // 窗口的字体大小
+    private final int size = 32;
 
     public RegisterWindow(PassWindow pwin) throws IOException {
         super(pwin, "请先注册马里奥账号吧！", true);
-        this.setSize(450, 450);
+
+        // 窗口的缩放比例
+        double scale = 2.5;
+
+        // 窗口的宽度
+        int scaledHeight = (int) Math.round(256 * scale);
+
+        // 窗口的高度
+        int scaledWidth = (int) Math.round(256 * scale);
+
+        // 设置窗口大小
+        this.setSize(scaledWidth, scaledHeight);
+
+        // 设置窗口位置为居中
         this.setLocationRelativeTo(null);
+
         //窗口居中设置窗口长宽
         JPanel panel = new BackgroundPanel();
+
+        // 置空布局
         panel.setLayout(null);
-        //置空布局
 
-        JPanel panel1 = new JPanel(new FlowLayout(FlowLayout.LEFT)); // 用于放置注册账号
-        JLabel labelAccount = new JLabel("注册账号：");
-        labelAccount.setBounds(100, 50, 80, 25);
-        labelAccount.setFont(new Font("微软雅黑", 1, 16));
-        labelAccount.setOpaque(false);
+        // 设置参数
+        int width = 160;
+        int height = 40;
+        int x = scaledWidth / 8;
+        int y = scaledHeight / 8;
 
-        inputAccount = new JPasswordField(14);
-        inputAccount.setBounds(200, 50, 100, 25);
-        inputAccount.setBackground(null);
-        inputAccount.setEchoChar((char) 0);
-        panel1.add(labelAccount);
-        panel1.add(inputAccount);
+        JTextArea labelAccount = createLabel("注册账号：", x, y, width, height);
+        inputAccount = createPasswordField(x + width, y, width * 2, height, (char) 0);
 
-        JPanel panel2 = new JPanel(new FlowLayout(FlowLayout.LEFT)); // 用于放置输入密码
-        JLabel labelPassword = new JLabel("输入密码：");
-        labelPassword.setBounds(100, 100, 80, 25);
-        labelPassword.setFont(new Font("微软雅黑", 1, 16));
-        labelPassword.setOpaque(false);
+        JTextArea labelPassword = createLabel("输入密码：", x, y + height * 2, width, height);
+        inputPassword = createPasswordField(x + width, y + height * 2, width * 2, height, '*');
 
-        inputPassword = new JPasswordField(10);
-        inputPassword.setBounds(200, 100, 100, 25);
-        inputPassword.setBackground(null);
-        inputPassword.setEchoChar('*');
-        panel2.add(labelPassword);
-        panel2.add(inputPassword);
+        JTextArea labelConfirmPassword = createLabel("确认密码：", x, y + height * 4, width, height);
+        inputConfirmPassword = createPasswordField(x + width, y + height * 4, width * 2, height, '*');
 
-        JPanel panel3 = new JPanel(new FlowLayout(FlowLayout.LEFT)); // 用于放置确认密码
-        JLabel labelConfirmPassword = new JLabel("确认密码：");
-        labelConfirmPassword.setBounds(100, 150, 80, 25);
-        labelConfirmPassword.setFont(new Font("微软雅黑", 1, 16));
-        labelConfirmPassword.setOpaque(false);
+        JTextArea labelName = createLabel("真实姓名：", x, y + height * 6, width, height);
+        inputName = createPasswordField(x + width, y + height * 6, width * 2, height, (char) 0);
 
-        inputConfirmPassword = new JPasswordField(10);
-        inputConfirmPassword.setBounds(200, 150, 100, 25);
-        inputConfirmPassword.setBackground(null);
-        inputConfirmPassword.setEchoChar('*');
-        panel3.add(labelConfirmPassword);
-        panel3.add(inputConfirmPassword);
+        JTextArea labelStudentID = createLabel("学号：", x, y + height * 8, width, height);
+        inputStudentID = createPasswordField(x + width, y + height * 8, width * 2, height, (char) 0);
 
-        JPanel panel4 = new JPanel(new FlowLayout(FlowLayout.LEFT)); // 用于放置真实姓名
-        JLabel labelName = new JLabel("真实姓名：");
-        labelName.setBounds(100, 200, 80, 25);
-        labelName.setFont(new Font("微软雅黑", 1, 16));
-        labelName.setOpaque(false);
+        JButton buttonRegister = new JButton("确认");
+        buttonRegister.setBounds(x + width, y + height * 10, width, height);
 
-        inputName = new JPasswordField(10);
-        inputName.setBounds(200, 200, 100, 25);
-        inputName.setBackground(null);
-        inputName.setEchoChar((char) 0);
-        panel4.add(labelName);
-        panel4.add(inputName);
+        buttonRegister.addActionListener(e -> {
+            String account = inputAccount.getText();
+            String password = new String(inputPassword.getPassword());
+            String confirmPassword = new String(inputConfirmPassword.getPassword());
+            String name = inputName.getText();
+            String studentID = inputStudentID.getText();
 
-        JPanel panel5 = new JPanel(new FlowLayout(FlowLayout.LEFT)); // 用于放置学号
-        JLabel labelStudentID = new JLabel("学号：");
-        labelStudentID.setBounds(100, 250, 80, 25);
-        labelStudentID.setFont(new Font("微软雅黑", 1, 16));
-        labelStudentID.setOpaque(false);
-
-        inputStudentID = new JPasswordField(10);
-        inputStudentID.setBounds(200, 250, 100, 25);
-        inputStudentID.setBackground(null);
-        inputStudentID.setEchoChar((char) 0);
-        panel5.add(labelStudentID);
-        panel5.add(inputStudentID);
-
-        buttonRegister = new JButton("确认");
-        buttonRegister.setBounds(200, 350, 60, 25);
-
-        buttonRegister.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String account = inputAccount.getText();
-                String password = new String(inputPassword.getPassword());
-                String confirmPassword = new String(inputConfirmPassword.getPassword());
-                String name = inputName.getText();
-                String studentID = inputStudentID.getText();
-
-                // Check if any of the fields is empty
-                if (account.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || name.isEmpty() || studentID.isEmpty()) {
-                    JOptionPane.showMessageDialog(RegisterWindow.this, "请填写所有信息！", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                if (!password.equals(confirmPassword)) {
-                    JOptionPane.showMessageDialog(RegisterWindow.this, "密码不匹配，请重新输入！", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                try {
-                    File file = new File("credentials.txt");
-                    BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
-                    writer.write(account + "," + password);
-                    writer.newLine();
-                    writer.close();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-
-                JOptionPane.showMessageDialog(RegisterWindow.this, "注册成功！", "Success", JOptionPane.INFORMATION_MESSAGE);
-                dispose();
+            // 检查是否存在空字段
+            if (account.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || name.isEmpty() || studentID.isEmpty()) {
+                JOptionPane.showMessageDialog(RegisterWindow.this, "请填写所有信息！", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
             }
+
+            // 检查密码是否一致
+            if (!password.equals(confirmPassword)) {
+                JOptionPane.showMessageDialog(RegisterWindow.this, "密码不匹配，请重新输入！", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // 将注册信息写入文件中
+            try {
+                File file = new File("credentials.txt");
+                BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
+                writer.write(account + "," + password);
+                writer.newLine();
+                writer.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+
+            JOptionPane.showMessageDialog(RegisterWindow.this, "注册成功！", "Success", JOptionPane.INFORMATION_MESSAGE);
+            dispose();
         });
 
 
@@ -143,5 +116,43 @@ public class RegisterWindow extends JDialog {
         add("Center", panel);
 
         this.setVisible(true);
+    }
+
+    /**
+     * 创建标签
+     *
+     * @param text   标签的文本
+     * @param x      x坐标
+     * @param y      y坐标
+     * @param width  宽度
+     * @param height 高度
+     * @return 标签
+     */
+    private JTextArea createLabel(String text, int x, int y, int width, int height) {
+        JTextArea label = new JTextArea(text);
+        label.setEditable(false);
+        label.setBounds(x, y, width, height);
+        label.setFont(new Font("微软雅黑", Font.BOLD, size));
+        label.setOpaque(false);
+        return label;
+    }
+
+    /**
+     * 创建密码输入框
+     *
+     * @param x        x坐标
+     * @param y        y坐标
+     * @param width    宽度
+     * @param height   高度
+     * @param echoChar 回显字符
+     * @return 密码输入框
+     */
+    private JPasswordField createPasswordField(int x, int y, int width, int height, char echoChar) {
+        JPasswordField passwordField = new JPasswordField(size);
+        passwordField.setBounds(x, y, width, height);
+        passwordField.setFont(new Font("微软雅黑", Font.BOLD, size));
+        passwordField.setBackground(null);
+        passwordField.setEchoChar(echoChar);
+        return passwordField;
     }
 }
