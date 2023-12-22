@@ -1,15 +1,12 @@
 package gui;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class PassWindow extends JFrame {
+public class PassWindow extends JFrame implements ResizeAble {
     JTextArea textAccount, textPassword;
     JPasswordField inputAccount;
     JPasswordField inputPassword;
@@ -18,15 +15,12 @@ public class PassWindow extends JFrame {
     /**
      * 构造方法，创建游戏起始菜单界面。
      *
-     * @throws IOException 当读取图像文件失败时抛出。*/
+     * @throws IOException 当读取图像文件失败时抛出。
+     */
     public PassWindow() throws IOException {
         // 设置窗口标题
         super("欢迎进入马里奥游戏！");
 
-        // 设置窗口大小
-        double scale = 2.5;
-        int scaledWidth = (int) Math.round(256 * scale);
-        int scaledHeight = (int) Math.round(256 * scale);
         this.setSize(scaledWidth, scaledHeight);
 
         // 设置窗口位置为居中
@@ -38,94 +32,74 @@ public class PassWindow extends JFrame {
         // 置空布局
         panel.setLayout(null);
 
-        int size = 32, x = scaledWidth / 4, y = scaledHeight / 4, width = 80, height = 50;
+        int x = scaledWidth / 4, y = scaledHeight / 4, width = 80, height = 50;
+
         // 创建组件
-        textAccount = new JTextArea("账号：");
-        textAccount.setEditable(false); // 可否编辑
-        textAccount.setBounds(x, y, width, height); // 位置以及大小
-        textAccount.setFont(new Font("微软雅黑", Font.BOLD, size)); // 设置字号字体
-        textAccount.setOpaque(false); // 设置窗体为透明
+        textAccount = createLabel("账号：", x, y, width, height);
 
-        textPassword = new JTextArea("密码：");
-        textPassword.setEditable(false);
-        textPassword.setBounds(x, y + height * 2, width, height);
-        textPassword.setFont(new Font("微软雅黑", Font.BOLD, size));
-        textPassword.setOpaque(false);
+        textPassword = createLabel("密码：", x, y + height * 2, width, height);
 
-        inputAccount = new JPasswordField(size);
-        inputAccount.setBounds(x + width, y, width * 3, height);
-        inputAccount.setFont(new Font("微软雅黑", Font.BOLD, size));
-        inputAccount.setBackground(null);
-        inputAccount.setEchoChar((char) 0);
+        inputAccount = createPasswordField(x + width, y, width * 3, height, (char) 0);
 
-        inputPassword = new JPasswordField(size);
-        inputPassword.setFont(new Font("微软雅黑", Font.BOLD, size));
-        inputPassword.setEchoChar('*');
-        inputPassword.setBounds(x + width, y + height * 2, width * 3, height);
-        inputPassword.setBackground(null);
+        inputPassword = createPasswordField(x + width, y + height * 2, width * 3, height, '*');
 
         int tmp = 40;
         buttonLogin = new JButton("登录");
         buttonLogin.setBounds(x, y + height * 4, width, height);
+
         buttonRegister = new JButton("注册");
         buttonRegister.setBounds(x + 3 * tmp, y + height * 4, width, height);
+
         buttonReset = new JButton("退出");
         buttonReset.setBounds(x + 6 * tmp, y + height * 4, width, height);
 
         // 登录按钮的监听器
-        buttonLogin.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // 登录逻辑
-                String account = inputAccount.getText();
-                String password = new String(inputPassword.getPassword());
+        buttonLogin.addActionListener(e -> {
+            // 登录逻辑
+            String account = new String(inputAccount.getPassword());
+            String password = new String(inputPassword.getPassword());
 
-                if (checkCredentials(account, password)) {
-                    JOptionPane.showMessageDialog(PassWindow.this, "登录成功！ Welcome, " + getLastName(account), "Success", JOptionPane.INFORMATION_MESSAGE);
+            if (checkCredentials(account, password)) {
+                JOptionPane.showMessageDialog(PassWindow.this, "登录成功！ Welcome, " + getLastName(account), "Success", JOptionPane.INFORMATION_MESSAGE);
 
-                    dispose();
+                dispose();
 
-                    try {
-                        StartMenu rwin = new StartMenu(2.5, 0);
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(PassWindow.this, "用户名或密码错误，请重新输入！", "Error", JOptionPane.ERROR_MESSAGE);
+                try {
+                    new StartMenu(2.5, 0);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
                 }
+            } else {
+                JOptionPane.showMessageDialog(PassWindow.this, "用户名或密码错误，请重新输入！", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
         // 注册按钮的监听器
-        buttonRegister.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // 注册逻辑
-                RegisterWindow registerWindow = null;
-                try {
-                    registerWindow = new RegisterWindow(PassWindow.this);
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-
-                assert registerWindow != null;
-
-                registerWindow.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosed(java.awt.event.WindowEvent windowEvent) {
-                        refreshCredentials();
-                    }
-                });
+        buttonRegister.addActionListener(e -> {
+            // 注册逻辑
+            RegisterWindow registerWindow = null;
+            try {
+                registerWindow = new RegisterWindow(PassWindow.this);
+            } catch (IOException e1) {
+                e1.printStackTrace();
             }
+
+            assert registerWindow != null;
+
+            registerWindow.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                    // 更新登录信息
+                    inputAccount.setText("");
+                    inputPassword.setText("");
+                }
+            });
         });
 
         // 退出按钮的监听器
-        buttonReset.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // 重置逻辑
-                System.exit(0);
-            }
+        buttonReset.addActionListener(e -> {
+            // 重置逻辑
+            System.exit(0);
         });
 
         // 添加组件
@@ -182,14 +156,5 @@ public class PassWindow extends JFrame {
             e.printStackTrace();
         }
         return false;
-    }
-
-    /**
-     * 刷新登录信息。
-     */
-    private void refreshCredentials() {
-        // 更新登录信息
-        inputAccount.setText("");
-        inputPassword.setText("");
     }
 }

@@ -12,6 +12,7 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * StartMenu 类用于创建游戏的起始菜单界面。
@@ -19,7 +20,11 @@ import java.io.IOException;
  */
 public class StartMenu extends JFrame implements KeyListener {
     private JLabel menuLabel;
-    private ImageIcon option1, option2, option3, introduce, about, timeout, gameover, win;
+    private final ImageIcon option1;
+    private final ImageIcon option2;
+    private final ImageIcon option3;
+    private final ImageIcon introduce;
+    private final ImageIcon about;
     private int currentOption = 0;
     private boolean isMainScreen = true;  // 用于标记是否处于主菜单
     public static boolean start = false;
@@ -44,9 +49,9 @@ public class StartMenu extends JFrame implements KeyListener {
         option3 = new ImageIcon(getBufferedImage("Selection3.png"));
         introduce = new ImageIcon(getBufferedImage("Introduce.png"));
         about = new ImageIcon(getBufferedImage("About.png"));
-        timeout = new ImageIcon(getBufferedImage("TimeOut.png"));
-        gameover = new ImageIcon(getBufferedImage("GameOver.png"));
-        win = new ImageIcon(getBufferedImage("Win.png"));
+        ImageIcon timeout = new ImageIcon(getBufferedImage("TimeOut.png"));
+        ImageIcon gameover = new ImageIcon(getBufferedImage("GameOver.png"));
+        ImageIcon win = new ImageIcon(getBufferedImage("Win.png"));
         menuLabel = new JLabel(option1);
 
         // 添加组件到 JFrame
@@ -102,7 +107,7 @@ public class StartMenu extends JFrame implements KeyListener {
         // 创建 ImageIcon 对象
         try {
             //class用于获取类的元数据，尝试从类路径中获取图像资源。如果获取失败，不抛出异常，而是捕获并忽略异常
-            source = ImageIO.read(Assets.class.getResourceAsStream(imageName));
+            source = ImageIO.read(Objects.requireNonNull(Assets.class.getResourceAsStream(imageName)));
         } catch (Exception e) {
         }
 

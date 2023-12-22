@@ -1,34 +1,25 @@
 package gui;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class RegisterWindow extends JDialog {
+public class RegisterWindow extends JDialog implements ResizeAble {
     private final JPasswordField inputAccount;
     private final JPasswordField inputName;
     private final JPasswordField inputStudentID;
     private final JPasswordField inputPassword;
     private final JPasswordField inputConfirmPassword;
-    // 窗口的字体大小
-    private final int size = 32;
 
+    /**
+     * 构造方法，创建游戏起始菜单界面。
+     *
+     * @throws IOException 当读取图像文件失败时抛出。
+     */
     public RegisterWindow(PassWindow pwin) throws IOException {
         super(pwin, "请先注册马里奥账号吧！", true);
-
-        // 窗口的缩放比例
-        double scale = 2.5;
-
-        // 窗口的宽度
-        int scaledHeight = (int) Math.round(256 * scale);
-
-        // 窗口的高度
-        int scaledWidth = (int) Math.round(256 * scale);
 
         // 设置窗口大小
         this.setSize(scaledWidth, scaledHeight);
@@ -67,11 +58,11 @@ public class RegisterWindow extends JDialog {
         buttonRegister.setBounds(x + width, y + height * 10, width, height);
 
         buttonRegister.addActionListener(e -> {
-            String account = inputAccount.getText();
+            String account = new String(inputAccount.getPassword());
             String password = new String(inputPassword.getPassword());
             String confirmPassword = new String(inputConfirmPassword.getPassword());
-            String name = inputName.getText();
-            String studentID = inputStudentID.getText();
+            String name = new String(inputName.getPassword());
+            String studentID = new String(inputStudentID.getPassword());
 
             // 检查是否存在空字段
             if (account.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || name.isEmpty() || studentID.isEmpty()) {
@@ -100,7 +91,6 @@ public class RegisterWindow extends JDialog {
             dispose();
         });
 
-
         add(labelAccount);
         add(inputAccount);
         add(labelPassword);
@@ -116,43 +106,5 @@ public class RegisterWindow extends JDialog {
         add("Center", panel);
 
         this.setVisible(true);
-    }
-
-    /**
-     * 创建标签
-     *
-     * @param text   标签的文本
-     * @param x      x坐标
-     * @param y      y坐标
-     * @param width  宽度
-     * @param height 高度
-     * @return 标签
-     */
-    private JTextArea createLabel(String text, int x, int y, int width, int height) {
-        JTextArea label = new JTextArea(text);
-        label.setEditable(false);
-        label.setBounds(x, y, width, height);
-        label.setFont(new Font("微软雅黑", Font.BOLD, size));
-        label.setOpaque(false);
-        return label;
-    }
-
-    /**
-     * 创建密码输入框
-     *
-     * @param x        x坐标
-     * @param y        y坐标
-     * @param width    宽度
-     * @param height   高度
-     * @param echoChar 回显字符
-     * @return 密码输入框
-     */
-    private JPasswordField createPasswordField(int x, int y, int width, int height, char echoChar) {
-        JPasswordField passwordField = new JPasswordField(size);
-        passwordField.setBounds(x, y, width, height);
-        passwordField.setFont(new Font("微软雅黑", Font.BOLD, size));
-        passwordField.setBackground(null);
-        passwordField.setEchoChar(echoChar);
-        return passwordField;
     }
 }
