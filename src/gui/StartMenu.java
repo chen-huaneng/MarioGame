@@ -50,12 +50,13 @@ public class StartMenu extends JFrame implements KeyListener {
         introduce = new ImageIcon(getBufferedImage("Introduce.png"));
         about = new ImageIcon(getBufferedImage("About.png"));
         ImageIcon timeout = new ImageIcon(getBufferedImage("TimeOut.png"));
-        ImageIcon gameover = new ImageIcon(getBufferedImage("GameOver.png"));
+        ImageIcon gameOver = new ImageIcon(getBufferedImage("GameOver.png"));
         ImageIcon win = new ImageIcon(getBufferedImage("Win.png"));
         menuLabel = new JLabel(option1);
 
         // 添加组件到 JFrame
         add(menuLabel);
+
         // 设置默认选项
         if (status == 0) {
             menuLabel = new JLabel(option1);
@@ -66,7 +67,7 @@ public class StartMenu extends JFrame implements KeyListener {
         }
         if (status == 2) {
             isMainScreen = false;
-            menuLabel = new JLabel(gameover);
+            menuLabel = new JLabel(gameOver);
         }
         if (status == 3) {
             isMainScreen = false;
@@ -195,7 +196,7 @@ public class StartMenu extends JFrame implements KeyListener {
 
                 // 如果用户确认退出，关闭窗口
                 if (confirmed == JOptionPane.YES_OPTION) {
-                    dispose(); // Dispose the frame
+                    dispose(); // 关闭窗口
                 }
             }
             updateMenu();

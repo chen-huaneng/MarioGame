@@ -123,7 +123,6 @@ public class PassWindow extends JFrame implements ResizeAble {
      * @return 用户的姓氏
      */
     private String getLastName(String fullName) {
-
         String[] names = fullName.split(" ");
         return names.length > 0 ? names[0] : fullName;
     }
