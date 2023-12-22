@@ -30,7 +30,7 @@ public class BackgroundPanel extends JPanel {
         try {
             // class用于获取类的元数据，尝试从类路径中获取图像资源。如果获取失败，不抛出异常，而是捕获并忽略异常
             source = ImageIO.read(Objects.requireNonNull(Assets.class.getResourceAsStream(imageName)));
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
 
         // 检查第一个尝试获取的source是否为null，如果为null，则第二次尝试从文件系统中读取图像资源

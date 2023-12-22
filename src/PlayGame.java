@@ -10,6 +10,6 @@ public class PlayGame {
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
-        PassWindow passWindow = new PassWindow();
+        new PassWindow();
     }
 }
