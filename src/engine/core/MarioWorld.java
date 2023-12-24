@@ -470,7 +470,6 @@ public class MarioWorld {
 
         if (features.contains(TileFeature.BUMPABLE)) {
             bumpInto(xTile, yTile - 1);
-            this.addEvent(EventType.BUMP, MarioForwardModel.OBS_QUESTION_BLOCK);
             level.setBlock(xTile, yTile, 14);
             level.setShiftIndex(xTile, yTile, 4);
 
@@ -493,7 +492,6 @@ public class MarioWorld {
         if (features.contains(TileFeature.BREAKABLE)) {
             bumpInto(xTile, yTile - 1);
             if (canBreakBricks) {
-                this.addEvent(EventType.BUMP, MarioForwardModel.OBS_BRICK);
                 level.setBlock(xTile, yTile, 0);
                 if (this.visuals) {
                     for (int xx = 0; xx < 2; xx++) {
