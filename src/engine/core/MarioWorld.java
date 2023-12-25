@@ -158,6 +158,11 @@ public class MarioWorld {
         this.lastFrameEvents.add(new MarioEvent(eventType, eventParam, mario.x, mario.y, marioState, this.currentTick));
     }
 
+    /**
+     * 添加特效
+     *
+     * @param effect 特效
+     */
     public void addEffect(MarioEffect effect) {
         this.effects.add(effect);
     }
@@ -188,10 +193,20 @@ public class MarioWorld {
         sprite.world = null;
     }
 
+    /**
+     * 检测乌龟壳的碰撞
+     *
+     * @param shell 乌龟壳
+     */
     public void checkShellCollide(Shell shell) {
         shellsToCheck.add(shell);
     }
 
+    /**
+     * 检测火球的碰撞
+     *
+     * @param fireball 火球
+     */
     public void checkFireballCollide(Fireball fireball) {
         fireballsToCheck.add(fireball);
     }
@@ -263,6 +278,7 @@ public class MarioWorld {
             }
         }
 
+        // 更新当前的时间
         ++this.currentTick;
 
         // 更新相机的位置，使得Mario始终处于屏幕中央
@@ -379,15 +395,17 @@ public class MarioWorld {
                         sprite.initialCode = spriteCode;
                         this.addSprite(sprite);
                     }
+                    // 设置最后生成的图块的位置
                     this.level.setLastSpawnTick(x, y, this.currentTick);
                 }
 
+                // 判断是否有需要删除的精灵
                 if (dir != 0) {
+                    // 获取当前图块的特征
                     ArrayList<TileFeature> features = TileFeature.getTileType(this.level.getBlock(x, y));
-                    if (features.contains(TileFeature.SPAWNER)) {
-                        if (this.currentTick % 100 == 0) {
-                            addSprite(new BulletBill(this.visuals, x * 16 + 8 + dir * 8, y * 16 + 15, dir));
-                        }
+                    if (features.contains(TileFeature.SPAWNER) && this.currentTick % 100 == 0) {
+                        // 添加炮弹
+                        addSprite(new BulletBill(this.visuals, x * 16 + 8 + dir * 8, y * 16 + 15, dir));
                     }
                 }
             }
@@ -464,60 +482,91 @@ public class MarioWorld {
         }
     }
 
+    /**
+     * 处理Mario的跳跃
+     *
+     * @param xTile          x坐标
+     * @param yTile          y坐标
+     * @param canBreakBricks 是否可以打破砖块
+     */
     public void bump(int xTile, int yTile, boolean canBreakBricks) {
         int block = this.level.getBlock(xTile, yTile);
+        // 获取图块的特征
         ArrayList<TileFeature> features = TileFeature.getTileType(block);
 
+        // 判断是否可以被撞击
         if (features.contains(TileFeature.BUMPABLE)) {
             bumpInto(xTile, yTile - 1);
             level.setBlock(xTile, yTile, 14);
+            // 设置图块的偏移量
             level.setShiftIndex(xTile, yTile, 4);
 
+            // 判断是否为特殊图块
             if (features.contains(TileFeature.SPECIAL)) {
+                // 根据当前Mario的状态生成不同的蘑菇
                 if (!this.mario.isLarge) {
                     addSprite(new Mushroom(this.visuals, xTile * 16 + 9, yTile * 16 + 8));
                 } else {
                     addSprite(new FireFlower(this.visuals, xTile * 16 + 9, yTile * 16 + 8));
                 }
             } else if (features.contains(TileFeature.LIFE)) {
+                // 添加生命蘑菇
                 addSprite(new LifeMushroom(this.visuals, xTile * 16 + 9, yTile * 16 + 8));
             } else {
+                // 添加金币
                 mario.collectCoin();
+                // 添加金币特效
                 if (this.visuals) {
                     this.addEffect(new CoinEffect(xTile * 16 + 8, (yTile) * 16));
                 }
             }
         }
 
+        // 判断是否可以被打破
         if (features.contains(TileFeature.BREAKABLE)) {
+            // 添加碰撞事件
             bumpInto(xTile, yTile - 1);
+            // 判断是否可以打破砖块
             if (canBreakBricks) {
                 level.setBlock(xTile, yTile, 0);
+                // 添加砖块特效
                 if (this.visuals) {
-                    for (int xx = 0; xx < 2; xx++) {
-                        for (int yy = 0; yy < 2; yy++) {
-                            this.addEffect(new BrickEffect(xTile * 16 + xx * 8 + 4, yTile * 16 + yy * 8 + 4,
-                                    (xx * 2 - 1) * 4, (yy * 2 - 1) * 4 - 8));
+                    for (int xx = 0; xx < 2; ++xx) {
+                        for (int yy = 0; yy < 2; ++yy) {
+                            this.addEffect(new BrickEffect(xTile * 16 + xx * 8 + 4, yTile * 16 + yy * 8 + 4, (xx * 2 - 1) * 4, (yy * 2 - 1) * 4 - 8));
                         }
                     }
                 }
             } else {
+                // 设置图块的偏移量
                 level.setShiftIndex(xTile, yTile, 4);
             }
         }
     }
 
+    /**
+     * 处理Mario的碰撞
+     *
+     * @param xTile x坐标
+     * @param yTile y坐标
+     */
     public void bumpInto(int xTile, int yTile) {
         int block = level.getBlock(xTile, yTile);
+        // 获取图块的特征
         if (TileFeature.getTileType(block).contains(TileFeature.PICKABLE)) {
+            // 添加收集事件
             this.addEvent(EventType.COLLECT, block);
+            // 收集金币
             this.mario.collectCoin();
+            // 设置图块为空
             level.setBlock(xTile, yTile, 0);
+            // 添加金币特效
             if (this.visuals) {
                 this.addEffect(new CoinEffect(xTile * 16 + 8, yTile * 16 + 8));
             }
         }
 
+        // 判断是否为敌人
         for (MarioSprite sprite : sprites) {
             sprite.bumpCheck(xTile, yTile);
         }

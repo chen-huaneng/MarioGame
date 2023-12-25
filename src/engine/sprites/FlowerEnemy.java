@@ -3,6 +3,7 @@ package engine.sprites;
 import engine.helper.SpriteType;
 
 public class FlowerEnemy extends Enemy {
+    // 起始纵坐标
     private final float yStart;
     private int tick, waitTime;
 
@@ -24,10 +25,12 @@ public class FlowerEnemy extends Enemy {
         this.yStart = this.y;
         this.ya = -1;
         this.y -= 1;
+        // 设置食人花的图像
         for (int i = 0; i < 4; i++) {
             this.update();
         }
 
+        // 如果可视化则设置食人花的图像
         if (visuals) {
             this.graphics.originY = 24;
             this.tick = 0;
@@ -35,6 +38,7 @@ public class FlowerEnemy extends Enemy {
     }
 
     /**
+     * 更新食人花的状态
      *
      */
     @Override
@@ -44,6 +48,7 @@ public class FlowerEnemy extends Enemy {
             return;
         }
 
+        // 保持食人花的位置，防止食人花到处移动
         if (ya > 0) {
             if (y >= yStart) {
                 y = yStart;
@@ -66,6 +71,7 @@ public class FlowerEnemy extends Enemy {
         }
         y += ya;
 
+        // 如果可视化则更新图像
         if (this.graphics != null) {
             this.tick++;
             this.graphics.index = this.type.getStartIndex() + ((tick / 2) & 1) * 2 + ((tick / 6) & 1);

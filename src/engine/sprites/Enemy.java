@@ -107,6 +107,9 @@ public class Enemy extends MarioSprite {
         }
     }
 
+    /**
+     * 更新敌人的图像
+     */
     private void updateGraphics() {
         wingTime++;
         this.wingGraphics.index = 32 + wingTime / 4 % 2;
@@ -154,16 +157,20 @@ public class Enemy extends MarioSprite {
             facing = -facing;
         }
 
+        // 更新矢量的速度，包含了朝向和水平速度
         onGround = false;
         move(0, ya);
 
+        // 判断是否有翅膀
         ya *= winged ? 0.95f : 0.85f;
+        // 判断是否在地面上
         if (onGround) {
             xa *= GROUND_INERTIA;
         } else {
             xa *= AIR_INERTIA;
         }
 
+        // 判断是否在地面上
         if (!onGround) {
             if (winged) {
                 ya += 0.6f;
@@ -174,6 +181,7 @@ public class Enemy extends MarioSprite {
             ya = -10;
         }
 
+        // 判断是否可视化
         if (this.graphics != null) {
             this.updateGraphics();
         }

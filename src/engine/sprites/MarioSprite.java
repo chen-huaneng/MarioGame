@@ -188,11 +188,19 @@ public abstract class MarioSprite {
     public void collideCheck() {
     }
 
+    /**
+     * 检查是否发生碰撞
+     *
+     * @param xTile 横坐标
+     * @param yTile 纵坐标
+     */
     public void bumpCheck(int xTile, int yTile) {
+        // 如果敌人已经死亡，则不再检查碰撞
         if (!this.alive) {
             return;
         }
 
+        // 如果敌人的坐标与砖块坐标相同，则发生碰撞
         if (x + width > xTile * 16 && x - width < xTile * 16 + 16 && yTile == (int) ((y - 1) / 16)) {
             facing = -world.mario.facing;
             ya = -10;

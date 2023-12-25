@@ -8,23 +8,31 @@ import engine.helper.SpriteType;
 import engine.helper.TileFeature;
 
 public class Mario extends MarioSprite {
+    // 是否大Mario和火球Mario
     public boolean isLarge, isFire;
+    // 是否在地面上
     public boolean wasOnGround, isDucking, canShoot, mayJump;
+    // 按键操作
     public boolean[] actions = null;
+    // 跳跃时间
     public int jumpTime = 0;
 
+    // 跳跃速度
     private float xJumpSpeed, yJumpSpeed = 0;
     // 无敌时间
     private int invulnerableTime = 0;
 
+    // 动画帧速度
     private float marioFrameSpeed = 0;
     private boolean oldLarge, oldFire = false;
 
-    // stats
+    // 跳跃的起始横坐标
     private float xJumpStart = -100;
-
+    // 水平惯性
     private final float GROUND_INERTIA = 0.89f;
+    // 空气阻力
     private final float AIR_INERTIA = 0.89f;
+    // 无敌时间
     private final int POWERUP_TIME = 3;
 
     /**
@@ -80,7 +88,9 @@ public class Mario extends MarioSprite {
             ya += 8;
         }
 
+        // 用于标记是否发生碰撞
         boolean collide = false;
+        // 判断向上移动是否会发生碰撞
         if (ya > 0) {
             if (isBlocking(x + xa - width, y + ya, xa, 0)) {
                 collide = true;
@@ -95,9 +105,9 @@ public class Mario extends MarioSprite {
         if (ya < 0) {
             if (isBlocking(x + xa, y + ya - height, xa, ya)) {
                 collide = true;
-            } else if (collide || isBlocking(x + xa - width, y + ya - height, xa, ya)) {
+            } else if (isBlocking(x + xa - width, y + ya - height, xa, ya)) {
                 collide = true;
-            } else if (collide || isBlocking(x + xa + width, y + ya - height, xa, ya)) {
+            } else if (isBlocking(x + xa + width, y + ya - height, xa, ya)) {
                 collide = true;
             }
         }
@@ -123,6 +133,7 @@ public class Mario extends MarioSprite {
                 collide = true;
             }
         }
+        // 如果发生碰撞则更新位置
         if (collide) {
             if (xa < 0) {
                 x = (int) ((x - width) / 16) * 16 + width;
@@ -149,10 +160,20 @@ public class Mario extends MarioSprite {
         }
     }
 
+    /**
+     * 判断Mario是否会碰撞到障碍物
+     *
+     * @param _x  Mario的横坐标
+     * @param _y  Mario的纵坐标
+     * @param xa  Mario的水平速度
+     * @param ya  Mario的垂直速度
+     * @return 判断是否会碰撞到障碍物
+     */
     @Override
     public boolean isBlocking(float _x, float _y, float xa, float ya) {
         int xTile = (int) (_x / 16);
         int yTile = (int) (_y / 16);
+        // 如果Mario的坐标和障碍物的坐标相同则不会碰撞
         if (xTile == (int) (this.x / 16) && yTile == (int) (this.y / 16)) {
             return false;
         }
@@ -161,11 +182,16 @@ public class Mario extends MarioSprite {
         int block = world.level.getBlock(xTile, yTile);
 
         if (TileFeature.getTileType(block).contains(TileFeature.PICKABLE)) {
+            // 如果是可拾取的物品则触发拾取事件
             this.world.addEvent(EventType.COLLECT, block);
+            // 增加金币数量
             this.collectCoin();
+            // 设置该位置的障碍物为空
             world.level.setBlock(xTile, yTile, 0);
         }
+        // 如果是障碍物则触发碰撞事件
         if (blocking && ya < 0) {
+            // 如果是向上碰撞则触发顶部碰撞事件
             world.bump(xTile, yTile, isLarge);
         }
         return blocking;
@@ -277,23 +303,31 @@ public class Mario extends MarioSprite {
         graphics.index = frameIndex;
     }
 
+    /**
+     * 更新Mario的状态
+     */
     @Override
     public void update() {
+        // 如果Mario死亡则不更新
         if (!this.alive) {
             return;
         }
 
+        // 如果无敌时间大于0则减少无敌时间
         if (invulnerableTime > 0) {
             invulnerableTime--;
         }
         this.wasOnGround = this.onGround;
 
+        // 设置速度
         float sideWaysSpeed = actions[MarioActions.SPEED.getValue()] ? 1.2f : 0.6f;
 
         if (onGround) {
+            // 如果在地面上则设置水平速度
             isDucking = actions[MarioActions.DOWN.getValue()] && isLarge;
         }
 
+        // 根据Mario的状态设置高度
         if (isLarge) {
             height = isDucking ? 12 : 24;
         } else {
@@ -308,22 +342,26 @@ public class Mario extends MarioSprite {
         }
 
         if (actions[MarioActions.JUMP.getValue()] || (jumpTime < 0 && !onGround)) {
+            // 如果按下跳跃键或者跳跃时间小于0且不在地面上则设置跳跃速度
             if (jumpTime < 0) {
+                // 如果跳跃时间小于0则设置跳跃速度
                 xa = xJumpSpeed;
                 ya = -jumpTime * yJumpSpeed;
                 jumpTime++;
             } else if (onGround && mayJump) {
+                // 如果在地面上且可以跳跃则设置跳跃速度
                 xJumpSpeed = 0;
                 yJumpSpeed = -1.9f;
                 jumpTime = 7;
                 ya = jumpTime * yJumpSpeed;
                 onGround = false;
-                if (!(isBlocking(x, y - 4 - height, 0, -4) || isBlocking(x - width, y - 4 - height, 0, -4)
-                        || isBlocking(x + width, y - 4 - height, 0, -4))) {
+                if (!(isBlocking(x, y - 4 - height, 0, -4) || isBlocking(x - width, y - 4 - height, 0, -4) || isBlocking(x + width, y - 4 - height, 0, -4))) {
+                    // 如果不会碰撞到障碍物则触发跳跃事件
                     this.xJumpStart = this.x;
                     this.world.addEvent(EventType.JUMP, 0);
                 }
             } else if (jumpTime > 0) {
+                // 如果跳跃时间大于0则设置跳跃速度
                 xa += xJumpSpeed;
                 ya = jumpTime * yJumpSpeed;
                 jumpTime--;
@@ -332,21 +370,27 @@ public class Mario extends MarioSprite {
             jumpTime = 0;
         }
 
+        // 如果按下向左或向右的键则设置水平速度
         if (actions[MarioActions.LEFT.getValue()] && !isDucking) {
             xa -= sideWaysSpeed;
+            // 如果跳跃时间大于0则设置面向
             if (jumpTime >= 0) {
                 facing = -1;
             }
         }
 
+        // 如果按下向右或向右的键则设置水平速度
         if (actions[MarioActions.RIGHT.getValue()] && !isDucking) {
             xa += sideWaysSpeed;
+            // 如果跳跃时间大于0则设置面向
             if (jumpTime >= 0) {
                 facing = 1;
             }
         }
 
+        // 如果按下向上的键则设置垂直速度
         if (actions[MarioActions.SPEED.getValue()] && canShoot && isFire && world.fireballsOnScreen < 2) {
+            // 如果可以发射火球则发射火球
             world.addSprite(new Fireball(this.graphics != null, x + facing * 6, y - 20, facing));
         }
 
@@ -358,9 +402,11 @@ public class Mario extends MarioSprite {
             xa = 0;
         }
 
+        // 如果不在地面上则设置垂直速度
         onGround = false;
         move(xa, 0);
         move(0, ya);
+        // 如果在地面上则触发着陆事件
         if (!wasOnGround && onGround && this.xJumpStart >= 0) {
             this.world.addEvent(EventType.LAND, 0);
             this.xJumpStart = -100;
@@ -371,23 +417,29 @@ public class Mario extends MarioSprite {
             xa = 0;
         }
 
+        // 如果Mario的横坐标大于地图的宽度则触发胜利事件
         if (x > world.level.exitTileX * 16) {
             x = world.level.exitTileX * 16;
             xa = 0;
             this.world.win();
         }
 
+        // 设置水平速度
         ya *= 0.85f;
+
+        // 设置水平惯性
         if (onGround) {
             xa *= GROUND_INERTIA;
         } else {
             xa *= AIR_INERTIA;
         }
 
+        // 设置垂直速度
         if (!onGround) {
             ya += 3;
         }
 
+        // 更新图像
         if (this.graphics != null) {
             this.updateGraphics();
         }
@@ -500,23 +552,16 @@ public class Mario extends MarioSprite {
         invulnerableTime = 1;
     }
 
-    public void collect1Up() {
-        if (!this.alive) {
-            return;
-        }
-
-        this.world.lives++;
-    }
-
+    /**
+     * 收集金币
+     */
     public void collectCoin() {
+        // 如果Mario死亡则不更新
         if (!this.alive) {
             return;
         }
 
+        // 增加金币数量
         this.world.coins++;
-        if (this.world.coins % 100 == 0) {
-            collect1Up();
-        }
     }
-
 }

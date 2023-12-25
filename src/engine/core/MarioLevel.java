@@ -233,17 +233,35 @@ public class MarioLevel {
         }
     }
 
+    /**
+     * 判断是否为障碍物
+     *
+     * @param xTile 贴图的横坐标
+     * @param yTile 贴图的纵坐标
+     * @param xa    横向的速度
+     * @param ya    纵向的速度
+     * @return 是否为障碍物
+     */
     public boolean isBlocking(int xTile, int yTile, float xa, float ya) {
         int block = this.getBlock(xTile, yTile);
         ArrayList<TileFeature> features = TileFeature.getTileType(block);
         boolean blocking = features.contains(TileFeature.BLOCK_ALL);
+        // 判断是否为障碍物
         blocking |= (ya < 0) && features.contains(TileFeature.BLOCK_UPPER);
         blocking |= (ya > 0) && features.contains(TileFeature.BLOCK_LOWER);
 
         return blocking;
     }
 
+    /**
+     * 获取指定位置的贴图
+     *
+     * @param xTile 贴图的横坐标
+     * @param yTile 贴图的纵坐标
+     * @return 返回指定位置的贴图
+     */
     public int getBlock(int xTile, int yTile) {
+        // 判断贴图的位置是否超出了范围
         if (xTile < 0) {
             xTile = 0;
         }
@@ -256,6 +274,13 @@ public class MarioLevel {
         return this.levelTiles[xTile][yTile];
     }
 
+    /**
+     * 设置指定位置的贴图
+     *
+     * @param xTile 贴图的横坐标
+     * @param yTile 贴图的纵坐标
+     * @param index 贴图的索引
+     */
     public void setBlock(int xTile, int yTile, int index) {
         if (xTile < 0 || yTile < 0 || xTile > this.tileWidth - 1 || yTile > this.tileHeight - 1) {
             return;
@@ -263,7 +288,14 @@ public class MarioLevel {
         this.levelTiles[xTile][yTile] = index;
     }
 
+    /**
+     * 获取指定位置的精灵贴图的偏移量
+     *
+     * @param xTile 贴图的横坐标
+     * @param yTile 贴图的纵坐标
+     */
     public void setShiftIndex(int xTile, int yTile, int shift) {
+        // 判断给定位置是否超出边界
         if (this.graphics == null || xTile < 0 || yTile < 0 || xTile > this.tileWidth - 1 || yTile > this.tileHeight - 1) {
             return;
         }
@@ -300,7 +332,15 @@ public class MarioLevel {
         return this.lastSpawnTime[xTile][yTile];
     }
 
+    /**
+     * 设置上一次生成的时刻
+     *
+     * @param xTile 贴图的横坐标
+     * @param yTile 贴图的纵坐标
+     * @param tick  上一次生成的时刻
+     */
     public void setLastSpawnTick(int xTile, int yTile, int tick) {
+        // 判断给定位置是否超出边界
         if (xTile < 0 || yTile < 0 || xTile > this.tileWidth - 1 || yTile > this.tileHeight - 1) {
             return;
         }

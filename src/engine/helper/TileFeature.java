@@ -14,8 +14,15 @@ public enum TileFeature {
     ANIMATED,
     SPAWNER;
 
+    /**
+     * 获取砖块的类型
+     *
+     * @param index 砖块的索引
+     * @return 砖块的类型
+     */
     public static ArrayList<TileFeature> getTileType(int index) {
         ArrayList<TileFeature> features = new ArrayList<>();
+        // 根据砖块的索引设置砖块的类型
         switch (index) {
             case 1:
             case 2:

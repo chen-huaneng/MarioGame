@@ -8,6 +8,14 @@ import engine.helper.SpriteType;
 
 public class BulletBill extends MarioSprite {
 
+    /**
+     * 根据坐标和是否可视化生成炮弹
+     *
+     * @param visuals 是否可视化
+     * @param x       横坐标
+     * @param y       纵坐标
+     * @param dir     方向
+     */
     public BulletBill(boolean visuals, float x, float y, int dir) {
         super(x, y, SpriteType.BULLET_BILL);
         this.width = 4;
@@ -15,6 +23,7 @@ public class BulletBill extends MarioSprite {
         this.ya = -5;
         this.facing = dir;
 
+        // 如果可视化则设置蘑菇的图像
         if (visuals) {
             this.graphics = new MarioImage(Assets.enemies, 40);
             this.graphics.originX = 8;
@@ -24,11 +33,11 @@ public class BulletBill extends MarioSprite {
     }
 
     /**
-     * 更新蘑菇的位置
+     * 更新炮弹的位置
      */
     @Override
     public void update() {
-        // 如果蘑菇死亡，则不再更新
+        // 如果炮弹死亡，则不再更新
         if (!this.alive) {
             return;
         }
@@ -70,7 +79,7 @@ public class BulletBill extends MarioSprite {
     }
 
     /**
-     * 移动蘑菇的位置
+     * 移动炮弹的位置
      *
      * @param xa 水平移动速度
      */

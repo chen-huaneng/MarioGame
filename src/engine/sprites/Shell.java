@@ -31,16 +31,19 @@ public class Shell extends MarioSprite {
         }
     }
 
+    /**
+     * 更新乌龟的位置
+     */
     @Override
     public void update() {
+        // 如果乌龟死亡，则不再更新
         if (!this.alive) {
             return;
         }
 
-        super.update();
-
         float sideWaysSpeed = 11f;
 
+        // 判断朝向
         if (xa > 2) {
             facing = 1;
         }
@@ -50,6 +53,7 @@ public class Shell extends MarioSprite {
 
         xa = facing * sideWaysSpeed;
 
+        // 判断是否碰撞
         if (facing != 0) {
             world.checkShellCollide(this);
         }
@@ -61,6 +65,7 @@ public class Shell extends MarioSprite {
         move(0, ya);
 
         ya *= 0.85f;
+        // 设置惯性
         if (onGround) {
             xa *= GROUND_INERTIA;
         } else {
@@ -71,6 +76,7 @@ public class Shell extends MarioSprite {
             ya += 2;
         }
 
+        // 设置图像的朝向
         if (this.graphics != null) {
             this.graphics.flipX = facing == -1;
         }
