@@ -7,9 +7,11 @@ import engine.helper.EventType;
 import engine.helper.SpriteType;
 
 public class Shell extends MarioSprite {
+    // 惯性
     private static final float GROUND_INERTIA = 0.89f;
+    // 惯性
     private static final float AIR_INERTIA = 0.89f;
-
+    // 乌龟壳类型
     private int shellType = 0;
 
 
@@ -91,8 +93,14 @@ public class Shell extends MarioSprite {
         }
     }
 
+    /**
+     * 火球碰撞检测
+     * @param fireball 火球
+     * @return 返回是否碰撞
+     */
     @Override
     public boolean fireballCollideCheck(Fireball fireball) {
+        // 如果乌龟壳死亡，则不再碰撞检测
         if (!this.alive) {
             return false;
         }
@@ -100,6 +108,7 @@ public class Shell extends MarioSprite {
         float xD = fireball.x - x;
         float yD = fireball.y - y;
 
+        // 如果火球与乌龟壳碰撞，则乌龟壳死亡
         if (xD > -16 && xD < 16) {
             if (yD > -height && yD < fireball.height) {
                 if (facing != 0) {
@@ -108,6 +117,7 @@ public class Shell extends MarioSprite {
 
                 xa = fireball.facing * 2;
                 ya = -5;
+                // 事件触发
                 if (this.graphics != null) {
                     this.world.addEffect(new DeathEffect(this.x, this.y, this.graphics.flipX, 41 + this.shellType, -5));
                 }
@@ -160,6 +170,15 @@ public class Shell extends MarioSprite {
         }
     }
 
+    /**
+     * 判断给定坐标位置是否存在障碍物，以及是否会阻挡敌人的移动
+     *
+     * @param _x 横坐标
+     * @param _y 纵坐标
+     * @param xa 水平速度
+     * @param ya 垂直速度
+     * @return 返回是否会被阻挡
+     */
     @Override
     public boolean isBlocking(float _x, float _y, float xa, float ya) {
         int x = (int) (_x / 16);

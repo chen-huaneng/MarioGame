@@ -312,12 +312,18 @@ public class MarioWorld {
             sprite.collideCheck();
         }
 
+        // 处理乌龟壳的碰撞
         checkShellCollide();
+
+        // 处理火球的碰撞
         checkFireballCollide();
 
+        // 添加精灵
         sprites.addAll(0, addedSprites);
+        // 移除精灵
         sprites.removeAll(removedSprites);
 
+        // 清空待添加和待移除的精灵列表
         addedSprites.clear();
         removedSprites.clear();
     }
@@ -422,11 +428,9 @@ public class MarioWorld {
         for (Shell shell : shellsToCheck) {
             for (MarioSprite sprite : sprites) {
                 // 判断是否为乌龟壳
-                if (sprite != shell && shell.alive && sprite.alive) {
+                if (sprite != shell && shell.alive && sprite.alive && sprite.shellCollideCheck(shell)) {
                     // 判断是否碰撞
-                    if (sprite.shellCollideCheck(shell)) {
-                        this.removeSprite(sprite);
-                    }
+                    this.removeSprite(sprite);
                 }
             }
         }
@@ -441,13 +445,13 @@ public class MarioWorld {
         // 火球检测和处理
         for (Fireball fireball : fireballsToCheck) {
             for (MarioSprite sprite : sprites) {
-                if (sprite != fireball && fireball.alive && sprite.alive) {
-                    if (sprite.fireballCollideCheck(fireball)) {
-                        if (this.visuals) {
-                            this.addEffect(new FireballEffect(fireball.x, fireball.y));
-                        }
-                        this.removeSprite(fireball);
+                // 判断是否为火球
+                if (sprite != fireball && fireball.alive && sprite.alive && sprite.fireballCollideCheck(fireball)) {
+                    // 判断是否碰撞
+                    if (this.visuals) {
+                        this.addEffect(new FireballEffect(fireball.x, fireball.y));
                     }
+                    this.removeSprite(fireball);
                 }
             }
         }
@@ -577,8 +581,8 @@ public class MarioWorld {
     }
 
     public void render(Graphics og) {
-        for (int i = 0; i < backgrounds.length; i++) {
-            this.backgrounds[i].render(og, (int) cameraX, (int) cameraY);
+        for (MarioBackground background : backgrounds) {
+            background.render(og, (int) cameraX, (int) cameraY);
         }
         for (MarioSprite sprite : sprites) {
             if (sprite.type == SpriteType.MUSHROOM || sprite.type == SpriteType.LIFE_MUSHROOM ||

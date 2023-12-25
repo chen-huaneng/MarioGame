@@ -101,8 +101,15 @@ public class BulletBill extends MarioSprite {
         x += xa;
     }
 
+    /**
+     * 检测是否与火球碰撞
+     *
+     * @param fireball 火球对象
+     * @return 返回是否碰撞
+     */
     @Override
     public boolean fireballCollideCheck(Fireball fireball) {
+        // 如果对象死亡，则不再检测
         if (!this.alive) {
             return false;
         }

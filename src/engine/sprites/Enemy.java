@@ -10,14 +10,22 @@ import engine.helper.SpriteType;
 import java.awt.*;
 
 public class Enemy extends MarioSprite {
+    // 定义敌人的水平速度
     private static final float GROUND_INERTIA = 0.89f;
+    // 定义敌人的垂直速度
     private static final float AIR_INERTIA = 0.89f;
+    // 判断是否避开悬崖
     protected boolean avoidCliffs = true;
+    // 判断是否带翅膀
     protected boolean winged = true;
+    // 判断是否会因为火球而死亡
     protected boolean noFireballDeath;
 
+    // 定义敌人的运行时间
     protected float runTime;
+    // 定义敌人的翅膀时间
     protected int wingTime = 0;
+    // 定义敌人的图像
     protected MarioImage wingGraphics;
 
     /**
@@ -356,8 +364,15 @@ public class Enemy extends MarioSprite {
         return false;
     }
 
+    /**
+     * 检测是否与火球碰撞
+     *
+     * @param fireball 火球对象
+     * @return 判断是否发生碰撞
+     */
     @Override
     public boolean fireballCollideCheck(Fireball fireball) {
+        // 如果对象死亡，则不再检测
         if (!this.alive) {
             return false;
         }
@@ -365,6 +380,7 @@ public class Enemy extends MarioSprite {
         float xD = fireball.x - x;
         float yD = fireball.y - y;
 
+        // 如果火球在敌人的范围内，则敌人死亡
         if (xD > -16 && xD < 16) {
             if (yD > -height && yD < fireball.height) {
                 if (noFireballDeath) {
@@ -373,8 +389,10 @@ public class Enemy extends MarioSprite {
 
                 xa = fireball.facing * 2;
                 ya = -5;
+                // 添加事件
                 this.world.addEvent(EventType.FIRE_KILL, this.type.getValue());
                 if (this.graphics != null) {
+                    // 添加死亡特效
                     if (this.type == SpriteType.GREEN_KOOPA || this.type == SpriteType.GREEN_KOOPA_WINGED) {
                         this.world.addEffect(new DeathEffect(this.x, this.y, this.graphics.flipX, 42, -5));
                     } else if (this.type == SpriteType.RED_KOOPA || this.type == SpriteType.RED_KOOPA_WINGED) {

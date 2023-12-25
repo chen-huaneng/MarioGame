@@ -207,10 +207,20 @@ public abstract class MarioSprite {
         }
     }
 
+    /**
+     * 检查是否与玩家发生碰撞
+     * @param shell 乌龟壳
+     * @return 是否发生碰撞
+     */
     public boolean shellCollideCheck(Shell shell) {
         return false;
     }
 
+    /**
+     * 检查是否与玩家发生碰撞
+     * @param fireball 火球
+     * @return 是否发生碰撞
+     */
     public boolean fireballCollideCheck(Fireball fireball) {
         return false;
     }
