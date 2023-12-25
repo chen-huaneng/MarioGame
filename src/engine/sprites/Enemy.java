@@ -314,8 +314,15 @@ public class Enemy extends MarioSprite {
         }
     }
 
+    /**
+     * 检测是否与炮弹碰撞
+     *
+     * @param shell 炮弹对象
+     * @return 判断是否发生碰撞
+     */
     @Override
     public boolean shellCollideCheck(Shell shell) {
+        // 如果敌人死亡则不需要检测
         if (!this.alive) {
             return false;
         }
@@ -323,12 +330,15 @@ public class Enemy extends MarioSprite {
         float xD = shell.x - x;
         float yD = shell.y - y;
 
+        // 如果炮弹在炮弹的范围内，则炮弹死亡
         if (xD > -16 && xD < 16) {
             if (yD > -height && yD < shell.height) {
                 xa = shell.facing * 2;
                 ya = -5;
+                // 添加事件
                 this.world.addEvent(EventType.SHELL_KILL, this.type.getValue());
                 if (this.graphics != null) {
+                    // 添加死亡特效
                     if (this.type == SpriteType.GREEN_KOOPA || this.type == SpriteType.GREEN_KOOPA_WINGED) {
                         this.world.addEffect(new DeathEffect(this.x, this.y, this.graphics.flipX, 42, -5));
                     } else if (this.type == SpriteType.RED_KOOPA || this.type == SpriteType.RED_KOOPA_WINGED) {

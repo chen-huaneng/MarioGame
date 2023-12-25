@@ -421,7 +421,9 @@ public class MarioWorld {
         // 碰撞检测和处理
         for (Shell shell : shellsToCheck) {
             for (MarioSprite sprite : sprites) {
+                // 判断是否为乌龟壳
                 if (sprite != shell && shell.alive && sprite.alive) {
+                    // 判断是否碰撞
                     if (sprite.shellCollideCheck(shell)) {
                         this.removeSprite(sprite);
                     }

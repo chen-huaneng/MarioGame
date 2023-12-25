@@ -177,8 +177,14 @@ public class Shell extends MarioSprite {
         return blocking;
     }
 
+    /**
+     * 乌龟壳碰撞检测
+     * @param shell 乌龟壳
+     * @return 返回是否碰撞
+     */
     @Override
     public boolean shellCollideCheck(Shell shell) {
+        // 如果乌龟壳死亡，则不再碰撞检测
         if (!this.alive) {
             return false;
         }
@@ -186,6 +192,7 @@ public class Shell extends MarioSprite {
         float xD = shell.x - x;
         float yD = shell.y - y;
 
+        // 如果乌龟壳与乌龟壳碰撞，则乌龟壳死亡
         if (xD > -16 && xD < 16) {
             if (yD > -height && yD < shell.height) {
                 this.world.addEvent(EventType.SHELL_KILL, this.type.getValue());

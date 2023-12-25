@@ -116,8 +116,15 @@ public class BulletBill extends MarioSprite {
         return false;
     }
 
+    /**
+     * 检测是否与炮弹碰撞
+     *
+     * @param shell 炮弹对象
+     * @return 返回是否碰撞
+     */
     @Override
     public boolean shellCollideCheck(Shell shell) {
+        // 如果炮弹死亡，则不再检测
         if (!this.alive) {
             return false;
         }
@@ -125,11 +132,15 @@ public class BulletBill extends MarioSprite {
         float xD = shell.x - x;
         float yD = shell.y - y;
 
+        // 如果炮弹在炮弹的范围内，则炮弹死亡
         if (xD > -16 && xD < 16) {
+            // 如果炮弹在炮弹的高度范围内，则炮弹死亡
             if (yD > -height && yD < shell.height) {
+                // 炮弹死亡
                 if (this.graphics != null) {
                     this.world.addEffect(new DeathEffect(this.x, this.y - 7, this.graphics.flipX, 43, -1));
                 }
+                // 添加事件
                 this.world.addEvent(EventType.SHELL_KILL, this.type.getValue());
                 this.world.removeSprite(this);
                 return true;
