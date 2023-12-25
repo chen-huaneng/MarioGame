@@ -303,6 +303,8 @@ public class MarioWorld {
             }
             sprite.update();
         }
+
+        // 处理碰撞
         for (MarioSprite sprite : sprites) {
             if (!sprite.alive) {
                 continue;

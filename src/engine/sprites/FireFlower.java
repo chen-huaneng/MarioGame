@@ -33,17 +33,25 @@ public class FireFlower extends MarioSprite {
         }
     }
 
+    /**
+     * 碰撞检测
+     */
     @Override
     public void collideCheck() {
+        // 如果火花死亡，则不再检测
         if (!this.alive) {
             return;
         }
 
+        // 判断Mario是否与火花碰撞
         float xMarioD = world.mario.x - x;
         float yMarioD = world.mario.y - y;
+        // 如果Mario与火花碰撞，则Mario获得火花
         if (xMarioD > -16 && xMarioD < 16) {
             if (yMarioD > -height && yMarioD < world.mario.height) {
+                // 事件触发
                 world.addEvent(EventType.COLLECT, this.type.getValue());
+                // 获得火花
                 world.mario.getFlower();
                 world.removeSprite(this);
             }

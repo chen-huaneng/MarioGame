@@ -13,6 +13,14 @@ public class Shell extends MarioSprite {
     private int shellType = 0;
 
 
+    /**
+     * 根据坐标和是否可视化生成乌龟壳
+     *
+     * @param visuals   是否可视化
+     * @param x         横坐标
+     * @param y         纵坐标
+     * @param shellType 乌龟壳类型
+     */
     public Shell(boolean visuals, float x, float y, int shellType, String spriteCode) {
         super(x, y, SpriteType.SHELL);
 
@@ -23,6 +31,7 @@ public class Shell extends MarioSprite {
         this.shellType = shellType;
         this.initialCode = spriteCode;
 
+        // 如果可视化则设置乌龟壳的图像
         if (visuals) {
             this.graphics = new MarioImage(Assets.enemies, shellType * 8 + 3);
             this.graphics.originX = 8;
@@ -109,17 +118,25 @@ public class Shell extends MarioSprite {
         return false;
     }
 
+    /**
+     * 碰撞检测
+     */
     @Override
     public void collideCheck() {
+        // 如果乌龟壳死亡，则不再碰撞检测
         if (!this.alive) {
             return;
         }
 
+        // 判断Mario是否与乌龟壳碰撞
         float xMarioD = world.mario.x - x;
         float yMarioD = world.mario.y - y;
+        // 如果Mario与乌龟壳碰撞，则触发事件
         if (xMarioD > -16 && xMarioD < 16) {
             if (yMarioD > -height && yMarioD < world.mario.height) {
+                // 如果Mario在乌龟壳上方，则Mario获得乌龟壳
                 if (world.mario.ya > 0 && yMarioD <= 0 && (!world.mario.onGround || !world.mario.wasOnGround)) {
+                    // 事件触发
                     world.mario.stomp(this);
                     if (facing != 0) {
                         xa = 0;
@@ -130,9 +147,11 @@ public class Shell extends MarioSprite {
                 } else {
                     if (facing != 0) {
                         world.addEvent(EventType.HURT, this.type.getValue());
+                        // Mario受伤
                         world.mario.getHurt();
                     } else {
                         world.addEvent(EventType.KICK, this.type.getValue());
+                        // Mario踢乌龟壳
                         world.mario.kick(this);
                         facing = world.mario.facing;
                     }

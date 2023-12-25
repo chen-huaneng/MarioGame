@@ -36,18 +36,27 @@ public class Mushroom extends MarioSprite {
         }
     }
 
+    /**
+     * 判断蘑菇是否与Mario碰撞
+     */
     @Override
     public void collideCheck() {
+        // 如果蘑菇死亡，则不再碰撞检测
         if (!this.alive) {
             return;
         }
 
+        // 判断Mario是否与蘑菇碰撞
         float xMarioD = world.mario.x - x;
         float yMarioD = world.mario.y - y;
+        // 如果Mario与蘑菇碰撞，则触发收集事件
         if (xMarioD > -16 && xMarioD < 16) {
             if (yMarioD > -height && yMarioD < world.mario.height) {
+                // 触发收集事件
                 world.addEvent(EventType.COLLECT, this.type.getValue());
+                // Mario获得蘑菇
                 world.mario.getMushroom();
+                // 移除蘑菇
                 world.removeSprite(this);
             }
         }

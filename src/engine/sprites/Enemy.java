@@ -70,36 +70,48 @@ public class Enemy extends MarioSprite {
         }
     }
 
+    /**
+     * 碰撞检测
+     */
     @Override
     public void collideCheck() {
+        // 如果敌人死亡则不需要检测
         if (!this.alive) {
             return;
         }
 
+        // 判断是否与玩家碰撞
         float xMarioD = world.mario.x - x;
         float yMarioD = world.mario.y - y;
+        // 如果玩家在敌人的范围内，则判断是否会被踩死
         if (xMarioD > -width * 2 - 4 && xMarioD < width * 2 + 4) {
             if (yMarioD > -height && yMarioD < world.mario.height) {
-                if (type != SpriteType.SPIKY && type != SpriteType.SPIKY_WINGED && type != SpriteType.ENEMY_FLOWER &&
-                        world.mario.ya > 0 && yMarioD <= 0 && (!world.mario.onGround || !world.mario.wasOnGround)) {
+                // 如果玩家在敌人的上方，则踩死敌人
+                if (type != SpriteType.SPIKY && type != SpriteType.SPIKY_WINGED && type != SpriteType.ENEMY_FLOWER && world.mario.ya > 0 && yMarioD <= 0 && (!world.mario.onGround || !world.mario.wasOnGround)) {
+                    // 踩死敌人
                     world.mario.stomp(this);
                     if (winged) {
                         winged = false;
                         ya = 0;
                     } else {
+                        // 如果敌人是乌龟，则生成壳
                         if (type == SpriteType.GREEN_KOOPA || type == SpriteType.GREEN_KOOPA_WINGED) {
                             this.world.addSprite(new Shell(this.graphics != null, x, y, 1, this.initialCode));
                         } else if (type == SpriteType.RED_KOOPA || type == SpriteType.RED_KOOPA_WINGED) {
                             this.world.addSprite(new Shell(this.graphics != null, x, y, 0, this.initialCode));
                         } else if (type == SpriteType.GOOMBA || type == SpriteType.GOOMBA_WINGED) {
+                            // 如果敌人是板栗，则添加踩扁特效
                             if (this.graphics != null) {
+                                // 添加踩扁特效
                                 this.world.addEffect(new SquishEffect(this.x, this.y - 7));
                             }
                         }
+                        // 敌人死亡
                         this.world.addEvent(EventType.STOMP_KILL, this.type.getValue());
                         this.world.removeSprite(this);
                     }
                 } else {
+                    // 如果玩家在敌人的下方，则玩家受到伤害
                     this.world.addEvent(EventType.HURT, this.type.getValue());
                     world.mario.getHurt();
                 }

@@ -445,13 +445,20 @@ public class Mario extends MarioSprite {
         }
     }
 
+    /**
+     * 跳跃踩踏敌人
+     * @param enemy 敌人对象
+     */
     public void stomp(Enemy enemy) {
+        // 如果Mario死亡则不更新
         if (!this.alive) {
             return;
         }
+        // 设置跳跃速度
         float targetY = enemy.y - enemy.height / 2;
         move(0, targetY - y);
 
+        // 设置跳跃速度
         xJumpSpeed = 0;
         yJumpSpeed = -1.9f;
         jumpTime = 8;
@@ -460,10 +467,16 @@ public class Mario extends MarioSprite {
         invulnerableTime = 1;
     }
 
+    /**
+     * 跳跃踩踏敌人
+     * @param shell 敌人对象
+     */
     public void stomp(Shell shell) {
+        // 如果Mario死亡则不更新
         if (!this.alive) {
             return;
         }
+        // 设置跳跃速度
         float targetY = shell.y - shell.height / 2;
         move(0, targetY - y);
 
@@ -475,20 +488,27 @@ public class Mario extends MarioSprite {
         invulnerableTime = 1;
     }
 
+    /**
+     * 被敌人攻击
+     */
     public void getHurt() {
+        // 如果Mario死亡则不更新
         if (invulnerableTime > 0 || !this.alive) {
             return;
         }
 
+        // 如果Mario是大Mario则变成小Mario
         if (isLarge) {
             world.pauseTimer = 3 * POWERUP_TIME;
             this.oldLarge = this.isLarge;
             this.oldFire = this.isFire;
+            // 设置Mario的状态
             if (isFire) {
                 this.isFire = false;
             } else {
                 this.isLarge = false;
             }
+            // 设置无敌时间
             invulnerableTime = 32;
         } else {
             if (this.world != null) {
@@ -497,11 +517,16 @@ public class Mario extends MarioSprite {
         }
     }
 
+    /**
+     * 获得火花
+     */
     public void getFlower() {
+        // 如果Mario死亡则不更新
         if (!this.alive) {
             return;
         }
 
+        // 如果Mario不是火球Mario则变成火球Mario
         if (!isFire) {
             world.pauseTimer = 3 * POWERUP_TIME;
             this.oldFire = this.isFire;
@@ -509,26 +534,38 @@ public class Mario extends MarioSprite {
             this.isFire = true;
             this.isLarge = true;
         } else {
+            // 如果Mario是火球Mario则收集金币
             this.collectCoin();
         }
     }
 
+    /**
+     * 获得蘑菇
+     */
     public void getMushroom() {
+        // 如果Mario死亡则不更新
         if (!this.alive) {
             return;
         }
 
+        // 如果Mario不是大Mario则变成大Mario
         if (!isLarge) {
             world.pauseTimer = 3 * POWERUP_TIME;
             this.oldFire = this.isFire;
             this.oldLarge = this.isLarge;
             this.isLarge = true;
         } else {
+            // 如果Mario是大Mario则收集金币
             this.collectCoin();
         }
     }
 
+    /**
+     * 踢乌龟壳
+     * @param shell 敌人对象
+     */
     public void kick(Shell shell) {
+        // 如果Mario死亡则不更新
         if (!this.alive) {
             return;
         }
@@ -536,7 +573,12 @@ public class Mario extends MarioSprite {
         invulnerableTime = 1;
     }
 
+    /**
+     * 跳跃踩踏敌人
+     * @param bill 敌人对象
+     */
     public void stomp(BulletBill bill) {
+        // 如果Mario死亡则不更新
         if (!this.alive) {
             return;
         }
@@ -544,6 +586,7 @@ public class Mario extends MarioSprite {
         float targetY = bill.y - bill.height / 2;
         move(0, targetY - y);
 
+        // 设置跳跃速度
         xJumpSpeed = 0;
         yJumpSpeed = -1.9f;
         jumpTime = 8;

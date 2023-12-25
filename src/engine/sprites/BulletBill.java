@@ -54,23 +54,37 @@ public class BulletBill extends MarioSprite {
         }
     }
 
+    /**
+     * 碰撞检测
+     */
     @Override
     public void collideCheck() {
+        // 如果炮弹死亡，则不再检测
         if (!this.alive) {
             return;
         }
 
+        // 检测是否与玩家碰撞
         float xMarioD = world.mario.x - x;
         float yMarioD = world.mario.y - y;
+
+        // 如果玩家在炮弹的范围内，则玩家受到伤害
         if (xMarioD > -16 && xMarioD < 16) {
+            // 如果玩家在炮弹的高度范围内，则玩家受到伤害
             if (yMarioD > -height && yMarioD < world.mario.height) {
+                // 如果玩家在炮弹的上方，则玩家踩到炮弹，炮弹死亡
                 if (world.mario.ya > 0 && yMarioD <= 0 && (!world.mario.onGround || !world.mario.wasOnGround)) {
+                    // 玩家踩到炮弹，炮弹死亡
                     world.mario.stomp(this);
+                    // 炮弹死亡
                     if (this.graphics != null) {
+                        // 添加死亡效果
                         this.world.addEffect(new DeathEffect(this.x, this.y - 7, this.graphics.flipX, 43, 0));
                     }
+                    // 添加事件
                     this.world.removeSprite(this);
                 } else {
+                    // 玩家受到伤害
                     this.world.addEvent(EventType.HURT, this.type.getValue());
                     world.mario.getHurt();
                 }

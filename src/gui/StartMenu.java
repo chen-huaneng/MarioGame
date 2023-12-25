@@ -148,7 +148,7 @@ public class StartMenu extends JFrame implements KeyListener {
             String level = generator.getGeneratedLevel(new MarioLevelModel(150, 16));
             // 启动游戏
             MarioGame game = new MarioGame();
-            game.playGame(level, 200, 2);
+            game.playGame(level, 200, 0);
             return null;
         }
     }
