@@ -46,10 +46,17 @@ public class MarioGame {
         return world.coins;
     }
 
+    /**
+     * 帧率控制
+     * @param fps 帧率
+     * @return 每一帧的时间
+     */
     private int getDelay(int fps) {
+        // 如果fps小于等于0，则返回0
         if (fps <= 0) {
             return 0;
         }
+        // 返回每一帧的时间
         return 1000 / fps;
     }
 
@@ -153,10 +160,15 @@ public class MarioGame {
         VolatileImage renderTarget = null;
         Graphics backBuffer = null;
         Graphics currentBuffer = null;
+        // 控制可视化
         if (visual) {
+            // 创建图像
             renderTarget = this.render.createVolatileImage(MarioGame.width, MarioGame.height);
+            // 获取图像的画笔
             backBuffer = this.render.getGraphics();
+            // 获取当前的画笔
             currentBuffer = renderTarget.getGraphics();
+            // 添加焦点监听器
             this.render.addFocusListener(this.render);
         }
 
@@ -183,9 +195,11 @@ public class MarioGame {
             }
 
 
+            // 获取当前的时间
             if (this.getDelay(fps) > 0) {
                 try {
                     currentTime += this.getDelay(fps);
+                    // 休眠
                     Thread.sleep(Math.max(0, currentTime - System.currentTimeMillis()));
                 } catch (InterruptedException e) {
                     break;
@@ -193,24 +207,32 @@ public class MarioGame {
             }
         }
 
+        // 超时事件
         if (this.world.gameStatus == GameStatus.TIME_OUT) {
             try {
+                // 超时
                 StartMenu startmenu = new StartMenu(2.5, 1);
                 this.window.dispose();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+
+        // 失败事件
         if (this.world.gameStatus == GameStatus.LOSE) {
             try {
+                // 失败
                 StartMenu startmenu = new StartMenu(2.5, 2);
                 this.window.dispose();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+
+        // 胜利事件
         if (this.world.gameStatus == GameStatus.WIN) {
             try {
+                // 胜利
                 StartMenu startmenu = new StartMenu(2.5, 3);
                 this.window.dispose();
             } catch (IOException e) {
@@ -218,6 +240,5 @@ public class MarioGame {
             }
         }
     }
-
 
 }

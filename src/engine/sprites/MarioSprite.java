@@ -49,6 +49,11 @@ public abstract class MarioSprite {
         this.onGround = true;
     }
 
+    /**
+     * 绘制精灵
+     *
+     * @param og 原始图形
+     */
     public void render(Graphics og) {
         this.graphics.render(og, (int) (this.x - this.world.cameraX), (int) (this.y - this.world.cameraY));
     }

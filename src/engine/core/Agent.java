@@ -8,10 +8,18 @@ import java.awt.event.KeyEvent;
 public class Agent extends KeyAdapter {
     private boolean[] actions = null;
 
+    /**
+     * 初始化
+     */
     public void initialize() {
         actions = new boolean[MarioActions.numberOfActions()];
     }
 
+    /**
+     * 获取按键的状态
+     *
+     * @return 按键的状态
+     */
     public boolean[] getActions() {
         return actions;
     }

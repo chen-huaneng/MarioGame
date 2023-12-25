@@ -48,9 +48,18 @@ public class MarioBackground extends MarioGraphics {
         }
     }
 
+    /**
+     * 绘制游戏界面
+     *
+     * @param og 原始图形
+     * @param x  x坐标
+     * @param y  y坐标
+     */
     @Override
     public void render(Graphics og, int x, int y) {
+        // 计算x坐标的偏移量
         int xOff = x % this.width;
+        // 绘制游戏背景
         for (int i = -1; i < this.screenWidth / this.width + 1; i++) {
             og.drawImage(image, -xOff + i * this.width, 0, null);
         }

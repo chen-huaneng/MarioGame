@@ -392,9 +392,18 @@ public class MarioLevel {
         return -1;
     }
 
+    /**
+     * 绘制游戏界面
+     *
+     * @param og       原始图形
+     * @param cameraX  相机的横坐标
+     * @param cameraY  相机的纵坐标
+     */
     public void render(Graphics og, int cameraX, int cameraY) {
         this.graphics.render(og, cameraX, cameraY);
+        // 判断是否到达终点
         if (cameraX + MarioGame.width >= this.exitTileX * 16) {
+            // 绘制旗杆的旗帜
             this.flag.render(og, this.exitTileX * 16 - 8 - cameraX, Math.max(1, this.exitTileY - 11) * 16 + 16 - cameraY);
         }
     }

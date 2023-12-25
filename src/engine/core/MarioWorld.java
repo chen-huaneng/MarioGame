@@ -38,7 +38,7 @@ public class MarioWorld {
     public int currentTick;
 
     // 是否存活以及金币数量
-    public int coins, lives;
+    public int coins, lives = 1;
 
     // 上一帧的事件列表
     public ArrayList<MarioEvent> lastFrameEvents;
@@ -580,23 +580,36 @@ public class MarioWorld {
         }
     }
 
+    /**
+     * 渲染游戏界面
+     * @param og 原始图形
+     */
     public void render(Graphics og) {
         for (MarioBackground background : backgrounds) {
+            // 渲染游戏背景
             background.render(og, (int) cameraX, (int) cameraY);
         }
+
         for (MarioSprite sprite : sprites) {
+            // 渲染游戏精灵
             if (sprite.type == SpriteType.MUSHROOM || sprite.type == SpriteType.LIFE_MUSHROOM ||
                     sprite.type == SpriteType.FIRE_FLOWER || sprite.type == SpriteType.ENEMY_FLOWER) {
                 sprite.render(og);
             }
         }
+
+        // 渲染游戏地图
         this.level.render(og, (int) cameraX, (int) cameraY);
+
+        // 渲染游戏精灵
         for (MarioSprite sprite : sprites) {
             if (sprite.type != SpriteType.MUSHROOM && sprite.type != SpriteType.LIFE_MUSHROOM &&
                     sprite.type != SpriteType.FIRE_FLOWER && sprite.type != SpriteType.ENEMY_FLOWER) {
                 sprite.render(og);
             }
         }
+
+        // 渲染游戏特效
         for (int i = 0; i < this.effects.size(); i++) {
             if (this.effects.get(i).life <= 0) {
                 this.effects.remove(i);
