@@ -1,6 +1,6 @@
 package music;
 
-import edu.princeton.cs.algs4.StdAudio;
+import music.princeton.StdAudio;
 import music.synthesizer.GuitarString;
 
 import javax.sound.midi.InvalidMidiDataException;
