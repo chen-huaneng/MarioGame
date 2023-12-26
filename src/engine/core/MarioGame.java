@@ -6,24 +6,17 @@ import gui.StartMenu;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.im.InputContext;
 import java.awt.image.VolatileImage;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class MarioGame {
     // 屏幕的宽度
     public static final int width = 256;
     // 屏幕的高度
     public static final int height = 256;
-
-    /**
-     * pauses the whole game at any moment
-     */
     // 暂停游戏
     public boolean pause = false;
-
     // 可视化
     private JFrame window = null;
     private MarioRender render = null;
@@ -211,7 +204,7 @@ public class MarioGame {
         if (this.world.gameStatus == GameStatus.TIME_OUT) {
             try {
                 // 超时
-                StartMenu startmenu = new StartMenu(2.5, 1);
+                new StartMenu(2.5, 1);
                 this.window.dispose();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -222,7 +215,7 @@ public class MarioGame {
         if (this.world.gameStatus == GameStatus.LOSE) {
             try {
                 // 失败
-                StartMenu startmenu = new StartMenu(2.5, 2);
+                new StartMenu(2.5, 2);
                 this.window.dispose();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -233,7 +226,7 @@ public class MarioGame {
         if (this.world.gameStatus == GameStatus.WIN) {
             try {
                 // 胜利
-                StartMenu startmenu = new StartMenu(2.5, 3);
+                new StartMenu(2.5, 3);
                 this.window.dispose();
             } catch (IOException e) {
                 e.printStackTrace();

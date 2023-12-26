@@ -408,16 +408,24 @@ public class Enemy extends MarioSprite {
         return false;
     }
 
+    /**
+     * 检测是否与Mario碰撞
+     * @param xTile 横坐标
+     * @param yTile 纵坐标
+     */
     @Override
     public void bumpCheck(int xTile, int yTile) {
+        // 如果对象死亡，则不再检测
         if (!this.alive) {
             return;
         }
 
+        // 如果Mario在敌人的范围内，则敌人死亡
         if (x + width > xTile * 16 && x - width < xTile * 16 + 16 && yTile == (int) ((y - 1) / 16)) {
             xa = -world.mario.facing * 2;
             ya = -5;
             if (this.graphics != null) {
+                // 添加死亡特效
                 if (this.type == SpriteType.GREEN_KOOPA || this.type == SpriteType.GREEN_KOOPA_WINGED) {
                     this.world.addEffect(new DeathEffect(this.x, this.y, this.graphics.flipX, 42, -5));
                 } else if (this.type == SpriteType.RED_KOOPA || this.type == SpriteType.RED_KOOPA_WINGED) {
@@ -432,11 +440,16 @@ public class Enemy extends MarioSprite {
         }
     }
 
+    /**
+     * 绘制敌人的图像
+     * @param og 原始图形
+     */
     @Override
     public void render(Graphics og) {
         if (winged) {
             if (type != SpriteType.RED_KOOPA && type != SpriteType.GREEN_KOOPA && type != SpriteType.RED_KOOPA_WINGED
                     && type != SpriteType.GREEN_KOOPA_WINGED) {
+                // 如果敌人是板栗，则绘制翅膀
                 this.wingGraphics.flipX = false;
                 this.wingGraphics.render(og, (int) (this.x - this.world.cameraX - 6), (int) (this.y - this.world.cameraY - 6));
                 this.wingGraphics.flipX = true;
@@ -444,15 +457,18 @@ public class Enemy extends MarioSprite {
             }
         }
 
+        // 绘制敌人的图像
         this.graphics.render(og, (int) (this.x - this.world.cameraX), (int) (this.y - this.world.cameraY));
 
         if (winged) {
             if (type == SpriteType.RED_KOOPA || type == SpriteType.GREEN_KOOPA || type == SpriteType.RED_KOOPA_WINGED
                     || type == SpriteType.GREEN_KOOPA_WINGED) {
+                // 如果敌人是乌龟，则绘制翅膀
                 int shiftX = -1;
                 if (this.graphics.flipX) {
                     shiftX = 17;
                 }
+                // 绘制翅膀
                 this.wingGraphics.flipX = this.graphics.flipX;
                 this.wingGraphics.render(og, (int) (this.x - this.world.cameraX + shiftX), (int) (this.y - this.world.cameraY - 8));
             }

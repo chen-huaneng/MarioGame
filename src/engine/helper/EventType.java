@@ -2,7 +2,6 @@ package engine.helper;
 
 // 游戏中发生的事件类型
 public enum EventType {
-    BUMP(1),
     STOMP_KILL(2),
     FIRE_KILL(3),
     SHELL_KILL(4),
