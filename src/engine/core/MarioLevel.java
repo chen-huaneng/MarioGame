@@ -1,6 +1,5 @@
 package engine.core;
 
-import engine.graphics.MarioImage;
 import engine.graphics.MarioTilemap;
 import engine.helper.Assets;
 import engine.helper.SpriteType;
@@ -10,7 +9,6 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class MarioLevel {
-
     public int width = MarioGame.width;
     public int tileWidth = MarioGame.width / 16;
     public int height = MarioGame.height;
@@ -22,7 +20,6 @@ public class MarioLevel {
     private SpriteType[][] spriteTemplates;
     private int[][] lastSpawnTime;
     private MarioTilemap graphics;
-    private MarioImage flag;
 
     /**
      * 设置游戏的贴图
@@ -213,23 +210,17 @@ public class MarioLevel {
         this.exitTileX = lines[0].length() - 1;
         this.exitTileY = findFirstFloor(lines, this.exitTileX);
 
-        // 设置终点的旗杆底部
-        for (int y = this.exitTileY; y > Math.max(1, this.exitTileY - 11); --y) {
-            this.levelTiles[this.exitTileX][y] = 40;
+        //设置终点颂恩楼贴图
+        for (int x = exitTileX, n = 80; x >= exitTileX - 3; --x, n -= 8) {
+            for (int y = exitTileY, m = n; y >= exitTileY - 6; --y, ++m) {
+                this.levelTiles[x][y] = m;
+            }
         }
-
-        // 设置旗杆的顶部
-        this.levelTiles[this.exitTileX][Math.max(1, this.exitTileY - 11)] = 39;
 
         // 判断是否可视化
         if (visuals) {
             // 设置贴图
             this.graphics = new MarioTilemap(Assets.level, this.levelTiles);
-            // 设置旗杆的旗帜
-            this.flag = new MarioImage(Assets.level, 41);
-            // 设置旗帜的长度和宽度
-            this.flag.width = 16;
-            this.flag.height = 16;
         }
     }
 
@@ -395,16 +386,11 @@ public class MarioLevel {
     /**
      * 绘制游戏界面
      *
-     * @param og       原始图形
-     * @param cameraX  相机的横坐标
-     * @param cameraY  相机的纵坐标
+     * @param og      原始图形
+     * @param cameraX 相机的横坐标
+     * @param cameraY 相机的纵坐标
      */
     public void render(Graphics og, int cameraX, int cameraY) {
         this.graphics.render(og, cameraX, cameraY);
-        // 判断是否到达终点
-        if (cameraX + MarioGame.width >= this.exitTileX * 16) {
-            // 绘制旗杆的旗帜
-            this.flag.render(og, this.exitTileX * 16 - 8 - cameraX, Math.max(1, this.exitTileY - 11) * 16 + 16 - cameraY);
-        }
     }
 }

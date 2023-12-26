@@ -470,6 +470,8 @@ public class LevelGenerator {
         while (length < model.getWidth()) {
             length += buildZone(model, length, model.getWidth() - length);
         }
+        // 在终点前三格重新设置为颂恩楼
+        buildStraight(model, model.getWidth() - 4, 3, true);
 
         // 生成天花板
         if (type > 0) {
