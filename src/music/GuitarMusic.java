@@ -12,7 +12,7 @@ import java.util.zip.GZIPInputStream;
  *
  * @author Eli Lipsitz
  */
-public class TTFAF {
+public class GuitarMusic {
     private static volatile boolean isMusicPlaying = true; // 用于控制音乐线程的标志
     private static String music = System.getProperty("user.dir") + "/music/";
     private static GuitarPlayer player;
