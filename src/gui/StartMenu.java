@@ -4,6 +4,7 @@ import engine.core.LevelGenerator;
 import engine.core.MarioGame;
 import engine.core.MarioLevelModel;
 import engine.helper.Assets;
+import music.TTFAF;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -143,12 +144,19 @@ public class StartMenu extends JFrame implements KeyListener {
          */
         @Override
         protected Void doInBackground() {
+            // 在这里启动一个新线程播放音乐
+            Thread musicThread = new Thread(TTFAF::playMusic);
+            musicThread.start();
+
             // 生成游戏关卡
             LevelGenerator generator = new LevelGenerator();
             String level = generator.getGeneratedLevel(new MarioLevelModel(150, 16));
             // 启动游戏
             MarioGame game = new MarioGame();
             game.playGame(level, 200, 0);
+
+            // 关闭音乐线程
+            TTFAF.stopMusic();
             return null;
         }
     }
